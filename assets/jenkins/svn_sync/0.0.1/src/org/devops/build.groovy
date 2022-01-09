@@ -179,7 +179,8 @@ def generateTranslationKV() {
             env.BRANCH_PREFIX = "release/ob"
         }
         dir('automator') {
-            checkout([changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: 'nodejs_tool']], extensions: [], userRemoteConfigs: [[url: 'http://192.168.1.205:3000/yzp/nodejs_tool.git']]]])
+            checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: 'master']], extensions: [], userRemoteConfigs: [[url: 'https://e.coding.net/tsubasaohzora/playground/automator.git']]]
+            bat 'npm i'
         }
         dir('project/resource/assets/cfgjson') {
             checkout([$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '', excludedRegions: '', excludedRevprop: '', excludedUsers: '', filterChangelog: true, ignoreDirPropChanges: false, includedRegions: '''.*/resource/assets/cfgjson/\\w+\\.json
@@ -203,7 +204,7 @@ def generateTranslationKV() {
             git changelog: false, poll: false, branch: 'master', url: 'git@github.com:G123-jp/i18n-cp-seirei.git'
         }
         dir('convert2src') {
-            bat '%WORKSPACE%/automator/automator/main %WORKSPACE%/automator/automator/cfg/dldl/conversion_to_src.yml --FULL_AUTOMATIC 1 --QUITE_MODE 1 --projectFolder %WORKSPACE%/project --gitFolder %WORKSPACE%/i18n_cp_seirei --projectVer "%PROJECT_VER%" --dst_locale %DST_LOCALE% --conversionWorkspaceFolder %WORKSPACE%/conversion --no_suffix %NO_SUFFIX% --branch_prefix %BRANCH_PREFIX%'
+            bat 'node %WORKSPACE%/automator/automator/main.js %WORKSPACE%/automator/automator/cfg/dldl/conversion_to_src.yml --FULL_AUTOMATIC 1 --QUITE_MODE 1 --projectFolder %WORKSPACE%/project --gitFolder %WORKSPACE%/i18n_cp_seirei --projectVer "%PROJECT_VER%" --dst_locale %DST_LOCALE% --conversionWorkspaceFolder %WORKSPACE%/conversion --no_suffix %NO_SUFFIX% --branch_prefix %BRANCH_PREFIX%'
         }
     }
 }
@@ -218,7 +219,8 @@ def retrieveTranslation() {
             env.BRANCH_PREFIX = "release/ob"
         }
         dir('automator') {
-            checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: 'nodejs_tool']], extensions: [], userRemoteConfigs: [[url: 'http://192.168.1.205:3000/yzp/nodejs_tool.git']]]
+            checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: 'master']], extensions: [], userRemoteConfigs: [[url: 'https://e.coding.net/tsubasaohzora/playground/automator.git']]]
+            bat 'npm i'
         }
         dir('project/resource/assets/cfgjson') {
             checkout([scm: [$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '', excludedRegions: '', excludedRevprop: '', excludedUsers: '', filterChangelog: true, ignoreDirPropChanges: false, includedRegions: '''.*/resource/assets/cfgjson/\\w+\\.json
@@ -243,7 +245,7 @@ def retrieveTranslation() {
             git branch: '${BRANCH_PREFIX}${PROJECT_VER}', url: 'git@github.com:G123-jp/i18n-cp-seirei.git'
         }
         dir('convert2src') {
-            bat '%WORKSPACE%/automator/automator/main %WORKSPACE%/automator/automator/cfg/dldl/conversion_retrieve.yml --FULL_AUTOMATIC 1 --QUITE_MODE 1 --projectFolder %WORKSPACE%/project --gitFolder %WORKSPACE%/i18n_cp_seirei --projectVer "%PROJECT_VER%" --dst_locale %DST_LOCALE% --conversionWorkspaceFolder %WORKSPACE%/conversion --no_suffix %NO_SUFFIX%  --branch_prefix %BRANCH_PREFIX%'
+            bat 'node %WORKSPACE%/automator/automator/main.js %WORKSPACE%/automator/automator/cfg/dldl/conversion_retrieve.yml --FULL_AUTOMATIC 1 --QUITE_MODE 1 --projectFolder %WORKSPACE%/project --gitFolder %WORKSPACE%/i18n_cp_seirei --projectVer "%PROJECT_VER%" --dst_locale %DST_LOCALE% --conversionWorkspaceFolder %WORKSPACE%/conversion --no_suffix %NO_SUFFIX%  --branch_prefix %BRANCH_PREFIX%'
         }
         dir('i18n_cp_seirei') {
             checkout([$class: 'GitSCM', branches: [[name: '${BRANCH_PREFIX}${PROJECT_VER}']], extensions: [], userRemoteConfigs: [[url: 'git@github.com:G123-jp/i18n-cp-seirei.git']]])
@@ -262,7 +264,8 @@ def retrieveTranslationAPI() {
             env.BRANCH_PREFIX = "release/ob"
         }
         dir('automator') {
-            checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: 'nodejs_tool']], extensions: [], userRemoteConfigs: [[url: 'http://192.168.1.205:3000/yzp/nodejs_tool.git']]]
+            checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: 'master']], extensions: [], userRemoteConfigs: [[url: 'https://e.coding.net/tsubasaohzora/playground/automator.git']]]
+            bat 'npm i'
         }
         dir('project/resource/assets/cfgjson') {
             checkout([scm: [$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '', excludedRegions: '', excludedRevprop: '', excludedUsers: '', filterChangelog: true, ignoreDirPropChanges: false, includedRegions: '''.*/resource/assets/cfgjson/\\w+\\.json
@@ -290,7 +293,7 @@ svn revert -R .
 '''
         }
         dir('convert2src') {
-            bat '%WORKSPACE%/automator/automator/main %WORKSPACE%/automator/automator/cfg/dldl/conversion_retrieve@api.yml --FULL_AUTOMATIC 1 --QUITE_MODE 1 --projectFolder %WORKSPACE%/project --gitFolder %WORKSPACE%/i18n_cp_seirei --projectVer "%PROJECT_VER%" --dst_locale %DST_LOCALE% --conversionWorkspaceFolder %WORKSPACE%/conversion --no_suffix %NO_SUFFIX%  --branch_prefix %BRANCH_PREFIX% --zipUrl "%ZIP_URL%" --translationFolder %WORKSPACE%/translation  --projectName %PROJECT_NAME%'
+            bat 'node %WORKSPACE%/automator/automator/main.js %WORKSPACE%/automator/automator/cfg/dldl/conversion_retrieve@api.yml --FULL_AUTOMATIC 1 --QUITE_MODE 1 --projectFolder %WORKSPACE%/project --gitFolder %WORKSPACE%/i18n_cp_seirei --projectVer "%PROJECT_VER%" --dst_locale %DST_LOCALE% --conversionWorkspaceFolder %WORKSPACE%/conversion --no_suffix %NO_SUFFIX%  --branch_prefix %BRANCH_PREFIX% --zipUrl "%ZIP_URL%" --translationFolder %WORKSPACE%/translation  --projectName %PROJECT_NAME%'
         }
     }
 }
@@ -305,7 +308,8 @@ def generateTranslationKV_API() {
             env.BRANCH_PREFIX = "release/ob"
         }
         dir('automator') {
-            checkout([changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: 'nodejs_tool']], extensions: [], userRemoteConfigs: [[url: 'http://192.168.1.205:3000/yzp/nodejs_tool.git']]]])
+            checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: 'master']], extensions: [], userRemoteConfigs: [[url: 'https://e.coding.net/tsubasaohzora/playground/automator.git']]]
+            bat 'npm i'
         }
         dir('translation') {
             checkout changelog: false, poll: false, scm: [$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '', excludedRegions: '', excludedRevprop: '', excludedUsers: '', filterChangelog: false, ignoreDirPropChanges: false, includedRegions: '', locations: [[cancelProcessOnExternalsFail: true, credentialsId: 'dfb8344e-2d0c-4750-8154-9503745a01f9', depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: 'https://svn100.hotgamehl.com/svn/Html5/trunk/dldl_WX/translation_keyvalue']], quietOperation: false, workspaceUpdater: [$class: 'UpdateUpdater']]
@@ -333,19 +337,20 @@ def generateTranslationKV_API() {
     '''
         }                
         dir('convert2src') {
-            bat '%WORKSPACE%/automator/automator/main %WORKSPACE%/automator/automator/cfg/dldl/conversion_to_src@api.yml --FULL_AUTOMATIC 1 --QUITE_MODE 1 --projectFolder %WORKSPACE%/project --projectVer "%PROJECT_VER%" --projectName %PROJECT_NAME% --dst_locale %DST_LOCALE% --conversionWorkspaceFolder %WORKSPACE%/conversion --translationFolder %WORKSPACE%/translation --no_suffix %NO_SUFFIX%'
+            bat 'node %WORKSPACE%/automator/automator/main.js %WORKSPACE%/automator/automator/cfg/dldl/conversion_to_src@api.yml --FULL_AUTOMATIC 1 --QUITE_MODE 1 --projectFolder %WORKSPACE%/project --projectVer "%PROJECT_VER%" --projectName %PROJECT_NAME% --dst_locale %DST_LOCALE% --conversionWorkspaceFolder %WORKSPACE%/conversion --translationFolder %WORKSPACE%/translation --no_suffix %NO_SUFFIX%'
         }
     }
 }
 
 def mergeSVN() {
     dir('automator') {
-        checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: 'nodejs_tool']], extensions: [], userRemoteConfigs: [[url: 'http://192.168.1.205:3000/yzp/nodejs_tool.git']]]
+            checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: 'master']], extensions: [], userRemoteConfigs: [[url: 'https://e.coding.net/tsubasaohzora/playground/automator.git']]]
+            bat 'npm i'
     }
     dir('project') {
         checkoutSVN(params.HG_REPOSITORY_SRC)
     }
-    bat '%WORKSPACE%/automator/automator/main %WORKSPACE%/automator/automator/cfg/dldl/svn_merge.yml --FULL_AUTOMATIC 1 --QUITE_MODE 1 --dst %WORKSPACE%/project --src %MREGE_SRC% --revisions "%MERGE_REVISIONS%"'
+    bat 'node %WORKSPACE%/automator/automator/main.js %WORKSPACE%/automator/automator/cfg/dldl/svn_merge.yml --FULL_AUTOMATIC 1 --QUITE_MODE 1 --dst %WORKSPACE%/project --src %MREGE_SRC% --revisions "%MERGE_REVISIONS%"'
     if (params.BUILD_NEXT_JOB && params.NEXT_JOB) {
         build wait: false, job: params.NEXT_JOB
     }
@@ -421,10 +426,11 @@ def ftpUploadSource() {
         checkout([$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '', excludedRegions: "", excludedRevprop: '', excludedUsers: '', filterChangelog: true, ignoreDirPropChanges: false, includedRegions: ".*/${LOCAL_FILE}", locations: [[cancelProcessOnExternalsFail: true, credentialsId: 'dfb8344e-2d0c-4750-8154-9503745a01f9', depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: "$SCM_URL"]], quietOperation: false, workspaceUpdater: [$class: 'UpdateUpdater']])
     }
     dir('automator') {
-        checkout([changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: 'nodejs_tool']], extensions: [], userRemoteConfigs: [[url: 'http://192.168.1.205:3000/yzp/nodejs_tool.git']]]])
+            checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: 'master']], extensions: [], userRemoteConfigs: [[url: 'https://e.coding.net/tsubasaohzora/playground/automator.git']]]
+            bat 'npm i'
     }
     dir("ftp") {
-        bat '%WORKSPACE%/automator/automator/main %WORKSPACE%/automator/automator/cfg/dldl/ftp_upload.yml --FULL_AUTOMATIC 1 --QUITE_MODE 1 --remote_file %REMOTE_FILE% --local_file %WORKSPACE%/source/%LOCAL_FILE%'
+        bat 'node %WORKSPACE%/automator/automator/main.js %WORKSPACE%/automator/automator/cfg/dldl/ftp_upload.yml --FULL_AUTOMATIC 1 --QUITE_MODE 1 --remote_file %REMOTE_FILE% --local_file %WORKSPACE%/source/%LOCAL_FILE%'
     }
 }
 
@@ -529,7 +535,8 @@ def generateSendTranslationKV_API() {
             env.BRANCH_PREFIX = "release/ob"
         }
         dir('automator') {
-            checkout([changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: 'nodejs_tool']], extensions: [], userRemoteConfigs: [[url: 'http://192.168.1.205:3000/yzp/nodejs_tool.git']]]])
+            checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: 'master']], extensions: [], userRemoteConfigs: [[url: 'https://e.coding.net/tsubasaohzora/playground/automator.git']]]
+            bat 'npm i'
         }
         dir('translation') {
             checkout([$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '', excludedRegions: '', excludedRevprop: '', excludedUsers: '', filterChangelog: false, ignoreDirPropChanges: false, includedRegions: ".*/${PROJECT_NAME}/${PROJECT_VER}/cn/.*", locations: [[cancelProcessOnExternalsFail: true, credentialsId: 'dfb8344e-2d0c-4750-8154-9503745a01f9', depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: 'https://svn100.hotgamehl.com/svn/Html5/trunk/dldl_WX/translation_keyvalue']], quietOperation: false, workspaceUpdater: [$class: 'UpdateUpdater']])
@@ -559,7 +566,7 @@ def generateSendTranslationKV_API() {
         dir('convert2src') {
             env.REVISIONS = env.REVISIONS ? env.REVISIONS : getRevisions()
             print "env.REVISIONS " + env.REVISIONS
-            bat '%WORKSPACE%/automator/automator/main %WORKSPACE%/automator/automator/cfg/dldl/conversion_to_send@api.yml --FULL_AUTOMATIC 1 --QUITE_MODE 1 --projectFolder %WORKSPACE%/project --projectVer "%PROJECT_VER%" --projectName %PROJECT_NAME% --dst_locale %DST_LOCALE% --conversionWorkspaceFolder %WORKSPACE%/conversion --translationFolder %WORKSPACE%/translation --no_suffix %NO_SUFFIX% --revisions "%REVISIONS%" --revision_beg "%REVISION_BEG%" --revision_end "%REVISION_END%"'
+            bat 'node %WORKSPACE%/automator/automator/main.js %WORKSPACE%/automator/automator/cfg/dldl/conversion_to_send@api.yml --FULL_AUTOMATIC 1 --QUITE_MODE 1 --projectFolder %WORKSPACE%/project --projectVer "%PROJECT_VER%" --projectName %PROJECT_NAME% --dst_locale %DST_LOCALE% --conversionWorkspaceFolder %WORKSPACE%/conversion --translationFolder %WORKSPACE%/translation --no_suffix %NO_SUFFIX% --revisions "%REVISIONS%" --revision_beg "%REVISION_BEG%" --revision_end "%REVISION_END%"'
         }
     }
 }
