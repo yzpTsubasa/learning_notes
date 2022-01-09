@@ -204,7 +204,7 @@ def generateTranslationKV() {
             git changelog: false, poll: false, branch: 'master', url: 'git@github.com:G123-jp/i18n-cp-seirei.git'
         }
         dir('convert2src') {
-            bat 'node %WORKSPACE%/automator/automator/main.js %WORKSPACE%/automator/automator/cfg/dldl/conversion_to_src.yml --FULL_AUTOMATIC 1 --QUITE_MODE 1 --projectFolder %WORKSPACE%/project --gitFolder %WORKSPACE%/i18n_cp_seirei --projectVer "%PROJECT_VER%" --dst_locale %DST_LOCALE% --conversionWorkspaceFolder %WORKSPACE%/conversion --no_suffix %NO_SUFFIX% --branch_prefix %BRANCH_PREFIX%'
+            bat 'node %WORKSPACE%/automator/main.js %WORKSPACE%/automator/cfg/dldl/conversion_to_src.yml --FULL_AUTOMATIC 1 --QUITE_MODE 1 --projectFolder %WORKSPACE%/project --gitFolder %WORKSPACE%/i18n_cp_seirei --projectVer "%PROJECT_VER%" --dst_locale %DST_LOCALE% --conversionWorkspaceFolder %WORKSPACE%/conversion --no_suffix %NO_SUFFIX% --branch_prefix %BRANCH_PREFIX%'
         }
     }
 }
@@ -245,7 +245,7 @@ def retrieveTranslation() {
             git branch: '${BRANCH_PREFIX}${PROJECT_VER}', url: 'git@github.com:G123-jp/i18n-cp-seirei.git'
         }
         dir('convert2src') {
-            bat 'node %WORKSPACE%/automator/automator/main.js %WORKSPACE%/automator/automator/cfg/dldl/conversion_retrieve.yml --FULL_AUTOMATIC 1 --QUITE_MODE 1 --projectFolder %WORKSPACE%/project --gitFolder %WORKSPACE%/i18n_cp_seirei --projectVer "%PROJECT_VER%" --dst_locale %DST_LOCALE% --conversionWorkspaceFolder %WORKSPACE%/conversion --no_suffix %NO_SUFFIX%  --branch_prefix %BRANCH_PREFIX%'
+            bat 'node %WORKSPACE%/automator/main.js %WORKSPACE%/automator/cfg/dldl/conversion_retrieve.yml --FULL_AUTOMATIC 1 --QUITE_MODE 1 --projectFolder %WORKSPACE%/project --gitFolder %WORKSPACE%/i18n_cp_seirei --projectVer "%PROJECT_VER%" --dst_locale %DST_LOCALE% --conversionWorkspaceFolder %WORKSPACE%/conversion --no_suffix %NO_SUFFIX%  --branch_prefix %BRANCH_PREFIX%'
         }
         dir('i18n_cp_seirei') {
             checkout([$class: 'GitSCM', branches: [[name: '${BRANCH_PREFIX}${PROJECT_VER}']], extensions: [], userRemoteConfigs: [[url: 'git@github.com:G123-jp/i18n-cp-seirei.git']]])
@@ -293,7 +293,7 @@ svn revert -R .
 '''
         }
         dir('convert2src') {
-            bat 'node %WORKSPACE%/automator/automator/main.js %WORKSPACE%/automator/automator/cfg/dldl/conversion_retrieve@api.yml --FULL_AUTOMATIC 1 --QUITE_MODE 1 --projectFolder %WORKSPACE%/project --gitFolder %WORKSPACE%/i18n_cp_seirei --projectVer "%PROJECT_VER%" --dst_locale %DST_LOCALE% --conversionWorkspaceFolder %WORKSPACE%/conversion --no_suffix %NO_SUFFIX%  --branch_prefix %BRANCH_PREFIX% --zipUrl "%ZIP_URL%" --translationFolder %WORKSPACE%/translation  --projectName %PROJECT_NAME%'
+            bat 'node %WORKSPACE%/automator/main.js %WORKSPACE%/automator/cfg/dldl/conversion_retrieve@api.yml --FULL_AUTOMATIC 1 --QUITE_MODE 1 --projectFolder %WORKSPACE%/project --gitFolder %WORKSPACE%/i18n_cp_seirei --projectVer "%PROJECT_VER%" --dst_locale %DST_LOCALE% --conversionWorkspaceFolder %WORKSPACE%/conversion --no_suffix %NO_SUFFIX%  --branch_prefix %BRANCH_PREFIX% --zipUrl "%ZIP_URL%" --translationFolder %WORKSPACE%/translation  --projectName %PROJECT_NAME%'
         }
     }
 }
@@ -337,7 +337,7 @@ def generateTranslationKV_API() {
     '''
         }                
         dir('convert2src') {
-            bat 'node %WORKSPACE%/automator/automator/main.js %WORKSPACE%/automator/automator/cfg/dldl/conversion_to_src@api.yml --FULL_AUTOMATIC 1 --QUITE_MODE 1 --projectFolder %WORKSPACE%/project --projectVer "%PROJECT_VER%" --projectName %PROJECT_NAME% --dst_locale %DST_LOCALE% --conversionWorkspaceFolder %WORKSPACE%/conversion --translationFolder %WORKSPACE%/translation --no_suffix %NO_SUFFIX%'
+            bat 'node %WORKSPACE%/automator/main.js %WORKSPACE%/automator/cfg/dldl/conversion_to_src@api.yml --FULL_AUTOMATIC 1 --QUITE_MODE 1 --projectFolder %WORKSPACE%/project --projectVer "%PROJECT_VER%" --projectName %PROJECT_NAME% --dst_locale %DST_LOCALE% --conversionWorkspaceFolder %WORKSPACE%/conversion --translationFolder %WORKSPACE%/translation --no_suffix %NO_SUFFIX%'
         }
     }
 }
@@ -350,7 +350,7 @@ def mergeSVN() {
     dir('project') {
         checkoutSVN(params.HG_REPOSITORY_SRC)
     }
-    bat 'node %WORKSPACE%/automator/automator/main.js %WORKSPACE%/automator/automator/cfg/dldl/svn_merge.yml --FULL_AUTOMATIC 1 --QUITE_MODE 1 --dst %WORKSPACE%/project --src %MREGE_SRC% --revisions "%MERGE_REVISIONS%"'
+    bat 'node %WORKSPACE%/automator/main.js %WORKSPACE%/automator/cfg/dldl/svn_merge.yml --FULL_AUTOMATIC 1 --QUITE_MODE 1 --dst %WORKSPACE%/project --src %MREGE_SRC% --revisions "%MERGE_REVISIONS%"'
     if (params.BUILD_NEXT_JOB && params.NEXT_JOB) {
         build wait: false, job: params.NEXT_JOB
     }
@@ -430,7 +430,7 @@ def ftpUploadSource() {
             bat 'npm i'
     }
     dir("ftp") {
-        bat 'node %WORKSPACE%/automator/automator/main.js %WORKSPACE%/automator/automator/cfg/dldl/ftp_upload.yml --FULL_AUTOMATIC 1 --QUITE_MODE 1 --remote_file %REMOTE_FILE% --local_file %WORKSPACE%/source/%LOCAL_FILE%'
+        bat 'node %WORKSPACE%/automator/main.js %WORKSPACE%/automator/cfg/dldl/ftp_upload.yml --FULL_AUTOMATIC 1 --QUITE_MODE 1 --remote_file %REMOTE_FILE% --local_file %WORKSPACE%/source/%LOCAL_FILE%'
     }
 }
 
@@ -566,7 +566,7 @@ def generateSendTranslationKV_API() {
         dir('convert2src') {
             env.REVISIONS = env.REVISIONS ? env.REVISIONS : getRevisions()
             print "env.REVISIONS " + env.REVISIONS
-            bat 'node %WORKSPACE%/automator/automator/main.js %WORKSPACE%/automator/automator/cfg/dldl/conversion_to_send@api.yml --FULL_AUTOMATIC 1 --QUITE_MODE 1 --projectFolder %WORKSPACE%/project --projectVer "%PROJECT_VER%" --projectName %PROJECT_NAME% --dst_locale %DST_LOCALE% --conversionWorkspaceFolder %WORKSPACE%/conversion --translationFolder %WORKSPACE%/translation --no_suffix %NO_SUFFIX% --revisions "%REVISIONS%" --revision_beg "%REVISION_BEG%" --revision_end "%REVISION_END%"'
+            bat 'node %WORKSPACE%/automator/main.js %WORKSPACE%/automator/cfg/dldl/conversion_to_send@api.yml --FULL_AUTOMATIC 1 --QUITE_MODE 1 --projectFolder %WORKSPACE%/project --projectVer "%PROJECT_VER%" --projectName %PROJECT_NAME% --dst_locale %DST_LOCALE% --conversionWorkspaceFolder %WORKSPACE%/conversion --translationFolder %WORKSPACE%/translation --no_suffix %NO_SUFFIX% --revisions "%REVISIONS%" --revision_beg "%REVISION_BEG%" --revision_end "%REVISION_END%"'
         }
     }
 }
