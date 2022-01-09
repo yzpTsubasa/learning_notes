@@ -1,0 +1,1 @@
+echo CurrentTime：%time% %time:~0,2% hour %time:~3,2% minute %time:~6,2% second %time:~9,2%ms >> time.log

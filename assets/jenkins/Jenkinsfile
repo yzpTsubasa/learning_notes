@@ -1,0 +1,83 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('检出代码') {
+            steps {
+                checkout([$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '', excludedRegions: '', excludedRevprop: '', excludedUsers: '', filterChangelog: true, ignoreDirPropChanges: false, includedRegions: '.*\\.ts', locations: [[cancelProcessOnExternalsFail: true, credentialsId: '130d7a5c-b8c6-4f8d-ad3c-5a6c9b06779e', depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: "$SVN_REPOSITORY"]], quietOperation: false, workspaceUpdater: [$class: 'UpdateUpdater']])    
+            }
+        }
+        stage('钉钉通知-构建开始') {
+            steps {
+                script {
+                    dingtalk(
+                        robot: 'automator',
+                        type: 'ACTION_CARD',
+                        title: "${currentBuild.fullDisplayName} 开始",
+                        text: [
+                            "- **任务** [${currentBuild.fullDisplayName}](${BUILD_URL}) ",
+                            "- **状态** 开始",
+                            "- **记录**",
+                            "***",
+                        ] + getChangeString()
+                    )
+                }                
+            }
+
+        }
+        stage('SVN升级') {
+            steps {
+                bat 'svn upgrade'
+            }
+        }
+        stage('SVN还原') {
+            steps {
+                bat 'svn revert -R .'
+            }
+        }
+        stage('更新manifest') {
+            steps {
+                bat '"./tools/main.exe" "./tools/cfg/generate_sorted_ts.yml" --QUIET_MODE'
+            }
+        }
+        stage('pub200') {
+            steps {
+                bat '"./tools/main.exe" "./tools/cfg/pub_200_auto.yml" --QUIET_MODE'
+            }
+        }
+    }
+
+    post { 
+        always { 
+            script {
+                env.result_color = currentBuild.result == 'SUCCESS' ? '#52c41a' : currentBuild.result == 'FAILURE' ? '#f5222d' : '#ff9f00'
+                env.result = currentBuild.result == 'SUCCESS' ? '成功' : currentBuild.result == 'FAILURE' ? '失败' : '不稳定'
+                env.description = currentBuild.description
+                env.durationString = currentBuild.durationString.minus(" and counting")
+                dingtalk(
+                    robot: 'automator',
+                    type: 'ACTION_CARD',
+                    title: "${currentBuild.fullDisplayName} ${result}",,
+                    text: [
+                        "- **任务** [${currentBuild.fullDisplayName}](${BUILD_URL}) ",
+                        "- **状态** <font color=${result_color}>${result}</font>",
+                        "- **用时** ${durationString}",
+                    ]
+                )
+            }
+        }
+    }
+
+    
+}
+
+def getChangeString() {
+    MAX_MSG_LEN = 100
+    echo "Gathering SCM changes......"
+    return currentBuild.changeSets.collect{
+        def i = 1
+        return it.items.collect{
+            "${i++}. ${it.msg.take(MAX_MSG_LEN)} by ${it.author}"
+        }.join("\n")
+    }
+}

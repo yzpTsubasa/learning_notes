@@ -1,0 +1,166 @@
+## windows
+
+## 刷新环境变量
+``` sh
+refreshenv
+```
+
+## 常用变量
+``` sh
+# 执行文件完整路径为 XXX\X.bat, 调用执行文件的工作目录为 YYY\
+%cd% # YYY
+%~dp0 # XXX\
+%~dpnx0 # XXX\X.bat
+%~f0 # XXX\X.bat
+```
+
+## 全局环境变量设置
+``` sh
+# 添加
+setx <key> <value>
+# 如：设置执行文件所在目录为环境变量DLDL_PUB_TOOLS_DIR的值
+setx DLDL_PUB_TOOLS_DIR %~dp0
+
+# 移除
+REG delete HKCU\Environment /F /V <key>
+```
+
+## 设置 HTTP 代理
+``` sh
+set HTTP_PROXY=http://127.0.0.1:6149
+set HTTPS_PROXY=http://127.0.0.1:6149
+```
+
+## 你不能访问此共享文件夹，因为你组织的安全策略阻止未经身份验证的来宾访问
+> `gpedit.msc` > `计算机配置` > `管理模板` > `网络` > `Lanman工作站` > 设置 `启用不安全的来宾登录` 为启用
+
+## ssh-agent unable to start ssh-agent service, error :1058
+``` powershell
+# 以管理员身份运行
+Set-Service -Name ssh-agent -StartupType automatic
+```
+
+## 安装常用工具
+``` shell
+
+# chocolatey
+# https://chocolatey.org/install
+Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+
+# scoop
+# https://github.com/lukesampson/scoop
+Invoke-Expression (New-Object System.Net.WebClient).DownloadString('https://get.scoop.sh')
+# 或者
+iwr -useb get.scoop.sh | iex
+
+# make
+choco install make
+
+```
+## 查看资源占用
+- 任务管理器 - 性能 - 打开资源监视器
+- 资源监视器 - CPU - 关联的句柄 - 搜索句柄
+## 关闭 Windows Defender
+- gpedit.msc
+- 计算机配置 - 管理模板 - Windows组件 - Windows Defender 防病毒程序
+- 关闭 Windows Defender 防病毒程序 - 启用
+## 开机启动项目录
+``` sh
+# 运行(或者在地址栏输入)
+shell:startup
+# 通常结果为： C:\Users\Administrator\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup
+# 把需要启动的程序快捷方式复制到该目录
+```
+## 安装 chocolatey
+``` sh
+Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+```
+##  bat参数
+```
+Calling
+
+for /?
+in the command-line gives help about this syntax (which can be used outside FOR, too, this is just the place where help can be found).
+
+In addition, substitution of FOR variable references has been enhanced. You can now use the following optional syntax:
+
+%~I         - expands %I removing any surrounding quotes (")
+%~fI        - expands %I to a fully qualified path name
+%~dI        - expands %I to a drive letter only
+%~pI        - expands %I to a path only
+%~nI        - expands %I to a file name only
+%~xI        - expands %I to a file extension only
+%~sI        - expanded path contains short names only
+%~aI        - expands %I to file attributes of file
+%~tI        - expands %I to date/time of file
+%~zI        - expands %I to size of file
+%~$PATH:I   - searches the directories listed in the PATH
+               environment variable and expands %I to the
+               fully qualified name of the first one found.
+               If the environment variable name is not
+               defined or the file is not found by the
+               search, then this modifier expands to the
+               empty string
+The modifiers can be combined to get compound results:
+
+%~dpI       - expands %I to a drive letter and path only
+%~nxI       - expands %I to a file name and extension only
+%~fsI       - expands %I to a full path name with short names only
+%~dp$PATH:I - searches the directories listed in the PATH
+               environment variable for %I and expands to the
+               drive letter and path of the first one found.
+%~ftzaI     - expands %I to a DIR like output line
+In the above examples %I and PATH can be replaced by other valid values. The %~ syntax is terminated by a valid FOR variable name. Picking upper case variable names like %I makes it more readable and avoids confusion with the modifiers, which are not case sensitive.
+
+There are different letters you can use like f for "full path name", d for drive letter, p for path, and they can be combined. %~ is the beginning for each of those sequences and a number I denotes it works on the parameter %I (where %0 is the complete name of the batch file, just like you assumed).
+```
+##  在此系统中禁止执行脚本
+``` powershell
+# 管理员身份运行 PowerShell 
+set-executionpolicy remotesigned
+# 查看脚本执行策略 - 本地机器(LocalMachine)
+Get-ExecutionPolicy
+# 查看脚本执行策略 - 列表
+Get-ExecutionPolicy -List
+```
+> Powershell脚本5种执行权限, 要删除特定范围的执行策略，请将执行策略设置为Undefined。
+1. Restricted
+默认的设置， 不允许任何脚本运行；
+2. AllSigned
+只能运行经过数字证书签名的脚本；
+3. RemoteSigned
+运行本地的脚本不需要数字签名，但是运行从网络上下载的脚本就必须要有数字签名；
+4. Unrestricted
+允许所有的脚本运行；
+5. Undefined
+在Windows10下这是默认的值，表示未设置任何执行权限。这个值一般是用来删除执行策略的。
+
+##  查看端口占用
+``` sh
+netstat -ano | findstr "LISTENING" | findstr "8888"
+```
+##  创建快捷方式
+> 可能会被某些杀毒软件（如：360）等拦截
+``` sh
+mklink /j "./subfolder" "../folder"
+# 如在 out 目录创建，上层 resource 目录的链接
+mklink /j "resource" "../resource"
+```
+> It's not a keyboard shortcut, but holding ctrl+clicking on the icon in the taskbar repeatedly will cycle through that program's open windows.
+##  查看硬盘媒体类型
+优化驱动器 > 媒体类型
+##  右键菜单
+``` sh
+HKEY_CLASSES_ROOT\Directory\Background\shell
+```
+##  去除Visual Studio右键菜单
+> Run regedit.exe, go to `HKEY_CLASSES_ROOT\Directory\Background\shell\AnyCode`, take ownership of this key, change the permisions for your account and add a `DWORD (32Bit)` with the name `HideBasedOnVelocityId` and set the value to `006698a6 (hex)`:
+##  Windows Scroll Reverse 
+`计算机\HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Enum\HID\VID_05ac&PID_0277&MI_02&Col01\6&ef182fa&0&0000\Device Parameters`
+不需要新建项，通常是已经存在的项
+``` sh
+DWORD
+FlipFlopWheel = 1 
+FlipFlopHWheel = 1
+reboot
+```
