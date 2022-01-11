@@ -46,6 +46,8 @@ git push <remote> --delete <branch>
 git branch -d <branch>
 # 推送到所有远端
 for /F "tokens=* delims=! " %A in (' git remote ') do git push "%A"
+# 创建全新分支
+git checkout --orphan <branch>
 ```
 ## git 中文文件名乱码
 ``` bash
