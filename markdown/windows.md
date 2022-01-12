@@ -139,6 +139,13 @@ Get-ExecutionPolicy -List
 ``` sh
 netstat -ano | findstr "LISTENING" | findstr "8888"
 ```
+## 端口访问错误 EACCES
+``` bash
+# On Windows System, restarting the service "Host Network Service", resolved the issue.
+# 在Windows系统中，『services』 > 重启『主机网络服务』
+```
+
+
 ##  创建快捷方式
 > 可能会被某些杀毒软件（如：360）等拦截
 ``` sh
