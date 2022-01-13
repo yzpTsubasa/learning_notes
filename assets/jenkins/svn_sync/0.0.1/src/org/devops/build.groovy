@@ -435,7 +435,7 @@ def ftpUploadSource() {
 }
 
 // 使用本地环境的 svn 检出, 不需要 svn upgrade
-def checkoutSVN(scm) {
+def checkoutSVN(scmUrl) {
     // 检查状态
     def status = bat returnStdout: true, script: '@echo off && svn status'
     print status
@@ -446,9 +446,27 @@ def checkoutSVN(scm) {
         print "Workspace is not locked"
     }
     // 拉取 SVN
-    print (bat(returnStatus: true, script: "svn checkout ${scm} ."))
+    print (bat(returnStatus: true, script: "svn checkout ${scmUrl} ."))
     // pollSCM
-    checkout([$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '', excludedRegions: '', excludedRevprop: '', excludedUsers: '', filterChangelog: true, ignoreDirPropChanges: false, includedRegions: '', locations: [[cancelProcessOnExternalsFail: true, credentialsId: 'dfb8344e-2d0c-4750-8154-9503745a01f9', depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: "${scm}"]], quietOperation: false, workspaceUpdater: [$class: 'UpdateUpdater']])
+    checkout([$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '', excludedRegions: '', excludedRevprop: '', excludedUsers: '', filterChangelog: true, ignoreDirPropChanges: false, includedRegions: '', locations: [[cancelProcessOnExternalsFail: true, credentialsId: 'dfb8344e-2d0c-4750-8154-9503745a01f9', depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: "${scmUrl}"]], quietOperation: false, workspaceUpdater: [$class: 'UpdateUpdater']])
+}
+
+// 使用本地环境的 svn 检出, 不需要 svn upgrade
+def checkoutComplexSVN(scm) {
+    // 检查状态
+    def status = bat returnStdout: true, script: '@echo off && svn status'
+    print status
+    if (status && (status =~ /^.{2}L/).find()) {
+        print 'Workspace is already locked'
+        bat "svn cleanup"
+    } else {
+        print "Workspace is not locked"
+    }
+    // 拉取 SVN
+    def scmUrl = scm.locations[0].remote
+    print (bat(returnStatus: true, script: "svn checkout ${scmUrl} ."))
+    // pollSCM
+    checkout(scm)
 }
 
 def pub200AutomaticNewIntegrated() {
