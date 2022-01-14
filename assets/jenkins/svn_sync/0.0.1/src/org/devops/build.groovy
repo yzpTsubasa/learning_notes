@@ -169,100 +169,9 @@ def sendResult2DingTalk_PubWeb() {
     )
 }
 
-// 生成翻译KV表
-def generateTranslationKV() {
-    lock(resource: "conversion") {
-        if (!env.NO_SUFFIX) {
-            env.NO_SUFFIX = 0
-        }
-        if (!env.BRANCH_PREFIX) {
-            env.BRANCH_PREFIX = "release/ob"
-        }
-        dir('automator') {
-            checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: 'master']], extensions: [], userRemoteConfigs: [[url: 'https://e.coding.net/tsubasaohzora/playground/automator.git']]]
-            bat 'npm i'
-        }
-        dir('project/resource/assets/cfgjson') {
-            checkout([$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '', excludedRegions: '', excludedRevprop: '', excludedUsers: '', filterChangelog: true, ignoreDirPropChanges: false, includedRegions: '''.*/resource/assets/cfgjson/\\w+\\.json
-    .*/resource/assets/cfgjson/base/\\w+\\.json
-    .*/resource/js/common\\.js''', locations: [[cancelProcessOnExternalsFail: true, credentialsId: 'dfb8344e-2d0c-4750-8154-9503745a01f9', depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: "$SCM_URL/resource/assets/cfgjson"]], quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']])
-            bat '''
-    svn upgrade
-    svn revert -R .
-    '''
-        }
-        dir('project/resource/js') {
-            checkout([$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '', excludedRegions: '', excludedRevprop: '', excludedUsers: '', filterChangelog: true, ignoreDirPropChanges: false, includedRegions: '''.*/resource/assets/cfgjson/\\w+\\.json
-    .*/resource/assets/cfgjson/base/\\w+\\.json
-    .*/resource/js/common\\.js''', locations: [[cancelProcessOnExternalsFail: true, credentialsId: 'dfb8344e-2d0c-4750-8154-9503745a01f9', depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: "$SCM_URL/resource/js"]], quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']])
-            bat '''
-    svn upgrade
-    svn revert -R .
-    '''
-        }                
-        dir('i18n_cp_seirei') {
-            git changelog: false, poll: false, branch: 'master', url: 'git@github.com:G123-jp/i18n-cp-seirei.git'
-        }
-        dir('convert2src') {
-            bat 'node %WORKSPACE%/automator/main.js %WORKSPACE%/automator/cfg/dldl/conversion_to_src.yml --FULL_AUTOMATIC 1 --QUITE_MODE 1 --projectFolder %WORKSPACE%/project --gitFolder %WORKSPACE%/i18n_cp_seirei --projectVer "%PROJECT_VER%" --dst_locale %DST_LOCALE% --conversionWorkspaceFolder %WORKSPACE%/conversion --no_suffix %NO_SUFFIX% --branch_prefix %BRANCH_PREFIX%'
-        }
-    }
-}
-
-// 取回已翻译的内容
-def retrieveTranslation() {
-    lock(resource: "conversion") {
-        if (!env.NO_SUFFIX) {
-            env.NO_SUFFIX = 0
-        }
-        if (!env.BRANCH_PREFIX) {
-            env.BRANCH_PREFIX = "release/ob"
-        }
-        dir('automator') {
-            checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: 'master']], extensions: [], userRemoteConfigs: [[url: 'https://e.coding.net/tsubasaohzora/playground/automator.git']]]
-            bat 'npm i'
-        }
-        dir('project/resource/assets/cfgjson') {
-            checkout([scm: [$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '', excludedRegions: '', excludedRevprop: '', excludedUsers: '', filterChangelog: true, ignoreDirPropChanges: false, includedRegions: '''.*/resource/assets/cfgjson/\\w+\\.json
-    .*/resource/assets/cfgjson/base/\\w+\\.json
-    .*/resource/js/common\\.js''', locations: [[cancelProcessOnExternalsFail: true, credentialsId: 'dfb8344e-2d0c-4750-8154-9503745a01f9', depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: "$SCM_URL/resource/assets/cfgjson"]], quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']]])
-            bat '''
-    svn upgrade
-    svn revert -R .
-    '''
-        }
-        dir('project/resource/js') {
-            checkout([scm: [$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '', excludedRegions: '', excludedRevprop: '', excludedUsers: '', filterChangelog: true, ignoreDirPropChanges: false, includedRegions: '''.*/resource/assets/cfgjson/\\w+\\.json
-    .*/resource/assets/cfgjson/base/\\w+\\.json
-    .*/resource/js/common\\.js''', locations: [[cancelProcessOnExternalsFail: true, credentialsId: 'dfb8344e-2d0c-4750-8154-9503745a01f9', depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: "$SCM_URL/resource/js"]], quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']]])
-            bat '''
-    svn upgrade
-    svn revert -R .
-    '''
-        }   
-        dir('i18n_cp_seirei') {
-            checkout([$class: 'GitSCM', branches: [[name: '${BRANCH_PREFIX}${PROJECT_VER}']], extensions: [], userRemoteConfigs: [[url: 'git@github.com:G123-jp/i18n-cp-seirei.git']]])
-            git branch: '${BRANCH_PREFIX}${PROJECT_VER}', url: 'git@github.com:G123-jp/i18n-cp-seirei.git'
-        }
-        dir('convert2src') {
-            bat 'node %WORKSPACE%/automator/main.js %WORKSPACE%/automator/cfg/dldl/conversion_retrieve.yml --FULL_AUTOMATIC 1 --QUITE_MODE 1 --projectFolder %WORKSPACE%/project --gitFolder %WORKSPACE%/i18n_cp_seirei --projectVer "%PROJECT_VER%" --dst_locale %DST_LOCALE% --conversionWorkspaceFolder %WORKSPACE%/conversion --no_suffix %NO_SUFFIX%  --branch_prefix %BRANCH_PREFIX%'
-        }
-        dir('i18n_cp_seirei') {
-            checkout([$class: 'GitSCM', branches: [[name: '${BRANCH_PREFIX}${PROJECT_VER}']], extensions: [], userRemoteConfigs: [[url: 'git@github.com:G123-jp/i18n-cp-seirei.git']]])
-        }
-    }
-}
-
-
 // 取回已翻译的内容 API版本
 def retrieveTranslationAPI() {
     lock(resource: "conversion_api") {
-        if (!env.NO_SUFFIX) {
-            env.NO_SUFFIX = 0
-        }
-        if (!env.BRANCH_PREFIX) {
-            env.BRANCH_PREFIX = "release/ob"
-        }
         dir('automator') {
             checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: 'master']], extensions: [], userRemoteConfigs: [[url: 'https://e.coding.net/tsubasaohzora/playground/automator.git']]]
             bat 'npm i'
@@ -293,7 +202,7 @@ svn revert -R .
 '''
         }
         dir('convert2src') {
-            bat 'node %WORKSPACE%/automator/main.js %WORKSPACE%/automator/cfg/dldl/conversion_retrieve@api.yml --FULL_AUTOMATIC 1 --QUITE_MODE 1 --projectFolder %WORKSPACE%/project --gitFolder %WORKSPACE%/i18n_cp_seirei --projectVer "%PROJECT_VER%" --dst_locale %DST_LOCALE% --conversionWorkspaceFolder %WORKSPACE%/conversion --no_suffix %NO_SUFFIX%  --branch_prefix %BRANCH_PREFIX% --zipUrl "%ZIP_URL%" --translationFolder %WORKSPACE%/translation  --projectName %PROJECT_NAME% --zipDate %ZIP_DATE%'
+            bat 'node %WORKSPACE%/automator/main.js %WORKSPACE%/automator/cfg/dldl/conversion_retrieve@api.yml --FULL_AUTOMATIC 1 --QUITE_MODE 1 --projectFolder %WORKSPACE%/project --gitFolder %WORKSPACE%/i18n_cp_seirei --conversionWorkspaceFolder %WORKSPACE%/conversion --translationFolder %WORKSPACE%/translation --zipDate %ZIP_DATE%'
         }
     }
 }
@@ -301,12 +210,6 @@ svn revert -R .
 // 生成翻译KV表_API
 def generateTranslationKV_API() {
     lock(resource: "conversion_api") {
-        if (!env.NO_SUFFIX) {
-            env.NO_SUFFIX = 0
-        }
-        if (!env.BRANCH_PREFIX) {
-            env.BRANCH_PREFIX = "release/ob"
-        }
         dir('automator') {
             checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: 'master']], extensions: [], userRemoteConfigs: [[url: 'https://e.coding.net/tsubasaohzora/playground/automator.git']]]
             bat 'npm i'
@@ -337,7 +240,7 @@ def generateTranslationKV_API() {
     '''
         }                
         dir('convert2src') {
-            bat 'node %WORKSPACE%/automator/main.js %WORKSPACE%/automator/cfg/dldl/conversion_to_src@api.yml --FULL_AUTOMATIC 1 --QUITE_MODE 1 --projectFolder %WORKSPACE%/project --projectVer "%PROJECT_VER%" --projectName %PROJECT_NAME% --dst_locale %DST_LOCALE% --conversionWorkspaceFolder %WORKSPACE%/conversion --translationFolder %WORKSPACE%/translation --no_suffix %NO_SUFFIX%'
+            bat 'node %WORKSPACE%/automator/main.js %WORKSPACE%/automator/cfg/dldl/conversion_to_src@api.yml --FULL_AUTOMATIC 1 --QUITE_MODE 1 --projectFolder %WORKSPACE%/project --conversionWorkspaceFolder %WORKSPACE%/conversion --translationFolder %WORKSPACE%/translation'
         }
     }
 }
@@ -546,18 +449,12 @@ def getRevisions() {
 // 发送翻译KV表_API
 def generateSendTranslationKV_API() {
     lock(resource: "conversion_api") {
-        if (!env.NO_SUFFIX) {
-            env.NO_SUFFIX = 0
-        }
-        if (!env.BRANCH_PREFIX) {
-            env.BRANCH_PREFIX = "release/ob"
-        }
         dir('automator') {
             checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: 'master']], extensions: [], userRemoteConfigs: [[url: 'https://e.coding.net/tsubasaohzora/playground/automator.git']]]
             bat 'npm i'
         }
         dir('translation') {
-            checkout([$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '', excludedRegions: '', excludedRevprop: '', excludedUsers: '', filterChangelog: false, ignoreDirPropChanges: false, includedRegions: ".*/${PROJECT_NAME}/${PROJECT_VER}/cn/.*", locations: [[cancelProcessOnExternalsFail: true, credentialsId: 'dfb8344e-2d0c-4750-8154-9503745a01f9', depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: 'https://svn100.hotgamehl.com/svn/Html5/trunk/dldl_WX/translation_keyvalue']], quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']])
+            checkout([$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '', excludedRegions: '', excludedRevprop: '', excludedUsers: '', filterChangelog: false, ignoreDirPropChanges: false, includedRegions: "", locations: [[cancelProcessOnExternalsFail: true, credentialsId: 'dfb8344e-2d0c-4750-8154-9503745a01f9', depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: 'https://svn100.hotgamehl.com/svn/Html5/trunk/dldl_WX/translation_keyvalue']], quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']])
                         bat '''
     svn upgrade
     svn revert -R .
@@ -584,7 +481,7 @@ def generateSendTranslationKV_API() {
         dir('convert2src') {
             env.REVISIONS = env.REVISIONS ? env.REVISIONS : getRevisions()
             print "env.REVISIONS " + env.REVISIONS
-            bat 'node %WORKSPACE%/automator/main.js %WORKSPACE%/automator/cfg/dldl/conversion_to_send@api.yml --FULL_AUTOMATIC 1 --QUITE_MODE 1 --projectFolder %WORKSPACE%/project --projectVer "%PROJECT_VER%" --projectName %PROJECT_NAME% --dst_locale %DST_LOCALE% --conversionWorkspaceFolder %WORKSPACE%/conversion --translationFolder %WORKSPACE%/translation --no_suffix %NO_SUFFIX% --revisions "%REVISIONS%" --revision_beg "%REVISION_BEG%" --revision_end "%REVISION_END%"'
+            bat 'node %WORKSPACE%/automator/main.js %WORKSPACE%/automator/cfg/dldl/conversion_to_send@api.yml --FULL_AUTOMATIC 1 --QUITE_MODE 1 --projectFolder %WORKSPACE%/project --projectName %PROJECT_NAME% --conversionWorkspaceFolder %WORKSPACE%/conversion --translationFolder %WORKSPACE%/translation --revisions "%REVISIONS%" --revision_beg "%REVISION_BEG%" --revision_end "%REVISION_END%"'
         }
     }
 }

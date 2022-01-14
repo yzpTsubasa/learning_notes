@@ -2,19 +2,19 @@
 
 def build = new org.devops.build()
 
-def zipUrlName = "";
-if (params.PROJECT_NAME == "seirei") {
-    zipUrlName = "${params.PROJECT_NAME}-精灵";
-    if (params.DST_LOCALE == "jp") {
-        zipUrlName += "中翻日"
-    }
-    if (params.DST_LOCALE == "en") {
-        zipUrlName += "日翻英"
-    }
-}
-def zipUrl = "https://i18n-api.g123.jp/jsonfile/zip/${zipUrlName}-ob${PROJECT_VER}-${ZIP_DATE}.zip"
-env.ZIP_URL = zipUrl
-println(zipUrl)
+// def zipUrlName = "";
+// if (params.PROJECT_NAME == "seirei") {
+//     zipUrlName = "${params.PROJECT_NAME}-精灵";
+//     if (params.DST_LOCALE == "jp") {
+//         zipUrlName += "中翻日"
+//     }
+//     if (params.DST_LOCALE == "en") {
+//         zipUrlName += "日翻英"
+//     }
+// }
+// def zipUrl = "https://i18n-api.g123.jp/jsonfile/zip/${zipUrlName}-ob${PROJECT_VER}-${ZIP_DATE}.zip"
+// env.ZIP_URL = zipUrl
+// println(zipUrl)
 
 pipeline {
     agent any
@@ -49,7 +49,7 @@ pipeline {
         stage('retrieve_translation') {
             steps {
                 script {
-                    httpRequest responseHandle: 'NONE', url: "${ZIP_URL}", wrapAsMultipart: false
+                    // httpRequest responseHandle: 'NONE', url: "${ZIP_URL}", wrapAsMultipart: false
                     build.retrieveTranslationAPI()
                 }
             }
