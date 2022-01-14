@@ -1,4 +1,17 @@
 ## javascript&typescript
+
+## protocol buffer 相关
+- 下载 `protoc` https://github.com/protocolbuffers/protobuf/releases
+- 新建一个空项目，安装 `npm i ts-proto`
+### 在Windows中使用
+``` bash
+# 生成 包含完整类定义的 typescript 代码
+protoc --plugin=protoc-gen-ts_proto=.\\node_modules\\.bin\\protoc-gen-ts_proto.cmd --ts_proto_out=. ./messages.proto
+# 生成 仅包含接口的 typescript 代码
+protoc --plugin=protoc-gen-ts_proto=.\\node_modules\\.bin\\protoc-gen-ts_proto.cmd --ts_proto_out=. --ts_proto_opt=outputEncodeMethods=false,outputJsonMethods=false,outputClientImpl=false ./messages.proto
+```
+> 协议文件`messages.proto`要放在工作空间内部，并且以相对路径的写法传递给命令行参数
+
 ## express 解决跨域问题
 ``` js
 ////// 方案一
