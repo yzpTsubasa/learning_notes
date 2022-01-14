@@ -31,7 +31,7 @@ echo %PATH%
 # 添加新路径到当前会话的PATH变量
 set PATH="%PATH%;<NEW_PATH>"
 ```
-### setx 有 1024 的长度限制，path太长会被截断，不推荐下面的方法
+### setx 有 1024 的长度限制，path太长会被截断，不推荐下面的方法, PATH 长度最大为 2048
 ``` bash
 # 添加新路径到当前用户的PATH变量
 setx path "%PATH%;<NEW_PATH>"
