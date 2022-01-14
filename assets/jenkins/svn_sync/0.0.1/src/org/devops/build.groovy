@@ -293,7 +293,7 @@ svn revert -R .
 '''
         }
         dir('convert2src') {
-            bat 'node %WORKSPACE%/automator/main.js %WORKSPACE%/automator/cfg/dldl/conversion_retrieve@api.yml --FULL_AUTOMATIC 1 --QUITE_MODE 1 --projectFolder %WORKSPACE%/project --gitFolder %WORKSPACE%/i18n_cp_seirei --projectVer "%PROJECT_VER%" --dst_locale %DST_LOCALE% --conversionWorkspaceFolder %WORKSPACE%/conversion --no_suffix %NO_SUFFIX%  --branch_prefix %BRANCH_PREFIX% --zipUrl "%ZIP_URL%" --translationFolder %WORKSPACE%/translation  --projectName %PROJECT_NAME%'
+            bat 'node %WORKSPACE%/automator/main.js %WORKSPACE%/automator/cfg/dldl/conversion_retrieve@api.yml --FULL_AUTOMATIC 1 --QUITE_MODE 1 --projectFolder %WORKSPACE%/project --gitFolder %WORKSPACE%/i18n_cp_seirei --projectVer "%PROJECT_VER%" --dst_locale %DST_LOCALE% --conversionWorkspaceFolder %WORKSPACE%/conversion --no_suffix %NO_SUFFIX%  --branch_prefix %BRANCH_PREFIX% --zipUrl "%ZIP_URL%" --translationFolder %WORKSPACE%/translation  --projectName %PROJECT_NAME% --zipDate %ZIP_DATE%'
         }
     }
 }
