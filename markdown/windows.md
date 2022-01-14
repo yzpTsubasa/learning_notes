@@ -24,7 +24,19 @@ setx DLDL_PUB_TOOLS_DIR %~dp0
 # 移除
 REG delete HKCU\Environment /F /V <key>
 ```
-
+## PATH 变量
+``` bash
+# 打印PATH变量
+echo %PATH%
+# 添加新路径到当前会话的PATH变量
+set PATH="%PATH%;<NEW_PATH>"
+# 添加新路径到当前用户的PATH变量
+setx path "%PATH%;<NEW_PATH>"
+# 添加新路径到系统（所有用户）的PATH变量
+setx /M path "%PATH%;<NEW_PATH>"
+# 添加新路径到当前用户的PATH变量
+setx path "%PATH%;%cd%"
+```
 ## 设置 HTTP 代理
 ``` sh
 set HTTP_PROXY=http://127.0.0.1:6149
