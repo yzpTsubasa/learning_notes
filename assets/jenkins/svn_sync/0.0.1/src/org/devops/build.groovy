@@ -366,7 +366,7 @@ def checkoutComplexSVN(scm) {
         print "Workspace is not locked"
     }
     // 拉取 SVN
-    def scmUrl = scm.locations[0].remote
+    def scmUrl = scm.scm ? scm.scm.locations[0].remote : scm.locations[0].remote
     print (bat(returnStatus: true, script: "svn checkout ${scmUrl} ."))
     // pollSCM
     checkout(scm)
