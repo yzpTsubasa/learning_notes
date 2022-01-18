@@ -115,7 +115,7 @@ def sendStart2DingTalk_PubWeb() {
             // "- **备注** ${env.HG_BUILD_DESC ? env.HG_BUILD_DESC : '无'}",
             "- **发起** ${currentBuild.getBuildCauses()[0].userName ? currentBuild.getBuildCauses()[0].userName : currentBuild.getBuildCauses()[0].shortDescription.minus("Started by ").replace("timer", "定时器").replace("an SCM change", "SCM轮询")}",
             "- **仓库**",
-            params.HG_REPOSITORY_SRC,
+            params.HG_REPOSITORY_SRC ? (params.HG_REPOSITORY_SRC - ~/.*\//) : "Unknown",
             "- **记录**",
             "***",
         ] + getChangeString()
@@ -160,7 +160,7 @@ def sendResult2DingTalk_PubWeb() {
             "- **发起** ${currentBuild.getBuildCauses()[0].userName ? currentBuild.getBuildCauses()[0].userName : currentBuild.getBuildCauses()[0].shortDescription.minus("Started by ").replace("timer", "定时器").replace("an SCM change", "SCM轮询")}",
             "- **用时** ${durationString}",
             "- **仓库**",
-            params.HG_REPOSITORY_SRC,
+            params.HG_REPOSITORY_SRC ? (params.HG_REPOSITORY_SRC - ~/.*\//) : "Unknown",
             "- **记录**",
             "***",
         ] + getChangeString() + (
