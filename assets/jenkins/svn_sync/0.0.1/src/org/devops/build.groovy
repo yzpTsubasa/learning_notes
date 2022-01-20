@@ -40,7 +40,8 @@ def sendResult2DingTalk() {
     env.result = currentBuild.result == 'SUCCESS' ? '成功' : currentBuild.result == 'FAILURE' ? '失败' : '取消'
     env.description = currentBuild.description
     env.durationString = currentBuild.durationString.minus(" and counting")
-    def atUsers = []
+    // 失败时，@提交者
+    def atUsers = currentBuild.result == 'FAILURE' ? getCommitUserMobiles() : []
     dingtalk(
         robot: 'automator',
         type: 'ACTION_CARD',
@@ -133,6 +134,16 @@ def getAtUsers() {
     }
     print AT_USERS
     return AT_USERS
+}
+
+// 获取当前提交者的手机号
+def getCommitUserMobiles() {
+    def mobiles = (currentBuild.changeSets.collect{
+        it.items.collect{
+            hudson.model.User.getById(it.author.getId(), false).getProperty(io.jenkins.plugins.DingTalkUserProperty.class).getMobile()
+        }
+    }).flatten();
+    return mobiles ? mobiles : []
 }
 
 // pubToWeb构建结束
