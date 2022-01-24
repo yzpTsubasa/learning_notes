@@ -414,7 +414,7 @@ mklink /j "resource" "../resource"
 }
 
 // 获取末尾的几条日志
-def getTailLogString(size = 30) {
+def getTailLogString(size = 50) {
     // def consoleTextUrl = "http://192.168.1.205:8080/job/pipeline_dldl_h5_en_translation_ob_dev/20/consoleText"
     def consoleTextUrl = "${BUILD_URL}consoleText"
     def consoleText = httpRequest quiet: true, url: consoleTextUrl, wrapAsMultipart: false 
