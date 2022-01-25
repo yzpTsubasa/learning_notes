@@ -146,6 +146,8 @@ def getCommitUserMobiles() {
     def mobiles = (currentBuild.changeSets.collect{
         it.items.collect{
             hudson.model.User.getById(it.author.getId(), false).getProperty(io.jenkins.plugins.DingTalkUserProperty.class).getMobile()
+        }.findAll {
+            it
         }
     }).flatten();
     return mobiles ? mobiles : []
