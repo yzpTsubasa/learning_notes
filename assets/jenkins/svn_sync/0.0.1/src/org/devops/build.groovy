@@ -40,8 +40,7 @@ def sendResult2DingTalk() {
     env.result = currentBuild.result == 'SUCCESS' ? '成功' : currentBuild.result == 'FAILURE' ? '失败' : '取消'
     env.description = currentBuild.description
     env.durationString = currentBuild.durationString.minus(" and counting")
-    // 失败时，@提交者
-    def atUsers = currentBuild.result == 'FAILURE' ? getCommitUserMobiles() : []
+    def atUsers = getAtUsers()
     dingtalk(
         robot: 'automator',
         type: 'ACTION_CARD',
@@ -125,13 +124,19 @@ def sendStart2DingTalk_PubWeb() {
 
 // 获取要@的用户
 def getAtUsers() {
-    def AT_USERS_STR = params.AT_USERS != null ? params.AT_USERS : "+86-13960222569,+86-15705985096";
+    def AT_USERS_STR = params.AT_USERS != null ? params.AT_USERS : "";
     def AT_USERS = AT_USERS_STR.tokenize(",");
     // 添加构建者(需要允许指定的API)
     def builderMobile = currentBuild.getBuildCauses()[0].userId ? hudson.model.User.getById(currentBuild.getBuildCauses()[0].userId, false).getProperty(io.jenkins.plugins.DingTalkUserProperty.class).getMobile() : "";
-    if (builderMobile && !AT_USERS.contains(builderMobile)) {
+    if (builderMobile) {
         AT_USERS.add(builderMobile)
     }
+    // 失败时，@提交者
+    if (currentBuild.result == 'FAILURE') {
+        AT_USERS += getCommitUserMobiles()
+    }
+    // 去重
+    AT_USERS.unique()
     print AT_USERS
     return AT_USERS
 }
