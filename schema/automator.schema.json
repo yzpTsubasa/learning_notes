@@ -80,6 +80,8 @@
                 "message": {"title": "消息内容"},
                 "connection": {"title": "连接对象"},
                 "query": {"title": "查询语句"},
+                "no_glob": {"title": "不使用glob"},
+                "only_file": {"title": "仅文件"},
                 "store_confirm": {"title": "结果值确认"}
             }
         },
