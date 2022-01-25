@@ -335,17 +335,19 @@ def ftpUploadSource() {
 
 // 使用本地环境的 svn 检出, 不需要 svn upgrade
 def checkoutSVN(scmUrl) {
-    // 检查状态
-    def status = bat returnStdout: true, script: '@echo off && svn status'
-    print status
-    if (status && (status =~ /^.{2}L/).find()) {
-        print 'Workspace is already locked'
-        bat "svn cleanup"
-    } else {
-        print "Workspace is not locked"
+    if (fileExists('.svn')) {
+        // 检查状态
+        def status = bat returnStdout: true, script: '@echo off && svn status'
+        print status
+        if (status && (status =~ /^.{2}L/).find()) {
+            print 'Workspace is already locked'
+            bat "svn cleanup"
+        } else {
+            print "Workspace is not locked"
+        }
+        // 还原
+        bat returnStdout: true, script: '@echo off && svn revert -R .'
     }
-    // 还原
-    bat returnStdout: true, script: '@echo off && svn revert -R .'
     // 拉取 SVN
     print (bat(returnStatus: true, script: "svn checkout ${scmUrl} ."))
     // pollSCM
@@ -354,17 +356,19 @@ def checkoutSVN(scmUrl) {
 
 // 使用本地环境的 svn 检出, 不需要 svn upgrade
 def checkoutComplexSVN(scm) {
-    // 检查状态
-    def status = bat returnStdout: true, script: '@echo off && svn status'
-    print status
-    if (status && (status =~ /^.{2}L/).find()) {
-        print 'Workspace is already locked'
-        bat "svn cleanup"
-    } else {
-        print "Workspace is not locked"
+    if (fileExists('.svn')) {
+        // 检查状态
+        def status = bat returnStdout: true, script: '@echo off && svn status'
+        print status
+        if (status && (status =~ /^.{2}L/).find()) {
+            print 'Workspace is already locked'
+            bat "svn cleanup"
+        } else {
+            print "Workspace is not locked"
+        }
+        // 还原
+        bat returnStdout: true, script: '@echo off && svn revert -R .'
     }
-    // 还原
-    bat returnStdout: true, script: '@echo off && svn revert -R .'
     // 拉取 SVN
     def scmUrl = scm.scm ? scm.scm.locations[0].remote : scm.locations[0].remote
     print (bat(returnStatus: true, script: "svn checkout ${scmUrl} ."))
