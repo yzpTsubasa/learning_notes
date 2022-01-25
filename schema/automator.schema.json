@@ -80,9 +80,6 @@
                 "message": {"title": "消息内容"},
                 "connection": {"title": "连接对象"},
                 "query": {"title": "查询语句"},
-                "remote_file": {"title": "远端文件"},
-                "local_file": {"title": "本地文件"},
-                "remote_folder": {"title": "远端目录"},
                 "store_confirm": {"title": "结果值确认"}
             }
         },
