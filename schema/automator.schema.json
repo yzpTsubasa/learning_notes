@@ -83,6 +83,7 @@
                 "no_glob": {"title": "不使用glob"},
                 "only_file": {"title": "仅文件"},
                 "cache_key": {"title": "本地缓存键"},
+                "delimiter": {"title": "分隔符"},
                 "store_confirm": {"title": "结果值确认"}
             }
         },
