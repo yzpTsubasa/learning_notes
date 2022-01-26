@@ -41,6 +41,8 @@
                                 }
                             ]
                         },
+                        "overwrite": {"title": "强制覆盖"},
+                        "strategy": {"title": "策略", "enum": ["lazy", "hash", "force"]},
                         "strip_comments": {"title": "去除注释"}
                     }
                 },
