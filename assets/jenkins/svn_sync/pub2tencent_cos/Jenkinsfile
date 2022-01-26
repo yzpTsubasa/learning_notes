@@ -12,14 +12,16 @@ pipeline {
         stage('build') {
             steps {
                 script {
-                    dir("project") {
-                        build.checkoutSVN(params.HG_REPOSITORY_SRC)
+                    lock(resource: "cdn_root.${cdn_root}") {
+                        dir("project") {
+                            build.checkoutSVN(params.HG_REPOSITORY_SRC)
+                        }
+                        dir('automator') {
+                            checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: 'master']], extensions: [], userRemoteConfigs: [[url: 'https://e.coding.net/tsubasaohzora/playground/automator.git']]]
+                            bat 'npm i'
+                        }
+                        bat 'node %WORKSPACE%/automator/main.js %WORKSPACE%/automator/cfg/dldl/pub2cdn.yml --FULL_AUTOMATIC 1 --QUITE_MODE 1 --workspaceFolder %WORKSPACE%/project --target_hgvc_res_js_files %target_hgvc_res_js_files% --cdn_prefix %cdn_prefix% --cdn_root %cdn_root%'
                     }
-                    dir('automator') {
-                        checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: 'master']], extensions: [], userRemoteConfigs: [[url: 'https://e.coding.net/tsubasaohzora/playground/automator.git']]]
-                        bat 'npm i'
-                    }
-                    bat 'node %WORKSPACE%/automator/main.js %WORKSPACE%/automator/cfg/dldl/pub2cdn.yml --FULL_AUTOMATIC 1 --QUITE_MODE 1 --workspaceFolder %WORKSPACE%/project --target_hgvc_res_js_files %target_hgvc_res_js_files% --cdn_prefix %cdn_prefix% --cdn_root %cdn_root%'
                 }
             }
         }
