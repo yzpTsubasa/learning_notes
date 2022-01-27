@@ -1,0 +1,38 @@
+@Library("jenkins_library") _
+
+def build = new org.devops.build()
+
+pipeline {
+    agent any
+    options {
+        disableConcurrentBuilds()
+    }
+
+    stages {
+        stage('build') {
+            steps {
+                script {
+                    lock(resource: "cdn_root.${cdn_root}") {
+                        dir("project") {
+                            build.checkoutSVN(params.HG_REPOSITORY_SRC)
+                        }
+                        dir('automator') {
+                            checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: 'master']], extensions: [], userRemoteConfigs: [[url: 'https://e.coding.net/tsubasaohzora/playground/automator.git']]]
+                            bat 'npm i'
+                        }
+                        bat 'node %WORKSPACE%/automator/main.js %WORKSPACE%/automator/cfg/dldl/pub2cdn_complex.yml --FULL_AUTOMATIC 1 --QUITE_MODE 1 --workspaceFolder %WORKSPACE%/project'
+                    }
+                }
+            }
+        }
+    }
+
+
+    post { 
+        always { 
+            script {
+                build.sendResult2DingTalk_PubWeb()
+            }
+        }
+    }
+}
