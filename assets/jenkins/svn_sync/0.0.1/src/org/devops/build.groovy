@@ -76,13 +76,26 @@ def getLastChangedRev() {
 // 新的发布流程
 def pubToWeb() {
     bat([label: '发布', returnStdout: false, script: """cd "E:/projects/publish"
-git checkout -- * 
-git pull
-if "%chkdst%" == "true" (
-npx hgbuild walk ${HG_PUB_RES} ${HG_PUB_TYPE} --noUserOp --chkdst
-) else (
-npx hgbuild walk ${HG_PUB_RES} ${HG_PUB_TYPE} --noUserOp
-)"""])
+    git checkout -- * 
+    git pull
+    if "%chkdst%" == "true" (
+    npx hgbuild walk ${HG_PUB_RES} ${HG_PUB_TYPE} --noUserOp --chkdst
+    ) else (
+    npx hgbuild walk ${HG_PUB_RES} ${HG_PUB_TYPE} --noUserOp
+    )"""])
+}
+
+// 新的发布流程 _10_common 发布入口
+def pubToWebCommon() {
+    // _10_common 发布入口
+    bat([label: '发布', returnStdout: false, script: """cd "E:/projects/publish"
+    git checkout -- * 
+    git pull
+    if "%chkdst%" == "true" (
+        hgbuild run _10_common --prg_dir ${pwd()} --upload_filter ${params.upload_filter} --toolTag ${params.toolTag} --cfg_dir ${params.cfg_dir} --noUserOp --chkdst
+    ) else (
+        hgbuild run _10_common --prg_dir ${pwd()} --upload_filter ${params.upload_filter} --toolTag ${params.toolTag} --cfg_dir ${params.cfg_dir} --noUserOp
+    )"""])
 }
 
 // 新的发布流程 - 集成版本
@@ -94,6 +107,19 @@ def pubToWebIntegrated() {
         sendStart2DingTalk_PubWeb()
         // 发布
         pubToWeb()
+    }
+}
+
+
+// 新的发布流程 - 集成版本
+def pubToWebIntegratedCommon() {
+    lock(resource: "${cfg_dir}") {
+        // 检出
+        checkoutSVN(params.HG_REPOSITORY_SRC)
+        // 发送通知
+        sendStart2DingTalk_PubWeb()
+        // 发布
+        pubToWebCommon()
     }
 }
 
