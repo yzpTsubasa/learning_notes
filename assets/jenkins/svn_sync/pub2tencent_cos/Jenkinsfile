@@ -26,4 +26,13 @@ pipeline {
             }
         }
     }
+
+
+    post { 
+        always { 
+            script {
+                build.sendResult2DingTalk_PubWeb()
+            }
+        }
+    }
 }

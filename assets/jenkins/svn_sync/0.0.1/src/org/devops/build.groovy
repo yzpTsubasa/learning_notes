@@ -316,9 +316,12 @@ def getPubWebVersion() {
     def result = ((consoleText.content =~ /"autoIn":\["(\d+)"\]/))
     if (result.find()) {
         return result[0][1]
-    } else {
-        return null
     }
+    result = ((consoleText.content =~ /build web base v(\d+) begin/))
+    if (result.find()) {
+        return result[0][1]
+    }
+    return null
 }
 
 // 上传资源到FTP上
