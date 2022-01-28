@@ -49,6 +49,14 @@ for /F "tokens=* delims=! " %A in (' git remote ') do git push "%A"
 # 创建全新分支
 git checkout --orphan <branch>
 ```
+## PowerShell 写法
+``` ps1
+# 推送到所有远端
+foreach($line in Invoke-Expression "git remote") {
+    Write-Output $line
+    Invoke-Expression "git push $line"
+}
+```
 ## git 中文文件名乱码
 ``` bash
 git 默认中文文件名是 \xxx\xxx 等八进制形式，是因为 对0x80以上的字符进行quote。
