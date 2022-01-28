@@ -360,7 +360,7 @@ def ftpUploadSource() {
             bat 'npm i'
     }
     dir("ftp") {
-        bat 'node %WORKSPACE%/automator/main.js %WORKSPACE%/automator/cfg/dldl/ftp_upload.yml --FULL_AUTOMATIC 1 --QUITE_MODE 1 --remote_file %REMOTE_FILE% --local_file %WORKSPACE%/source/%LOCAL_FILE%'
+        bat "node %WORKSPACE%/automator/main.js %WORKSPACE%/automator/cfg/dldl/ftp_upload.yml --FULL_AUTOMATIC 1 --QUITE_MODE 1 --remote_file %REMOTE_FILE% --local_file ${params.LOCAL_FILE.tokenize(",").collect{env.WORKSPACE + "/source/" + it}.join(",")}"
     }
 }
 
