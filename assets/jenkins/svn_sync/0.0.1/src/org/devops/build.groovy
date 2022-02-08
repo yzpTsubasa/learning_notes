@@ -378,9 +378,10 @@ def checkoutSVN(scmUrl) {
         }
         // 还原
         bat returnStdout: true, script: '@echo off && svn revert -R .'
+    } else {
+        // 拉取 SVN
+        bat(script: "svn checkout ${scmUrl} . --quiet")
     }
-    // 拉取 SVN
-    bat(script: "svn checkout ${scmUrl} . --quiet")
     // pollSCM
     checkout([$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '', excludedRegions: '', excludedRevprop: '', excludedUsers: '', filterChangelog: true, ignoreDirPropChanges: false, includedRegions: '', locations: [[cancelProcessOnExternalsFail: true, credentialsId: 'dfb8344e-2d0c-4750-8154-9503745a01f9', depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: "${scmUrl}"]], quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']])
 }
@@ -399,10 +400,11 @@ def checkoutComplexSVN(scm) {
         }
         // 还原
         bat returnStdout: true, script: '@echo off && svn revert -R .'
+    } else {
+        // 拉取 SVN
+        def scmUrl = scm.scm ? scm.scm.locations[0].remote : scm.locations[0].remote
+        bat(script: "svn checkout ${scmUrl} . --quiet")
     }
-    // 拉取 SVN
-    def scmUrl = scm.scm ? scm.scm.locations[0].remote : scm.locations[0].remote
-    bat(script: "svn checkout ${scmUrl} . --quiet")
     // pollSCM
     checkout(scm)
 }
