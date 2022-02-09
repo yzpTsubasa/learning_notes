@@ -75,7 +75,7 @@ def getLastChangedRev() {
 
 // 新的发布流程
 def pubToWeb() {
-    bat([label: '发布', returnStdout: false, script: """cd "E:/projects/publish"
+    bat([label: '发布', returnStdout: false, script: """cd /d "E:/projects/publish"
     git checkout -- * 
     git pull
     if "%chkdst%" == "true" (
@@ -88,7 +88,7 @@ def pubToWeb() {
 // 新的发布流程 _10_common 发布入口
 def pubToWebCommon() {
     // _10_common 发布入口
-    bat([label: '发布', returnStdout: false, script: """cd "E:/projects/publish"
+    bat([label: '发布', returnStdout: false, script: """cd /d "E:/projects/publish"
     git checkout -- * 
     git pull
     if "%chkdst%" == "true" (
