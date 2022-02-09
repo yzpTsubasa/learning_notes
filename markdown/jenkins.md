@@ -174,7 +174,7 @@ bat([label: 'svn 信息', returnStdout: true, script: '@echo off && svn info', e
 ``` xml
 <Environment name="JENKINS_HOME" type="java.lang.String" value="E:/software/JenkinsTomcat" override="true"/>
 ```
-安裝版本配置在默认安装目录下的 `jenkins.xml` 如 `C:\Program Files\Jenkins\jenkins.xml`
+## 安裝版本配置在默认安装目录下的 `jenkins.xml` 如 `C:\Program Files\Jenkins\jenkins.xml`
 ``` xml
 <env name="JENKINS_HOME" value="E:\Jenkins"/>
 ```
