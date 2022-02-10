@@ -114,12 +114,14 @@ def pubToWebIntegrated() {
 // 新的发布流程 - 集成版本
 def pubToWebIntegratedCommon() {
     lock(resource: "${cfg_dir}") {
-        // 检出
-        checkoutSVN(params.HG_REPOSITORY_SRC)
-        // 发送通知
-        sendStart2DingTalk_PubWeb()
-        // 发布
-        pubToWebCommon()
+        dir("project") {
+            // 检出
+            checkoutSVN(params.HG_REPOSITORY_SRC)
+            // 发送通知
+            sendStart2DingTalk_PubWeb()
+            // 发布
+            pubToWebCommon()
+        }
     }
 }
 
