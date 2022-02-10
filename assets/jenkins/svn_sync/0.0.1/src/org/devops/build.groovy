@@ -73,6 +73,28 @@ def getLastChangedRev() {
     return map['Last Changed Rev']
 }
 
+def pubToWebIntegrated() {
+    lock(resource: "${HG_PUB_RES}") {
+        dir("project") {
+            // 检出
+            checkoutSVN(params.HG_REPOSITORY_SRC)
+            // 发送通知
+            sendStart2DingTalk_PubWeb()
+        }
+        dir("publish") {
+            checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: '*/yzp']], extensions: [], userRemoteConfigs: [[url: 'http://192.168.1.205:3000/fangjie/publish.git']]]
+            // 发布
+            bat([label: '发布', returnStdout: false, script: """
+npm i
+if "%chkdst%" == "true" (
+npx hgbuild walk ${HG_PUB_RES} ${HG_PUB_TYPE} --noUserOp --chkdst
+) else (
+npx hgbuild walk ${HG_PUB_RES} ${HG_PUB_TYPE} --noUserOp
+)"""])
+        }
+    }
+}
+
 // 新的发布流程 - 集成版本
 def pubToWebIntegratedCommonOld() {
     lock(resource: "${cfg_dir}") {
