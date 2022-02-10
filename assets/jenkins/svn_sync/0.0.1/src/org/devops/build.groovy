@@ -110,6 +110,30 @@ def pubToWebIntegrated() {
     }
 }
 
+// 新的发布流程 - 集成版本
+def pubToWebIntegratedCommonOld() {
+    lock(resource: "${cfg_dir}") {
+        dir("project") {
+            // 检出
+            checkoutSVN(params.HG_REPOSITORY_SRC)
+            // 发送通知
+            sendStart2DingTalk_PubWeb()
+        }
+        // 发布
+        dir("publish") {
+            checkout([$class: 'GitSCM', branches: [[name: '*/yzp']], extensions: [], userRemoteConfigs: [[url: 'http://192.168.1.205:3000/fangjie/publish.git']]])
+            bat """
+npm i
+"""
+            bat([label: '发布', returnStdout: false, script: """
+if "%chkdst%" == "true" (
+    hgbuild run _11_common_old --prg_dir ${WORKSPACE}/project --upload_filter ${params.upload_filter} --toolTag ${params.toolTag} --cfg_dir ${params.cfg_dir} --noUserOp --chkdst
+) else (
+    hgbuild run _11_common_old --prg_dir ${WORKSPACE}/project --upload_filter ${params.upload_filter} --toolTag ${params.toolTag} --cfg_dir ${params.cfg_dir} --noUserOp
+)"""])
+        }
+    }
+}
 
 // 新的发布流程 - 集成版本
 def pubToWebIntegratedCommon() {
@@ -123,11 +147,14 @@ def pubToWebIntegratedCommon() {
         // 发布
         dir("publish") {
             checkout([$class: 'GitSCM', branches: [[name: '*/yzp']], extensions: [], userRemoteConfigs: [[url: 'http://192.168.1.205:3000/fangjie/publish.git']]])
+            bat """
+npm i
+"""
             bat([label: '发布', returnStdout: false, script: """
 if "%chkdst%" == "true" (
-    hgbuild run _10_common --prg_dir ${pwd()} --upload_filter ${params.upload_filter} --toolTag ${params.toolTag} --cfg_dir ${params.cfg_dir} --noUserOp --chkdst
+    hgbuild run _10_common --prg_dir ${WORKSPACE}/project --upload_filter ${params.upload_filter} --toolTag ${params.toolTag} --cfg_dir ${params.cfg_dir} --noUserOp --chkdst
 ) else (
-    hgbuild run _10_common --prg_dir ${pwd()} --upload_filter ${params.upload_filter} --toolTag ${params.toolTag} --cfg_dir ${params.cfg_dir} --noUserOp
+    hgbuild run _10_common --prg_dir ${WORKSPACE}/project --upload_filter ${params.upload_filter} --toolTag ${params.toolTag} --cfg_dir ${params.cfg_dir} --noUserOp
 )"""])
         }
     }
