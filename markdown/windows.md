@@ -1,5 +1,10 @@
 ## windows
 
+## 有盘符切换的cd
+``` sh
+cd /d "X:/YYY/ZZZ"
+```
+
 ## 刷新环境变量
 ``` sh
 refreshenv
