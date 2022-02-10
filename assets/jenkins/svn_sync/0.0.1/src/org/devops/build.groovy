@@ -80,6 +80,8 @@ def pubToWebIntegrated() {
             checkoutSVN(params.HG_REPOSITORY_SRC)
             // 发送通知
             sendStart2DingTalk_PubWeb()
+            // 设置环境变量 prg_dir 给 hgbuild 使用
+            env.prg_dir = pwd()
         }
         dir("publish") {
             checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: '*/yzp']], extensions: [], userRemoteConfigs: [[url: 'http://192.168.1.205:3000/fangjie/publish.git']]]
