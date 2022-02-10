@@ -119,8 +119,16 @@ def pubToWebIntegratedCommon() {
             checkoutSVN(params.HG_REPOSITORY_SRC)
             // 发送通知
             sendStart2DingTalk_PubWeb()
-            // 发布
-            pubToWebCommon()
+        }
+        // 发布
+        dir("publish") {
+            checkout([$class: 'GitSCM', branches: [[name: '*/yzp']], extensions: [], userRemoteConfigs: [[url: 'http://192.168.1.205:3000/fangjie/publish.git']]])
+            bat([label: '发布', returnStdout: false, script: """
+if "%chkdst%" == "true" (
+    hgbuild run _10_common --prg_dir ${pwd()} --upload_filter ${params.upload_filter} --toolTag ${params.toolTag} --cfg_dir ${params.cfg_dir} --noUserOp --chkdst
+) else (
+    hgbuild run _10_common --prg_dir ${pwd()} --upload_filter ${params.upload_filter} --toolTag ${params.toolTag} --cfg_dir ${params.cfg_dir} --noUserOp
+)"""])
         }
     }
 }
