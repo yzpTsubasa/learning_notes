@@ -83,9 +83,11 @@ def pubToWebIntegrated() {
         }
         dir("publish") {
             checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: '*/yzp']], extensions: [], userRemoteConfigs: [[url: 'http://192.168.1.205:3000/fangjie/publish.git']]]
+            bat """
+npm i
+"""
             // 发布
             bat([label: '发布', returnStdout: false, script: """
-npm i
 if "%chkdst%" == "true" (
 npx hgbuild walk ${HG_PUB_RES} ${HG_PUB_TYPE} --noUserOp --chkdst
 ) else (

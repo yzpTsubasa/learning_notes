@@ -1,0 +1,32 @@
+@Library("jenkins_library") _
+
+def build = new org.devops.build()
+
+pipeline {
+    agent any
+    options {
+        disableConcurrentBuilds()
+    }
+
+    stages {
+        stage('build') {
+            steps {
+                script {
+                    print build.getAtUsers()
+                    build.pubToWebIntegrated()
+                }
+            }
+        }
+    }
+
+    post { 
+        always { 
+            script {
+                build.sendResult2DingTalk_PubWeb()
+                if (params.MAIL_TO) {
+                    build.sendResult2Emailext()
+                }
+            }
+        }
+    }
+}
