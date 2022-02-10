@@ -84,7 +84,7 @@ def pubToWebIntegratedCommonOld() {
         }
         // 发布
         dir("publish") {
-            checkout([$class: 'GitSCM', branches: [[name: '*/yzp']], extensions: [], userRemoteConfigs: [[url: 'http://192.168.1.205:3000/fangjie/publish.git']]])
+            checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: '*/yzp']], extensions: [], userRemoteConfigs: [[url: 'http://192.168.1.205:3000/fangjie/publish.git']]]
             bat """
 npm i
 """
@@ -109,7 +109,7 @@ def pubToWebIntegratedCommon() {
         }
         // 发布
         dir("publish") {
-            checkout([$class: 'GitSCM', branches: [[name: '*/yzp']], extensions: [], userRemoteConfigs: [[url: 'http://192.168.1.205:3000/fangjie/publish.git']]])
+            checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: '*/yzp']], extensions: [], userRemoteConfigs: [[url: 'http://192.168.1.205:3000/fangjie/publish.git']]]
             bat """
 npm i
 """
