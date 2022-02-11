@@ -3,7 +3,7 @@ package org.devops
 import org.yaml.snakeyaml.Yaml
 
 def getChangeString() {
-    MAX_MSG_LEN = 100
+    MAX_MSG_LEN = 500
     echo "Gathering SCM changes......"
     return currentBuild.changeSets.collect{
         def i = 1
