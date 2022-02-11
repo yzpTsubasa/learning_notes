@@ -15,6 +15,8 @@ pipeline {
                     lock(resource: "cdn_root.${cdn_root}") {
                         dir("project") {
                             build.checkoutSVN(params.HG_REPOSITORY_SRC)
+                            // 发送通知
+                            build.sendStart2DingTalk_PubWeb()
                         }
                         dir('automator') {
                             checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: 'master']], extensions: [], userRemoteConfigs: [[url: 'https://e.coding.net/tsubasaohzora/playground/automator.git']]]
