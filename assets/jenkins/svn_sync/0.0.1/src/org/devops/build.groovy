@@ -52,10 +52,10 @@ def sendResult2DingTalkTest() {
             "- **任务** [${currentBuild.fullDisplayName}](${BUILD_URL}) ",
             "- **状态** <font color=${result_color}>${result}</font>",
             // "- **备注** ${env.HG_BUILD_DESC ? env.HG_BUILD_DESC : '无'}",
-            "- **发起** ${currentBuild.getBuildCauses()[0].userName ? currentBuild.getBuildCauses()[0].userName : currentBuild.getBuildCauses()[0].shortDescription.minus("Started by ").replace("timer", "定时器").replace("an SCM change", "SCM轮询")}",
-            "- **时刻** ${new Date().format("yyyy-MM-dd HH:mm:ss", TimeZone.getTimeZone('Asia/Shanghai'))}",
-            "- **用时** ${durationString}",
-            "- **记录**",
+            "1. **发起** ${currentBuild.getBuildCauses()[0].userName ? currentBuild.getBuildCauses()[0].userName : currentBuild.getBuildCauses()[0].shortDescription.minus("Started by ").replace("timer", "定时器").replace("an SCM change", "SCM轮询")}",
+            "2. **时刻** ${new Date().format("yyyy-MM-dd HH:mm:ss", TimeZone.getTimeZone('Asia/Shanghai'))}",
+            "3. **用时** ${durationString}",
+            "4. **记录**",
             "***",
         ] + getChangeString() + (
             currentBuild.result == 'FAILURE' ? [
