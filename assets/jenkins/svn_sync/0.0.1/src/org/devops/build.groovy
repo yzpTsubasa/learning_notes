@@ -32,6 +32,41 @@ def sendStart2DingTalk() {
     // )
 }
 
+
+def sendResult2DingTalkTest() {
+    if (params.HG_QUIET) {
+        return;
+    }
+    env.result_color = currentBuild.result == 'SUCCESS' ? '#52c41a' : currentBuild.result == 'FAILURE' ? '#f5222d' : '#ff9f00'
+    env.result = currentBuild.result == 'SUCCESS' ? '成功' : currentBuild.result == 'FAILURE' ? '失败' : '取消'
+    env.description = currentBuild.description
+    env.durationString = currentBuild.durationString.minus(" and counting")
+    def atUsers = getAtUsers()
+    dingtalk(
+        robot: 'test',
+        type: 'ACTION_CARD',
+        title: "${currentBuild.fullDisplayName} ${result}",
+        at: atUsers,
+        atAll: false,
+        text: [
+            "- **任务** [${currentBuild.fullDisplayName}](${BUILD_URL}) ",
+            "- **状态** <font color=${result_color}>${result}</font>",
+            // "- **备注** ${env.HG_BUILD_DESC ? env.HG_BUILD_DESC : '无'}",
+            "- **发起** ${currentBuild.getBuildCauses()[0].userName ? currentBuild.getBuildCauses()[0].userName : currentBuild.getBuildCauses()[0].shortDescription.minus("Started by ").replace("timer", "定时器").replace("an SCM change", "SCM轮询")}",
+            "- **时刻** ${new Date().format("yyyy-MM-dd HH:mm:ss", TimeZone.getTimeZone('Asia/Shanghai'))}",
+            "- **用时** ${durationString}",
+            "- **记录**",
+            "***",
+        ] + getChangeString() + (
+            currentBuild.result == 'FAILURE' ? [
+                "***",
+                "- **<font color=${result_color}>失败日志</font>**",
+                getTailLogString(),
+            ] : []
+        )
+    )
+}
+
 def sendResult2DingTalk() {
     if (params.HG_QUIET) {
         return;
