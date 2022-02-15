@@ -86,6 +86,7 @@ pipeline {
 ## 时间格式化
 ``` groovy
 new Date().format("yyyy-MM-dd HH:mm:ss")
+new Date().format("yyyy-MM-dd'T'HH:mm:ss.SSS", TimeZone.getTimeZone('Asia/Shanghai'))
 ```
 
 ## 执行 sql 文件
