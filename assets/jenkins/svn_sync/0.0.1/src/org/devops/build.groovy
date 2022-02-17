@@ -262,7 +262,7 @@ def sendResult2DingTalk_PubWeb() {
             "# **[${currentBuild.fullDisplayName}](${BUILD_URL})**",
             "***",
             "- **状态** <font color=${result_color}>${result}</font>",
-            pubWebVersion ? "- **资源版本** <font color=${result_color}>${pubWebVersion}</font>" : "",
+            "- **资源版本** <font color=${result_color}>${pubWebVersion ? pubWebVersion : "Unknown"}</font>",
             // "- **备注** ${env.HG_BUILD_DESC ? env.HG_BUILD_DESC : '无'}",
             "- **发起** ${currentBuild.getBuildCauses()[0].userName ? currentBuild.getBuildCauses()[0].userName : currentBuild.getBuildCauses()[0].shortDescription.minus("Started by ").replace("timer", "定时器").replace("an SCM change", "SCM轮询")}",
             "- **时刻** ${new Date().format("yyyy-MM-dd HH:mm:ss", TimeZone.getTimeZone('Asia/Shanghai'))}",
@@ -408,6 +408,10 @@ def getPubWebVersion() {
         return result[0][1]
     }
     result = ((consoleText.content =~ /build web base v(\d+) begin/))
+    if (result.find()) {
+        return result[0][1]
+    }
+    result = ((consoleText.content =~ /bin\-release\\web\\v(\d+)/))
     if (result.find()) {
         return result[0][1]
     }
