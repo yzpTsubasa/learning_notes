@@ -5,6 +5,7 @@
 # 最近打开的应用
 adb shell dumpsys activity recents
 adb shell dumpsys activity recents | find "intent={"
+adb shell dumpsys activity recents | findstr intent={
 
 ```
 
