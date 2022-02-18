@@ -1,4 +1,13 @@
 ## android
+
+## adb 调试
+``` bash
+# 最近打开的应用
+adb shell dumpsys activity recents
+adb shell dumpsys activity recents | find "intent={"
+
+```
+
 ## 安卓在Windows下存在 ndk 编译时，尽量把项目放在接近磁盘根目录，减少路径长度，防止编译失败
 ``` bash
 # 超过256个字符的路径（266）
