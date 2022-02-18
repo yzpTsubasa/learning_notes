@@ -1,6 +1,6 @@
 ## android
 
-## 相关调试命令
+## android 调试相关命令行
 ``` bash
 # 最近打开的应用
 adb shell dumpsys activity recents
@@ -10,6 +10,7 @@ adb shell dumpsys activity recents | findstr intent={
 # 查看apk信息
 %ANDROID_HOME%/build-tools/***/aapt dump badging ***.apk
 %ANDROID_HOME%/build-tools/***/aapt dump badging ***.apk | find "package: name="
+%ANDROID_HOME%/build-tools/***/aapt dump badging ***.apk | find "launchable-activity"
 
 ```
 
