@@ -110,7 +110,8 @@ def getLastChangedRev() {
 }
 
 def pubToWebIntegrated() {
-    lock(resource: "${HG_PUB_RES}") {
+    // lock(resource: "${HG_PUB_RES}") {
+    lock(resource: "pub2web") {
         dir("project") {
             // 检出
             checkoutSVN(params.HG_REPOSITORY_SRC)
@@ -137,7 +138,8 @@ npx hgbuild walk ${HG_PUB_RES} ${HG_PUB_TYPE} --noUserOp
 
 // 新的发布流程 - 集成版本
 def pubToWebIntegratedCommonOld() {
-    lock(resource: "${cfg_dir}") {
+    // lock(resource: "${cfg_dir}") {
+    lock(resource: "pub2web") {
         dir("project") {
             // 检出
             checkoutSVN(params.HG_REPOSITORY_SRC)
@@ -162,7 +164,8 @@ if "%chkdst%" == "true" (
 
 // 新的发布流程 - 集成版本
 def pubToWebIntegratedCommon() {
-    lock(resource: "${cfg_dir}") {
+    // lock(resource: "${cfg_dir}") {
+    lock(resource: "pub2web") {
         dir("project") {
             // 检出
             checkoutSVN(params.HG_REPOSITORY_SRC)
