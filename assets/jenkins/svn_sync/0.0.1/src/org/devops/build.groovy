@@ -17,19 +17,19 @@ def sendStart2DingTalk() {
     if (params.HG_QUIET) {
         return;
     }
-    // dingtalk(
-    //     robot: 'automator',
-    //     type: 'ACTION_CARD',
-    //     title: "${currentBuild.fullDisplayName} 开始",
-    //     text: [
-    //         "- **任务** [${currentBuild.fullDisplayName}](${BUILD_URL}) ",
-    //         "- **状态** 开始",
-    //         // "- **备注** ${env.HG_BUILD_DESC ? env.HG_BUILD_DESC : '无'}",
-    //         "- **发起** ${currentBuild.getBuildCauses()[0].userName ? currentBuild.getBuildCauses()[0].userName : currentBuild.getBuildCauses()[0].shortDescription.minus("Started by ").replace("timer", "定时器").replace("an SCM change", "SCM轮询")}",
-    //         "- **记录**",
-    //         "***",
-    //     ] + getChangeString()
-    // )
+    dingtalk(
+        robot: 'automator',
+        type: 'ACTION_CARD',
+        title: "${currentBuild.fullDisplayName} 开始",
+        text: [
+            "- 任务 [${currentBuild.fullDisplayName}](${BUILD_URL}) ",
+            "- 状态 开始",
+            "- 发起 ${currentBuild.getBuildCauses()[0].userName ? currentBuild.getBuildCauses()[0].userName : currentBuild.getBuildCauses()[0].shortDescription.minus("Started by ").replace("timer", "定时器").replace("an SCM change", "SCM轮询")}",
+            "- 时刻 ${new Date().format("yyyy-MM-dd HH:mm:ss", TimeZone.getTimeZone('Asia/Shanghai'))}",
+            "- 记录",
+            "***",
+        ] + getChangeString()
+    )
 }
 
 
@@ -51,7 +51,6 @@ def sendResult2DingTalkTest() {
         text: [
             "- **任务** [${currentBuild.fullDisplayName}](${BUILD_URL}) ",
             "- **状态** <font color=${result_color}>${result}</font>",
-            // "- **备注** ${env.HG_BUILD_DESC ? env.HG_BUILD_DESC : '无'}",
             "1. **发起** ${currentBuild.getBuildCauses()[0].userName ? currentBuild.getBuildCauses()[0].userName : currentBuild.getBuildCauses()[0].shortDescription.minus("Started by ").replace("timer", "定时器").replace("an SCM change", "SCM轮询")}",
             "2. **时刻** ${new Date().format("yyyy-MM-dd HH:mm:ss", TimeZone.getTimeZone('Asia/Shanghai'))}",
             "3. **用时** ${durationString}",
@@ -83,18 +82,17 @@ def sendResult2DingTalk() {
         at: atUsers,
         atAll: false,
         text: [
-            "- **任务** [${currentBuild.fullDisplayName}](${BUILD_URL}) ",
-            "- **状态** <font color=${result_color}>${result}</font>",
-            // "- **备注** ${env.HG_BUILD_DESC ? env.HG_BUILD_DESC : '无'}",
-            "- **发起** ${currentBuild.getBuildCauses()[0].userName ? currentBuild.getBuildCauses()[0].userName : currentBuild.getBuildCauses()[0].shortDescription.minus("Started by ").replace("timer", "定时器").replace("an SCM change", "SCM轮询")}",
-            "- **时刻** ${new Date().format("yyyy-MM-dd HH:mm:ss", TimeZone.getTimeZone('Asia/Shanghai'))}",
-            "- **用时** ${durationString}",
-            "- **记录**",
+            "- 任务 [${currentBuild.fullDisplayName}](${BUILD_URL}) ",
+            "- 状态 <font color=${result_color}>${result}</font>",
+            "- 发起 ${currentBuild.getBuildCauses()[0].userName ? currentBuild.getBuildCauses()[0].userName : currentBuild.getBuildCauses()[0].shortDescription.minus("Started by ").replace("timer", "定时器").replace("an SCM change", "SCM轮询")}",
+            "- 时刻 ${new Date().format("yyyy-MM-dd HH:mm:ss", TimeZone.getTimeZone('Asia/Shanghai'))}",
+            "- 用时 ${durationString}",
+            "- 记录",
             "***",
         ] + getChangeString() + (
             currentBuild.result == 'FAILURE' ? [
                 "***",
-                "- **<font color=${result_color}>失败日志</font>**",
+                "- <font color=${result_color}>失败日志</font>",
                 getTailLogString(),
             ] : []
         )
@@ -203,7 +201,6 @@ def sendStart2DingTalk_PubWeb() {
             "# **[${currentBuild.fullDisplayName}](${BUILD_URL})**",
             "***",
             "- **状态** 开始",
-            // "- **备注** ${env.HG_BUILD_DESC ? env.HG_BUILD_DESC : '无'}",
             "- **发起** ${currentBuild.getBuildCauses()[0].userName ? currentBuild.getBuildCauses()[0].userName : currentBuild.getBuildCauses()[0].shortDescription.minus("Started by ").replace("timer", "定时器").replace("an SCM change", "SCM轮询")}",
             "- **时刻** ${new Date().format("yyyy-MM-dd HH:mm:ss", TimeZone.getTimeZone('Asia/Shanghai'))}",
             "- **仓库**",
@@ -266,7 +263,6 @@ def sendResult2DingTalk_PubWeb() {
             "***",
             "- **状态** <font color=${result_color}>${result}</font>",
             "- **资源版本** <font color=${result_color}>${pubWebVersion ? pubWebVersion : "Unknown"}</font>",
-            // "- **备注** ${env.HG_BUILD_DESC ? env.HG_BUILD_DESC : '无'}",
             "- **发起** ${currentBuild.getBuildCauses()[0].userName ? currentBuild.getBuildCauses()[0].userName : currentBuild.getBuildCauses()[0].shortDescription.minus("Started by ").replace("timer", "定时器").replace("an SCM change", "SCM轮询")}",
             "- **时刻** ${new Date().format("yyyy-MM-dd HH:mm:ss", TimeZone.getTimeZone('Asia/Shanghai'))}",
             "- **用时** ${durationString}",
