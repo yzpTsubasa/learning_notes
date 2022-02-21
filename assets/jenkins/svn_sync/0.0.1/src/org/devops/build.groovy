@@ -476,6 +476,44 @@ def checkoutComplexSVN(scm) {
     checkout(scm)
 }
 
+def pub200AutomaticIntegrated() {
+    // 编译
+    dir("project") {
+        checkoutSVN(params.HG_REPOSITORY_SRC)
+        if (needCompile()) {
+            sendStart2DingTalk()
+            // 有环境才执行排序
+            if (fileExists('./tools/main.exe') && fileExists('./tools/cfg/generate_sorted_ts.yml')) {
+                bat([label: '更新manifest', returnStdout: false, script: '"./tools/main.exe" "./tools/cfg/generate_sorted_ts.yml" --QUIET_MODE'])
+            }
+            def pub_200_out_bat = ""
+            // 编译代码的备选批处理文件
+            def pub_200_out_bat_alternatives = [
+                "pub_200_out.bat",
+            ]
+            for (alternative in pub_200_out_bat_alternatives) {
+                if (fileExists(alternative)) {
+                    pub_200_out_bat = alternative
+                    break
+                }
+            }
+            if (pub_200_out_bat) {
+                bat([label: '编译代码', returnStdout: false, script: pub_200_out_bat])
+                bat([label: 'SVN提交', returnStdout: false, script: "svn commit -m \"out [${getLastChangedRev()}]\" out/main.min.* manifest.json src/base/WND_ID_CFG.ts ui_ctrl out/index.html"])
+            } else {
+                bat([label: '发布200', returnStdout: false, script: "node scripts --hgt _200 --noUserOp"])
+            }
+        }
+    }
+    // 创建out目录resource链接
+    dir("project/out") {
+        bat """if not exist "resource" (
+mklink /j "resource" "../resource"
+)
+"""
+    }
+}
+
 def pub200AutomaticNewIntegrated() {
     // 编译
     dir("project") {

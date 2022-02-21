@@ -1,0 +1,20 @@
+@Library("jenkins_library") _
+
+def build = new org.devops.build()
+
+pipeline {
+    agent any
+    options {
+        disableConcurrentBuilds()
+    }
+
+    stages {
+        stage('build') {
+            steps {
+                script {
+                    print "Test Build 4"
+                }
+            }
+        }
+    }
+}

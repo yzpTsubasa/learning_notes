@@ -1,0 +1,35 @@
+@Library("jenkins_library") _
+
+def build = new org.devops.build()
+
+pipeline {
+    agent any
+    triggers {
+        pollSCM 'H/2 * * * *'
+    }
+    options {
+        disableConcurrentBuilds()
+    }
+    stages {
+        stage('build') {
+            steps {
+                script {
+                    build.pub200AutomaticIntegrated()
+                }
+            }
+        }
+    }
+    
+    post { 
+        always { 
+            script {
+                print ''
+                if (build.needCompile()) {
+                    build.sendResult2DingTalk()
+                }
+            }
+        }
+    }
+
+    
+}
