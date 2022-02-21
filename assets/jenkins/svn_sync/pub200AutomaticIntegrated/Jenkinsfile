@@ -23,7 +23,7 @@ pipeline {
     post { 
         always { 
             script {
-                print ''
+                print 'Done'
                 if (build.needCompile()) {
                     build.sendResult2DingTalk()
                 }
