@@ -19,7 +19,7 @@ def sendStart2DingTalk() {
     }
     dingtalk(
         robot: 'automator',
-        type: 'ACTION_CARD',
+        type: 'MARKDOWN',
         title: "${currentBuild.fullDisplayName} 开始",
         text: [
             "- 任务 [${currentBuild.fullDisplayName}](${BUILD_URL}) ",
@@ -77,7 +77,7 @@ def sendResult2DingTalk() {
     def atUsers = getAtUsers()
     dingtalk(
         robot: 'automator',
-        type: 'ACTION_CARD',
+        type: 'MARKDOWN',
         title: "${currentBuild.fullDisplayName} ${result}",
         at: atUsers,
         atAll: false,
