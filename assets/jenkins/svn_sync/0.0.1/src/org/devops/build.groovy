@@ -636,7 +636,7 @@ def hasCode2Compile() {
             return it.getAffectedFiles().any {
                 def path = it.getPath()
                 // print path
-                return (path =~ /([\\\/]|^)(src|src_base|src_ext|dep_libs)[\\\/].*\.(ts|js)$/).find() && path != "src\\base\\WND_ID_CFG.ts"
+                return (path =~ /([\\\/]|^)(src|src_base|src_ext|dep_libs|index)[\\\/].*\.(ts|js)$/).find() && path != "src\\base\\WND_ID_CFG.ts"
             }
         }
     }   
