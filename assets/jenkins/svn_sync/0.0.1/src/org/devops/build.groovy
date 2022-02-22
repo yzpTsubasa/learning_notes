@@ -193,7 +193,7 @@ def sendStart2DingTalk_PubWeb() {
     }
     dingtalk(
         robot: 'automator',
-        type: 'ACTION_CARD',
+        type: 'MARKDOWN',
         title: "${currentBuild.fullDisplayName} 开始",
         // at: getAtUsers(),
         // atAll: false,
@@ -254,7 +254,7 @@ def sendResult2DingTalk_PubWeb() {
     def pubWebVersion = getPubWebVersion()
     dingtalk(
         robot: 'automator',
-        type: 'ACTION_CARD',
+        type: 'MARKDOWN',
         title: "${currentBuild.fullDisplayName} ${result}",
         at: getAtUsers(),
         atAll: false,
