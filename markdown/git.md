@@ -57,7 +57,13 @@ foreach($line in Invoke-Expression "git remote") {
     Invoke-Expression "git push $line"
 }
 # 推送到所有远端(单行版本)
-Invoke-Expression "git remote" | ForEach-Object -Process { Write-Output "pushing to remote $_";Invoke-Expression "git push $_" }
+Invoke-Expression "git remote" | ForEach-Object -Process { 
+  Write-Output "pushing to remote $_";Invoke-Expression "git push $_" 
+}
+# 推送到所有远端(可视版本)
+Invoke-Expression "git remote" | ForEach-Object -Process { 
+  Write-Output "pushing to remote $_";Invoke-Expression "git push $_" 
+}
 ```
 ## git 中文文件名乱码
 ``` bash
