@@ -481,7 +481,7 @@ def pub200AutomaticIntegrated() {
     dir("project") {
         checkoutSVN(params.HG_REPOSITORY_SRC)
         if (needCompile()) {
-            sendStart2DingTalk()
+            // sendStart2DingTalk()
             // 有环境才执行排序
             if (fileExists('./tools/main.exe') && fileExists('./tools/cfg/generate_sorted_ts.yml')) {
                 bat([label: '更新manifest', returnStdout: false, script: '"./tools/main.exe" "./tools/cfg/generate_sorted_ts.yml" --QUIET_MODE'])
