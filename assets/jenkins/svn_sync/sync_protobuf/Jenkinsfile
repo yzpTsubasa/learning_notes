@@ -1,0 +1,60 @@
+@Library("jenkins_library") _
+
+def build = new org.devops.build()
+
+pipeline {
+    agent any
+
+    stages {
+        stage('clean') {
+            steps {
+                print "clean"
+                // deleteDir()
+            }
+        }
+        stage('install hgbuild') {
+            steps {
+                script {
+                    if (params.UPDATE_HGBUILDLIB) {
+                        bat 'npm config set "@hotgame:registry" http://192.168.1.205:7000/'
+                        bat 'npm install -g @hotgame/hgbuildlib'
+                        bat 'hgtsc --version'        
+                    }
+                }
+            }
+        }
+        stage('checkout') {
+            steps {
+                script {
+                    dir("project") {
+                        build.checkoutComplexSVN([$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '', excludedRegions: '', excludedRevprop: '', excludedUsers: '', filterChangelog: true, ignoreDirPropChanges: false, includedRegions: '.*/src/protobuf/proto/\\\\w+\\\\.proto', locations: [[cancelProcessOnExternalsFail: true, credentialsId: 'dfb8344e-2d0c-4750-8154-9503745a01f9', depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: params.HG_REPOSITORY_SRC]], quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']])
+                    }
+                    dir("protobuf") {
+                        build.checkoutSVN(params.HG_REPOSITORY_SRC_PROTOBUF)
+                    }
+                }
+            }
+        }
+        stage('sync protobuf file') {
+            steps {
+                fileOperations([fileCopyOperation(excludes: '', flattenFiles: true, includes: 'protobuf/*.proto', renameFiles: false, sourceCaptureExpression: '', targetLocation: 'project/src/protobuf/proto', targetNameExpression: '')])
+                dir("project/src/protobuf/proto@tmp") {
+                    deleteDir()
+                }
+                dir("project/src/protobuf/proto") {
+                    bat 'svn add . --no-ignore --force'
+                    bat 'svn commit . -m "[0] Update protobuf file automatically"'
+                }
+            }
+        }
+        // stage('sync protobuf code') {
+        //     steps {
+        //         dir("project") {
+        //             bat 'hgpbts'
+                    
+        //             bat 'svn commit -m "[0] Update protobuf code and config automatically" src/protobuf/protobufMsg.d.ts resource/protobufMsg.json src/protobuf/IProtobuf.ts'
+        //         }
+        //     }
+        // }
+    }
+}
