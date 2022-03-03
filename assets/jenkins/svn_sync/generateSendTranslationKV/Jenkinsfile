@@ -1,0 +1,24 @@
+@Library("jenkins_library") _
+
+def build = new org.devops.build()
+
+pipeline {
+    agent any
+    triggers {
+        pollSCM 'H/2 * * * *'
+    }
+    options {
+        disableConcurrentBuilds()
+        ansiColor('xterm')
+    }
+
+    stages {
+        stage('generate_translation') {
+            steps {
+                script {
+                    build.generateSendTranslationKV_API()
+                }
+            }
+        }
+    }
+}
