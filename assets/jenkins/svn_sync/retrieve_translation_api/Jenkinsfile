@@ -8,27 +8,27 @@ pipeline {
         disableConcurrentBuilds()
         ansiColor('xterm')
     }
-    triggers {
-        URLTrigger(
-            // 计划任务
-            cronTabSpec: '*/2 * * * *',
-            entries: [
-                // URLTrigger
-                URLTriggerEntry( 
-                    url: "${TRIGGER_URL}", // 要检查的URL
-                    // checkLastModificationDate: true, // 检查修改时间
-                    timeout: 300, // 超时(秒)
-                    requestHeaders: [
-                        RequestHeader( headerName: "Authorization" , headerValue: "FLuCiEkQlqDdRtDQYHt856vWOO6+X0aG9MqAxyuYZe0" ),
-                        RequestHeader( headerName: "Range" , headerValue: "bytes=0-31" ),
-                    ],
-                    contentTypes: [
-                        MD5Sum()
-                    ],
-                ),
-            ]
-        )
-    }
+    // triggers {
+    //     URLTrigger(
+    //         // 计划任务
+    //         cronTabSpec: '*/2 * * * *',
+    //         entries: [
+    //             // URLTrigger
+    //             URLTriggerEntry( 
+    //                 url: "${TRIGGER_URL}", // 要检查的URL
+    //                 // checkLastModificationDate: true, // 检查修改时间
+    //                 timeout: 300, // 超时(秒)
+    //                 requestHeaders: [
+    //                     RequestHeader( headerName: "Authorization" , headerValue: "FLuCiEkQlqDdRtDQYHt856vWOO6+X0aG9MqAxyuYZe0" ),
+    //                     RequestHeader( headerName: "Range" , headerValue: "bytes=0-31" ),
+    //                 ],
+    //                 contentTypes: [
+    //                     MD5Sum()
+    //                 ],
+    //             ),
+    //         ]
+    //     )
+    // }
     stages {
         stage('retrieve_translation') {
             steps {
