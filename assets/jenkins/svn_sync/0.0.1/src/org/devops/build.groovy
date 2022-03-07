@@ -7,7 +7,7 @@ def getChangeString() {
     echo "Gathering SCM changes......"
     return currentBuild.changeSets.collect{
         def i = 1
-        return it.items.collect{
+        return it.items.reverse().collect{
             "${i++}. ${it.msg.take(MAX_MSG_LEN).replaceAll("[\r\n]+", "")} by ${it.author.getFullName()} at ${it.getCommitId()}"
         }.join("\n")
     }
