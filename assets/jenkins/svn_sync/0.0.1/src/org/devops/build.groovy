@@ -19,7 +19,7 @@ def sendStart2DingTalk() {
     }
     dingtalk(
         robot: 'automator',
-        type: 'MARKDOWN',
+        type: 'ACTION_CARD',
         title: "${currentBuild.fullDisplayName} 开始",
         text: [
             "- 任务 [${currentBuild.fullDisplayName}](${BUILD_URL}) ",
@@ -77,7 +77,7 @@ def sendResult2DingTalk() {
     def atUsers = getAtUsers()
     dingtalk(
         robot: 'automator',
-        type: 'MARKDOWN',
+        type: 'ACTION_CARD',
         title: "${currentBuild.fullDisplayName} ${result}",
         at: atUsers,
         atAll: false,
@@ -193,7 +193,7 @@ def sendStart2DingTalk_PubWeb() {
     }
     dingtalk(
         robot: 'automator',
-        type: 'MARKDOWN',
+        type: 'ACTION_CARD',
         title: "${currentBuild.fullDisplayName} 开始",
         // at: getAtUsers(),
         // atAll: false,
@@ -254,7 +254,7 @@ def sendResult2DingTalk_PubWeb() {
     def pubWebVersion = getPubWebVersion()
     dingtalk(
         robot: 'automator',
-        type: 'MARKDOWN',
+        type: 'ACTION_CARD',
         title: "${currentBuild.fullDisplayName} ${result}",
         at: getAtUsers(),
         atAll: false,
