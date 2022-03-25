@@ -28,26 +28,38 @@ Host github.com
 - 然后重启，启动【服务】
 ##  常用命令
 ``` bash
+
 # 提交所有变化
-git add -A  
+git add -A
+git add --all
+
 # 提交被修改(modified)和被删除(deleted)文件，不包括新文件(new)
-git add -u  
+git add -u
+git add --update
+
 # 提交新文件(new)和被修改(modified)文件，不包括被删除(deleted)文件
-git add . 
+git add .
 git commit -m "msg"
 git push
+
 # 还原所有文件
-git checkout -- * 
+git checkout -- *
+
 # 检出指定分支及目录
 git clone -b <branch> <remote> <directory>
+
 # 删除远程分支
 git push <remote> --delete <branch>
+
 # 删除本地分支
 git branch -d <branch>
+
 # 推送到所有远端
 for /F "tokens=* delims=! " %A in (' git remote ') do git push "%A"
+
 # 创建全新分支
 git checkout --orphan <branch>
+
 ```
 ## PowerShell 写法
 ``` ps1
@@ -59,8 +71,8 @@ foreach($line in Invoke-Expression "git remote") {
 # 推送到所有远端(单行版本)
 Invoke-Expression "git remote" | ForEach-Object -Process { Write-Output "pushing to remote $_";Invoke-Expression "git push $_" }
 # 推送到所有远端(可视版本)
-Invoke-Expression "git remote" | ForEach-Object -Process { 
-  Write-Output "pushing to remote $_";Invoke-Expression "git push $_" 
+Invoke-Expression "git remote" | ForEach-Object -Process {
+  Write-Output "pushing to remote $_";Invoke-Expression "git push $_"
 }
 ```
 ## git 中文文件名乱码
