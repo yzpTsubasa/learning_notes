@@ -284,7 +284,7 @@ def sendResult2DingTalk_PubWeb() {
 def retrieveTranslationAPI() {
     lock(resource: "conversion_api") {
         dir('automator') {
-            checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: 'master']], extensions: [], userRemoteConfigs: [[url: 'https://e.coding.net/tsubasaohzora/playground/automator.git']]]
+            checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: 'master']], extensions: [], userRemoteConfigs: [[url: 'http://192.168.1.205:3000/yzp/automator.git']]]
             bat 'npm i'
         }
         dir('project/resource/assets/cfgjson') {
@@ -310,7 +310,7 @@ def retrieveTranslationAPI() {
 def generateTranslationKV_API() {
     lock(resource: "conversion_api") {
         dir('automator') {
-            checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: 'master']], extensions: [], userRemoteConfigs: [[url: 'https://e.coding.net/tsubasaohzora/playground/automator.git']]]
+            checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: 'master']], extensions: [], userRemoteConfigs: [[url: 'http://192.168.1.205:3000/yzp/automator.git']]]
             bat 'npm i'
         }
         dir('translation') {
@@ -334,7 +334,7 @@ def generateTranslationKV_API() {
 
 def mergeSVN() {
     dir('automator') {
-            checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: 'master']], extensions: [], userRemoteConfigs: [[url: 'https://e.coding.net/tsubasaohzora/playground/automator.git']]]
+            checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: 'master']], extensions: [], userRemoteConfigs: [[url: 'http://192.168.1.205:3000/yzp/automator.git']]]
             bat 'npm i'
     }
     dir('project') {
@@ -423,7 +423,7 @@ def ftpUploadSource() {
         checkout([$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '', excludedRegions: "", excludedRevprop: '', excludedUsers: '', filterChangelog: true, ignoreDirPropChanges: false, includedRegions: ".*/${LOCAL_FILE}", locations: [[cancelProcessOnExternalsFail: true, credentialsId: 'dfb8344e-2d0c-4750-8154-9503745a01f9', depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: "$SCM_URL"]], quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']])
     }
     dir('automator') {
-            checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: 'master']], extensions: [], userRemoteConfigs: [[url: 'https://e.coding.net/tsubasaohzora/playground/automator.git']]]
+            checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: 'master']], extensions: [], userRemoteConfigs: [[url: 'http://192.168.1.205:3000/yzp/automator.git']]]
             bat 'npm i'
     }
     dir("ftp") {
@@ -592,7 +592,7 @@ def getRevisions() {
 def generateSendTranslationKV_API() {
     lock(resource: "conversion_api") {
         dir('automator') {
-            checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: 'master']], extensions: [], userRemoteConfigs: [[url: 'https://e.coding.net/tsubasaohzora/playground/automator.git']]]
+            checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: 'master']], extensions: [], userRemoteConfigs: [[url: 'http://192.168.1.205:3000/yzp/automator.git']]]
             bat 'npm i'
         }
         dir('project/resource/assets/cfgjson') {
