@@ -198,3 +198,32 @@ bat([label: 'svn 信息', returnStdout: true, script: '@echo off && svn info', e
 
 
 ## 项目名称使用纯英文，否则 pipeline 脚本可能会有问题 
+
+## 使用脚本批量添加用户
+``` groovy
+import hudson.model.*
+import hudson.security.*
+import hudson.tasks.Mailer
+
+def nominatedUsers = [
+    ["test1", "测试员1", "test1@qq.com"],
+    ["test2", "测试员2", "test2@qq.com"],
+    ["test3", "测试员3", "test3@qq.com"],
+]
+nominatedUsers.each{ 
+    def userId = it[0]
+    def password = it[0]
+    def fullName= it[1]
+    def email = it[2]
+    def existingUser = Jenkins.instance.securityRealm.getUser(userId)
+    if (!existingUser) {
+        def user = Jenkins.instance.securityRealm.createAccount(userId, password)
+        user.addProperty(new Mailer.UserProperty(email));
+        user.setFullName(fullName)
+        println("新用户 ${userId} ${fullName} ${email}, 添加成功!")
+    } else {
+        println("用户已存在 ${existingUser.getId()} ${existingUser.getFullName()}, 添加失败!")
+    }
+}
+null
+```
