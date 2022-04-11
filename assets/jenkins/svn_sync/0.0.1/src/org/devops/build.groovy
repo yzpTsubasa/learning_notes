@@ -497,6 +497,11 @@ def pub200AutomaticIntegrated() {
                     break
                 }
             }
+            // 修改 index.html 版本号，方便检验版本
+            dir("out") {
+                def index_html = readFile(encoding: 'utf-8', file: 'index.html')
+                writeFile encoding: 'utf-8', file: 'index.html', text: index_html.replaceAll(/var hv \= .*;/, "var hv = \"${new Date().format("yyyy-MM-dd HH:mm:ss", TimeZone.getTimeZone('Asia/Shanghai'))}\";")
+            }
             if (pub_200_out_bat) {
                 bat([label: '编译代码', returnStdout: false, script: pub_200_out_bat])
                 bat([label: 'SVN提交', returnStdout: false, script: "svn commit -m \"out [${getLastChangedRev()}]\" out/main.min.* manifest.json src/base/WND_ID_CFG.ts ui_ctrl out/index.html"])
