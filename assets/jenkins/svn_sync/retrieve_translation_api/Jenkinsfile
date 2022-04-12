@@ -39,4 +39,12 @@ pipeline {
             }
         }
     }
+    
+    post { 
+        failure { 
+            script {
+                build.sendCommonResult2DingTalk()
+            }
+        }
+    }
 }

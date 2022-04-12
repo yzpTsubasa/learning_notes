@@ -280,6 +280,37 @@ def sendResult2DingTalk_PubWeb() {
     )
 }
 
+
+// 通用构建通知
+def sendCommonResult2DingTalk() {
+    if (params.HG_QUIET) {
+        return;
+    }
+    env.result_color = currentBuild.result == 'SUCCESS' ? '#52c41a' : currentBuild.result == 'FAILURE' ? '#f5222d' : '#ff9f00'
+    env.result = currentBuild.result == 'SUCCESS' ? '成功' : currentBuild.result == 'FAILURE' ? '失败' : '取消'
+    env.durationString = currentBuild.durationString.minus(" and counting")
+    dingtalk(
+        robot: 'automator',
+        type: 'ACTION_CARD',
+        title: "${currentBuild.fullDisplayName} ${result}",
+        at: getAtUsers(),
+        atAll: false,
+        text: [
+            "# **[${currentBuild.fullDisplayName}](${BUILD_URL})**",
+            "***",
+            "- **状态** <font color=${result_color}>${result}</font>",
+            "- **时刻** ${new Date().format("yyyy-MM-dd(E)HH:mm:ss", TimeZone.getTimeZone('Asia/Shanghai')) - "星期"}",
+            "- **用时** ${durationString}",
+        ] + (
+            currentBuild.result == 'FAILURE' ? [
+                "***",
+                "- **<font color=${result_color}>失败日志</font>**",
+                getTailLogString(),
+            ] : []
+        )
+    )
+}
+
 // 取回已翻译的内容 API版本
 def retrieveTranslationAPI() {
     lock(resource: "conversion_api") {
