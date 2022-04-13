@@ -39,4 +39,7 @@ svn add * --no-ignore  .
 
 # 删除所有丢失的文件
 for /F "tokens=* delims=! " %A in (' "svn status | findstr /R "^!"" ') do (svn delete "%A")
+
+# 还原指定版本号所作出的修改
+svn merge -c -<版本号> .
 ```
