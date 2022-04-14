@@ -102,6 +102,7 @@
                 "newline": {"title": "强制另起一行"},
                 "log": {"title": "记录结果在日志中", "type": "boolean"},
                 "required": {"title": "结果不能为空", "type": "boolean"},
+                "retry": {"title": "重试次数", "type": "number"},
                 "automatic": {"type": "boolean", "title": "是否自动执行"}
             }
         },
@@ -188,7 +189,6 @@
                                         "url": {"title": "请求地址"}
                                     }
                                 },
-                                "retry_times": {"title": "重试次数", "type": "number"},
                                 "enable_cache": {"title": "启用缓存(类型)"},
                                 "options": {
                                     "type": "object",
