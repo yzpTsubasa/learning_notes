@@ -29,6 +29,11 @@ pipeline {
     //         ]
     //     )
     // }
+    
+    parameters {
+        booleanParam description: '安静模式(不发送钉钉/邮件通知)', name: 'HG_QUIET'
+    }
+
     stages {
         stage('retrieve_translation') {
             steps {
