@@ -16,6 +16,6 @@ element.style {
     visibility: visible !important;
     border-width: 0 !important;
     background: black !important;
-    opacity: 1;
+    opacity: 1 !important;
 }
 ```
