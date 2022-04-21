@@ -1,5 +1,8 @@
 ## linux
 
+## vim/vi键盘图
+![vim/vi键盘图](../assets/linux/vim.png)
+
 ## Cent OS 7 [CentOS-7-x86_64-DVD-2009.iso]
 
 ### 安装 nodejs
