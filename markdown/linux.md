@@ -1,4 +1,58 @@
 ## linux
+
+## Cent OS 7 [CentOS-7-x86_64-DVD-2009.iso]
+
+### 网络设置 - 自启动
+``` bash
+[root@localhost ~]# cat /etc/sysconfig/network-scripts/ifcfg-enp0s3
+TYPE=Ethernet
+PROXY_METHOD=none
+BROWSER_ONLY=no
+BOOTPROTO=dhcp
+DEFROUTE=yes
+IPV4_FAILURE_FATAL=no
+IPV6INIT=yes
+IPV6_AUTOCONF=yes
+IPV6_DEFROUTE=yes
+IPV6_FAILURE_FATAL=no
+IPV6_ADDR_GEN_MODE=stable-privacy
+NAME=enp0s3
+UUID=4048a2a1-f428-434d-9bd5-567d5f5c5f6d
+DEVICE=enp0s3
+#ONBOOT=no
+
+ONBOOT=yes
+[root@localhost ~]# systemctl restart network
+```
+
+### 网络设置 - 静态ip,自启动,掩码,网关,DNS
+``` bash
+[root@localhost ~]# cat /etc/sysconfig/network-scripts/ifcfg-enp0s3
+TYPE=Ethernet
+PROXY_METHOD=none
+BROWSER_ONLY=no
+#BOOTPROTO=dhcp
+DEFROUTE=yes
+IPV4_FAILURE_FATAL=no
+IPV6INIT=yes
+IPV6_AUTOCONF=yes
+IPV6_DEFROUTE=yes
+IPV6_FAILURE_FATAL=no
+#IPV6_ADDR_GEN_MODE=stable-privacy
+NAME=enp0s3
+UUID=4048a2a1-f428-434d-9bd5-567d5f5c5f6d
+DEVICE=enp0s3
+#ONBOOT=no
+
+BOOTPROTO=static
+ONBOOT=yes
+IPADDR=192.168.10.117
+NETMASK=255.255.255.0
+GATEWAY=192.168.10.1
+DNS1=114.114.114.114
+[root@localhost ~]# systemctl restart network
+```
+
 ##  Nginx
 ``` bash
 # 使用新配置文件重启nginx
