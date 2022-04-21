@@ -1,5 +1,12 @@
 ## jenkins
 
+## 使用 PowerShell Core Script (powershell) 执行后台任务，版本 7.x
+> 默认的 PowerShell Script (pwsh) 使用的可能是旧版本，如 5.x，无法正常执行
+``` groovy
+pwsh 'Stop-Job -Name http_static_server; Remove-Job -Name http_static_server;'
+                pwsh 'Start-Job -Name http_static_server -ScriptBlock { node . %JENKINS_HOME%/workspace --disable_serve_index 0 --valid_pattern "\\\\/(out|public)(\\\\/|$)" --debug 1 --case_sensitive 1 --http_port 9999 }'
+```
+
 ## macOS 下 jenkins 操作
 ``` sh
 # Install the latest LTS version
