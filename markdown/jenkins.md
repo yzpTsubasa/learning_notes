@@ -1,5 +1,9 @@
 ## jenkins
 
+## 无法直接由jenkins执行的任务
+> 自启动可能需要特殊权限的任务时，比如 pm2 需要开启 daemon 守护进程，无法在 jenkins 中调用成功，需要设置系统自启动项，如 `pm2 list`，
+> 然后在由 jenkins 执行 `pm2 start ...`
+
 ## 使用 PowerShell Core Script (powershell) 执行后台任务，版本 7.x
 > 默认的 PowerShell Script (pwsh) 使用的可能是旧版本，如 5.x，无法正常执行
 ``` groovy
