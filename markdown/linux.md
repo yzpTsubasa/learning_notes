@@ -2,6 +2,30 @@
 
 ## Cent OS 7 [CentOS-7-x86_64-DVD-2009.iso]
 
+### 安装 nodejs
+``` bash
+# 前往 http://nodejs.cn/download/，选择对应架构的 Linux 二进制文件
+# 如 https://npmmirror.com/mirrors/node/v16.14.2/node-v16.14.2-linux-x64.tar.xz
+# 方便起见，前往目录 ~
+cd ~
+# 先确保 wget 已安装
+yum -y install wget
+# 下载二进制文件压缩包
+wget https://npmmirror.com/mirrors/node/v16.14.2/node-v16.14.2-linux-x64.tar.xz
+# 解压压缩包
+# --strip-components 1 可以去除1层目录结构
+# -xzvf 压缩包没有用gzip格式压缩，所以不用加z参数
+# -x或--extract或--get 从压缩包中还原文件
+# -z或--gzip或--ungzip 通过gzip指令处理压缩包
+# -v或--verbose 显示指令执行过程
+# -f<压缩包>或--file=<压缩包> 指定压缩包
+
+# -C<目的目录>或--directory=<目的目录> 切换到指定的目录
+tar --strip-components 1 -xvf node-v* -C /usr/local
+# 测试安装是否成功
+node --version
+```
+
 ### 网络设置 - 自启动
 ``` bash
 [root@localhost ~]# cat /etc/sysconfig/network-scripts/ifcfg-enp0s3
