@@ -6,10 +6,14 @@ def getChangeString() {
     MAX_MSG_LEN = 500
     echo "Gathering SCM changes......"
     return currentBuild.changeSets.collect{
-        def i = 1
-        return it.items.collect{
-            "${i++}. ${it.msg.take(MAX_MSG_LEN).replaceAll("[\r\n]+", "")} by ${it.author.getFullName()} at ${it.getCommitId()}"
-        }.join("\n")
+        it.items.findAll {
+            (it.msg.take(MAX_MSG_LEN) =~ /^(auto )?out \[\d+\]/).find()
+        }.collect {
+            def i = 1
+            return it.items.collect{
+                "${i++}. ${it.msg.take(MAX_MSG_LEN).replaceAll("[\r\n]+", "")} by ${it.author.getFullName()} at ${it.getCommitId()}"
+            }.join("\n")
+        }
     }
 }
 
@@ -226,7 +230,7 @@ def getAtUsers() {
     }
     // 去重
     AT_USERS.unique()
-    print AT_USERS
+    // print AT_USERS
     return AT_USERS
 }
 
