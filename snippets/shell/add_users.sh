@@ -1,5 +1,5 @@
 #!/bin/bash
-USER_LIST=$1
+USER_LIST=$@
 USER_FILE=./user.profile
 # for USER in user{1..10}; do
 for USER in $USER_LIST; do
