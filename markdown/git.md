@@ -1,4 +1,15 @@
 ## git
+
+## 凭证
+``` bash
+# 保存凭证到本地
+git config --global credential.helper store
+# 设置凭证超时
+git config --global credential.helper 'cache --timeout=600'
+# 查看凭证配置
+git config --global --get-all credential.helper
+```
+
 ## ssh 拉取 git代码
 - 创建 ~/.ssh/config 文件，如
 ``` s
