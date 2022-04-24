@@ -12,8 +12,8 @@ def getChangeString() {
             def i = 1
             return it.collect{
                 "${i++}. ${it.msg.take(MAX_MSG_LEN).replaceAll("[\r\n]+", "")} by ${it.author.getFullName()} at ${it.getCommitId()}"
-            }.join("\n")
-        }
+            }
+        }.join("\n")
     }
 }
 
