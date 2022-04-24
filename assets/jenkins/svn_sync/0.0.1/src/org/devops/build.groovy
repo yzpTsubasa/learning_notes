@@ -7,7 +7,7 @@ def getChangeString() {
     echo "Gathering SCM changes......"
     return currentBuild.changeSets.collect{
         it.items.findAll {
-            (it.msg.take(MAX_MSG_LEN) =~ /^(auto )?out \[\d+\]/).find()
+            !((it.msg.take(MAX_MSG_LEN) =~ /^(auto )?out \[\d+\]/).find())
         }.collect {
             def i = 1
             return it.items.collect{
