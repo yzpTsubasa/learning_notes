@@ -11,10 +11,12 @@ for IP in $(awk '/^[^#]/{print $1}'  $HOST_INFO); do
 	for USE_RATE in $USE_RATES; do
 		PART_NAME=${USE_RATE%=*}
 		USE_RATE=${USE_RATE#*=}
-		if [ $USE_RATE -ge 30 ]; then
-			echo "WARN: ${IP} $PART_NAME Partition usage $USE_RATE%!"
+		if [ $USE_RATE -ge 80 ]; then
+			echo "ERROR: ${IP} $PART_NAME Partition usage $USE_RATE%!"
+		elif [ $USE_RATE -ge 30 ]; then
+			echo "WARNING: ${IP} $PART_NAME Partition usage $USE_RATE%!"
 		else
-			echo "INFO: ${IP} $PART_NAME Partition usage $USE_RATE%!"
+			echo "SUCCESS: ${IP} $PART_NAME Partition usage $USE_RATE%!"
 		fi
 	done	
 done
