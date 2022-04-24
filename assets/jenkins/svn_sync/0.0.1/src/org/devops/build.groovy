@@ -10,7 +10,7 @@ def getChangeString() {
             !((it.msg.take(MAX_MSG_LEN) =~ /^(auto )?out \[\d+\]/).find())
         }.collect {
             def i = 1
-            return it.items.collect{
+            return it.collect{
                 "${i++}. ${it.msg.take(MAX_MSG_LEN).replaceAll("[\r\n]+", "")} by ${it.author.getFullName()} at ${it.getCommitId()}"
             }.join("\n")
         }
