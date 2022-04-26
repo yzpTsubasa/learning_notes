@@ -12,15 +12,25 @@ adb shell dumpsys activity recents | findstr intent={
 %ANDROID_HOME%/build-tools/***/aapt dump badging ***.apk | find "package: name="
 %ANDROID_HOME%/build-tools/***/aapt dump badging ***.apk | find "launchable-activity"
 
-# 查看进程(包名等信息)
-adb shell ps
 
 # 连接mumu模拟器
 adb connect 127.0.0.1:7555
+# 查看进程(包名等信息)
+adb shell ps
+# 查看已安装的所有包名
+adb shell pm list packages
+# 查看已连接的设备
+adb devices
+
+# 安装apk
+adb install "<apk路径>"
+# 安装apk(强制覆盖)
+adb install -r "<apk路径>"
+# 卸载包
+adb uninstall "<包名>"
 
 # 清除之前的日志信息
 adb logcat -c
-
 # 打印log的详情日志
 adb logcat -v time
 # 把日志输出到电脑的上查看，在窗口打印的同时，文件也会同时打印的
