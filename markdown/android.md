@@ -12,6 +12,20 @@ adb shell dumpsys activity recents | findstr intent={
 %ANDROID_HOME%/build-tools/***/aapt dump badging ***.apk | find "package: name="
 %ANDROID_HOME%/build-tools/***/aapt dump badging ***.apk | find "launchable-activity"
 
+# 查看进程(包名等信息)
+adb shell ps
+
+# 连接mumu模拟器
+adb connect 127.0.0.1:7555
+
+# 清除之前的日志信息
+adb logcat -c
+
+# 打印log的详情日志
+adb logcat -v time
+# 把日志输出到电脑的上查看，在窗口打印的同时，文件也会同时打印的
+adb logcat -v time > ./adb.log
+
 ```
 
 ## 安卓在Windows下存在 ndk 编译时，尽量把项目放在接近磁盘根目录，减少路径长度，防止编译失败
