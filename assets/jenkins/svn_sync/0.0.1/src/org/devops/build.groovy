@@ -384,7 +384,7 @@ def mergeSVN() {
 }
 
 def sendResult2Emailext (){
-    if (params.HG_QUIET) {
+    if (params.HG_QUIET && currentBuild.result == 'SUCCESS') {
         return;
     }
 
@@ -427,6 +427,7 @@ def sendResult2Emailext (){
                     <td>
                         <ul>
                             <li>构建日志：&nbsp;<a href="${BUILD_URL}">${BUILD_URL}</a></li>
+                            ${ 'SUCCESS' == 'FAILURE' ? '<li>构建失败原因：&nbsp;' + getTailLogString() + '</li>' : ''}
                         </ul>
                     </td>
                 </tr>
