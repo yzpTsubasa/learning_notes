@@ -26,7 +26,7 @@ def sendStart2DingTalk() {
         type: 'ACTION_CARD',
         title: "${currentBuild.fullDisplayName} 开始",
         text: [
-            "- 任务 [${currentBuild.fullDisplayName}](${BUILD_URL}) ",
+            "- [${currentBuild.fullDisplayName}](${BUILD_URL}) ",
             "- 状态 开始",
             "- 发起 ${currentBuild.getBuildCauses()[0].userName ? currentBuild.getBuildCauses()[0].userName : currentBuild.getBuildCauses()[0].shortDescription.minus("Started by ").replace("timer", "定时器").replace("an SCM change", "SCM轮询")}",
             "- 时刻 ${new Date().format("yyyy-MM-dd(E)HH:mm:ss", TimeZone.getTimeZone('Asia/Shanghai')) - "星期"}",
@@ -86,7 +86,7 @@ def sendResult2DingTalk() {
         at: atUsers,
         atAll: false,
         text: [
-            "- 任务 [${currentBuild.fullDisplayName}](${BUILD_URL}) ",
+            "- [${currentBuild.fullDisplayName}](${BUILD_URL}) ",
             "- 状态 <font color=${result_color}>${result}</font>",
             "- 发起 ${currentBuild.getBuildCauses()[0].userName ? currentBuild.getBuildCauses()[0].userName : currentBuild.getBuildCauses()[0].shortDescription.minus("Started by ").replace("timer", "定时器").replace("an SCM change", "SCM轮询")}",
             "- 时刻 ${new Date().format("yyyy-MM-dd(E)HH:mm:ss", TimeZone.getTimeZone('Asia/Shanghai')) - "星期"}",
