@@ -164,6 +164,14 @@ netstat -ano | findstr "LISTENING" | findstr "8888"
 # On Windows System, restarting the service "Host Network Service", resolved the issue.
 # 在Windows系统中，『services』 > 重启『主机网络服务』
 ```
+## 查看指定pid信息
+``` bash
+tasklist | findstr "PID"
+```
+## 关闭(nginx)任务
+``` bash
+taskkill /f /t /im nginx.exe
+```
 
 
 ##  创建快捷方式
