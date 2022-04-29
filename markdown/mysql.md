@@ -38,3 +38,10 @@ INSERT INTO `user` (`id`, `name`, `pwd`) VALUES
 (2, 'Misaki', 'yyy'),
 (3, 'Hyuga', 'zzz')
 ```
+### 备份
+``` bash
+# 备份库 test库
+mysqldump -uroot -proot -B test > test.sql
+# 备份表 test库中的user表 
+mysqldump -uroot -proot test user > test.user.sql
+```
