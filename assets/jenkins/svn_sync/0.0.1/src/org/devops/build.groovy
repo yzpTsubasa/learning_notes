@@ -205,6 +205,7 @@ def sendStart2DingTalk_PubWeb() {
             "# **[${currentBuild.fullDisplayName}](${BUILD_URL})**",
             "***",
             "- **状态** 开始",
+            "- **LOGO** " + (hasLogo2Refresh() ? "<font color=#ff9f00>已修改</font>" : "未修改"),
             "- **发起** ${currentBuild.getBuildCauses()[0].userName ? currentBuild.getBuildCauses()[0].userName : currentBuild.getBuildCauses()[0].shortDescription.minus("Started by ").replace("timer", "定时器").replace("an SCM change", "SCM轮询")}",
             "- **时刻** ${new Date().format("yyyy-MM-dd(E)HH:mm:ss", TimeZone.getTimeZone('Asia/Shanghai')) - "星期"}",
             "- **仓库**",
@@ -266,6 +267,7 @@ def sendResult2DingTalk_PubWeb() {
             "# **[${currentBuild.fullDisplayName}](${BUILD_URL})**",
             "***",
             "- **状态** <font color=${result_color}>${result}</font>",
+            "- **LOGO** " + (hasLogo2Refresh() ? "<font color=#ff9f00>已修改</font>" : "未修改"),
             "- **资源版本** <font color=${result_color}>${pubWebVersion ? pubWebVersion : "Unknown"}</font>",
             "- **发起** ${currentBuild.getBuildCauses()[0].userName ? currentBuild.getBuildCauses()[0].userName : currentBuild.getBuildCauses()[0].shortDescription.minus("Started by ").replace("timer", "定时器").replace("an SCM change", "SCM轮询")}",
             "- **时刻** ${new Date().format("yyyy-MM-dd(E)HH:mm:ss", TimeZone.getTimeZone('Asia/Shanghai')) - "星期"}",
@@ -680,4 +682,17 @@ def hasCode2Compile() {
             }
         }
     }   
+}
+
+// 判断是否有logo需要刷新
+def hasLogo2Refresh() {
+    return currentBuild.changeSets.any {
+        return it.items.any {
+            return it.getAffectedFiles().any {
+                def path = it.getPath()
+                // print path
+                return (path =~ /(\\|^)resource\\loading\\res\\logo.*\.png$/).find()
+            }
+        }
+    }
 }
