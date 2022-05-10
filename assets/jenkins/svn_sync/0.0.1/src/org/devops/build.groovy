@@ -427,7 +427,7 @@ def sendResult2Emailext (){
                     <td>
                         <ul>
                             <li>构建日志：&nbsp;<a href="${BUILD_URL}">${BUILD_URL}</a></li>
-                            ${ 'SUCCESS' == 'FAILURE' ? '<li>构建失败原因：&nbsp;' + getTailLogString() + '</li>' : ''}
+                            ${ currentBuild.result == 'FAILURE' ? '<li>构建失败原因：&nbsp;' + getTailLogString() + '</li>' : ''}
                         </ul>
                     </td>
                 </tr>
