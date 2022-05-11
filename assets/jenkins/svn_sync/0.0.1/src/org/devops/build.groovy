@@ -211,7 +211,7 @@ def sendStart2DingTalk_PubWeb() {
             params.HG_REPOSITORY_SRC ? (params.HG_REPOSITORY_SRC - ~/.*\//) : "Unknown",
             "- **记录**",
             "***",
-            "**logo** " + (hasLogo2Refresh() ? "<font color=#ff9f00>已修改</font>" : "未修改"),
+            "logo " + (hasLogo2Refresh() ? "<font color=#ff9f00>已修改</font>" : "未修改"),
         ] + getChangeString()
     )
 }
@@ -275,7 +275,7 @@ def sendResult2DingTalk_PubWeb() {
             params.HG_REPOSITORY_SRC ? (params.HG_REPOSITORY_SRC - ~/.*\//) : "Unknown",
             "- **记录**",
             "***",
-            "**logo** " + (hasLogo2Refresh() ? "<font color=#ff9f00>已修改</font>" : "未修改"),
+            "logo " + (hasLogo2Refresh() ? "<font color=#ff9f00>已修改</font>" : "未修改"),
         ] + getChangeString() + (
             currentBuild.result == 'FAILURE' ? [
                 "***",
