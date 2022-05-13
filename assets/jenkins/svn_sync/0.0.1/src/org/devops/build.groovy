@@ -209,9 +209,9 @@ def sendStart2DingTalk_PubWeb() {
             "- **时刻** ${new Date().format("yyyy-MM-dd(E)HH:mm:ss", TimeZone.getTimeZone('Asia/Shanghai')) - "星期"}",
             "- **仓库**",
             params.HG_REPOSITORY_SRC ? (params.HG_REPOSITORY_SRC - ~/.*\//) : "Unknown",
+            "- **logo** " + (hasLogo2Refresh() ? "<font color=#ff9f00>已修改</font>" : "未修改"),
             "- **记录**",
             "***",
-            "logo " + (hasLogo2Refresh() ? "<font color=#ff9f00>已修改</font>" : "未修改"),
         ] + getChangeString()
     )
 }
@@ -273,9 +273,9 @@ def sendResult2DingTalk_PubWeb() {
             "- **用时** ${durationString}",
             "- **仓库**",
             params.HG_REPOSITORY_SRC ? (params.HG_REPOSITORY_SRC - ~/.*\//) : "Unknown",
+            "- **logo** " + (hasLogo2Refresh() ? "<font color=#ff9f00>已修改</font>" : "未修改"),
             "- **记录**",
             "***",
-            "logo " + (hasLogo2Refresh() ? "<font color=#ff9f00>已修改</font>" : "未修改"),
         ] + getChangeString() + (
             currentBuild.result == 'FAILURE' ? [
                 "***",
