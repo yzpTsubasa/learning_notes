@@ -226,15 +226,15 @@ nominatedUsers.each{
     def password = it[0]
     def fullName= it[1]
     def email = it[2]
-    def existingUser = Jenkins.instance.securityRealm.getUser(userId)
-    if (!existingUser) {
-        def user = Jenkins.instance.securityRealm.createAccount(userId, password)
-        user.addProperty(new Mailer.UserProperty(email));
-        user.setFullName(fullName)
+    def user = Jenkins.instance.securityRealm.getUser(userId)
+    if (!user) {
+        user = Jenkins.instance.securityRealm.createAccount(userId, password)
         println("新用户 ${userId} ${fullName} ${email}, 添加成功!")
     } else {
-        println("用户已存在 ${existingUser.getId()} ${existingUser.getFullName()}, 添加失败!")
+        println("用户已存在 ${user.getId()} ${user.getFullName()}, 添加失败!")
     }
+    user.addProperty(new Mailer.UserProperty(email));
+    user.setFullName(fullName)
 }
 null
 ```
