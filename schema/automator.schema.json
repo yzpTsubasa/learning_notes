@@ -78,6 +78,7 @@
                 "store_key": {"title": "结果值名称"},
                 "store_dst": {"title": "结果值保存位置"},
                 "store_print": {"title": "结果值打印"},
+                "store_stdout": {"title": "结果值写入标准输出stdout，需要配合启动参数 --LOG_LEVEL 99"},
                 "title": {"title": "标题"},
                 "message": {"title": "消息内容"},
                 "connection": {"title": "连接对象"},
