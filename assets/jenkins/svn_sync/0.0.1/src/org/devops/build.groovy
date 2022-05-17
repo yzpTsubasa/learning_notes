@@ -113,20 +113,22 @@ def getLastChangedRev() {
 
 def pubToWebIntegrated() {
     // lock(resource: "${HG_PUB_RES}") {
-    lock(resource: "pub2web") {
-        dir("project") {
-            // 检出
-            checkoutSVN(params.HG_REPOSITORY_SRC)
-            // 发送通知
-            sendStart2DingTalk_PubWeb()
-            // 设置环境变量 prg_dir 给 hgbuild 使用
-            env.prg_dir = pwd()
-        }
-        dir("publish") {
-            checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: '*/yzp']], extensions: [], userRemoteConfigs: [[url: 'http://192.168.1.205:3000/fangjie/publish.git']]]
-            bat """
+    dir("project") {
+        // 检出
+        checkoutSVN(params.HG_REPOSITORY_SRC)
+        // 发送通知
+        sendStart2DingTalk_PubWeb()
+        // 设置环境变量 prg_dir 给 hgbuild 使用
+        env.prg_dir = pwd()
+    }
+    dir("publish") {
+        checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: '*/yzp']], extensions: [], userRemoteConfigs: [[url: 'http://192.168.1.205:3000/fangjie/publish.git']]]
+        bat """
 npm i
-"""
+"""     
+    }
+    lock(resource: "pub2web") {
+        dir("publish") {
             // 发布
             bat([label: '发布', returnStdout: false, script: """
 if "%chkdst%" == "true" (
@@ -141,19 +143,21 @@ npx hgbuild walk ${HG_PUB_RES} ${HG_PUB_TYPE} --noUserOp
 // 新的发布流程 - 集成版本
 def pubToWebIntegratedCommonOld() {
     // lock(resource: "${cfg_dir}") {
-    lock(resource: "pub2web") {
-        dir("project") {
-            // 检出
-            checkoutSVN(params.HG_REPOSITORY_SRC)
-            // 发送通知
-            sendStart2DingTalk_PubWeb()
-        }
-        // 发布
-        dir("publish") {
-            checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: '*/yzp']], extensions: [], userRemoteConfigs: [[url: 'http://192.168.1.205:3000/fangjie/publish.git']]]
-            bat """
+    dir("project") {
+        // 检出
+        checkoutSVN(params.HG_REPOSITORY_SRC)
+        // 发送通知
+        sendStart2DingTalk_PubWeb()
+    }
+    dir("publish") {
+        checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: '*/yzp']], extensions: [], userRemoteConfigs: [[url: 'http://192.168.1.205:3000/fangjie/publish.git']]]
+        bat """
 npm i
 """
+    }
+    lock(resource: "pub2web") {
+        // 发布
+        dir("publish") {
             bat([label: '发布', returnStdout: false, script: """
 if "%chkdst%" == "true" (
     hgbuild run _11_common_old --prg_dir ${WORKSPACE}/project --upload_filter ${params.upload_filter} --toolTag ${params.toolTag} --cfg_dir ${params.cfg_dir} --noUserOp --chkdst
@@ -167,19 +171,21 @@ if "%chkdst%" == "true" (
 // 新的发布流程 - 集成版本
 def pubToWebIntegratedCommon() {
     // lock(resource: "${cfg_dir}") {
-    lock(resource: "pub2web") {
-        dir("project") {
-            // 检出
-            checkoutSVN(params.HG_REPOSITORY_SRC)
-            // 发送通知
-            sendStart2DingTalk_PubWeb()
-        }
-        // 发布
-        dir("publish") {
-            checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: '*/yzp']], extensions: [], userRemoteConfigs: [[url: 'http://192.168.1.205:3000/fangjie/publish.git']]]
-            bat """
+    dir("project") {
+        // 检出
+        checkoutSVN(params.HG_REPOSITORY_SRC)
+        // 发送通知
+        sendStart2DingTalk_PubWeb()
+    }
+    // 发布
+    dir("publish") {
+        checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: '*/yzp']], extensions: [], userRemoteConfigs: [[url: 'http://192.168.1.205:3000/fangjie/publish.git']]]
+        bat """
 npm i
 """
+    }
+    lock(resource: "pub2web") {
+        dir("publish") {
             bat([label: '发布', returnStdout: false, script: """
 if "%chkdst%" == "true" (
     hgbuild run _10_common --prg_dir ${WORKSPACE}/project --upload_filter ${params.upload_filter} --toolTag ${params.toolTag} --cfg_dir ${params.cfg_dir} --noUserOp --chkdst
