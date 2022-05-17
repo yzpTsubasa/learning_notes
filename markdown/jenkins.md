@@ -1,5 +1,13 @@
 ## jenkins
 
+## 需要发布者手动确认的多阶段任务
+``` groovy
+// ...
+def ret = input message: '准备执行第二阶段?', ok: '继续执行', parameters: [booleanParam(defaultValue: true, description: '安静模式', name: 'HG_QUIET'), string(defaultValue: 'TEST', description: '测试', name: 'TEST')]
+print ret
+// ...
+```
+
 ## 无法直接由jenkins执行的任务
 > 自启动可能需要特殊权限的任务时，比如 pm2 需要开启 daemon 守护进程，无法在 jenkins 中调用成功，需要设置系统自启动项，如 `pm2 list`，
 > 然后在由 jenkins 执行 `pm2 start ...`
