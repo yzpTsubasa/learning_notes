@@ -152,6 +152,38 @@
                 {
                     "type": "object",
                     "properties": {
+                        "type": {"const": "dingtalk", "title": "使用机器人向钉钉群发送通知"},
+                        "data": {
+                            "type": "object",
+                            "title": "命令参数",
+                            "properties": {
+                                "webhook": {"title": "webhook地址"},
+                                "msgtype": {"title": "消息类型", "enum": ["text", "markdown", "actionCard", "feedCard"]},
+                                "title": {"title": "消息标题"},
+                                "content": {"title": "消息内容"},
+                                "atMobiles": {"title": "被@人的手机号", "type": "array"},
+                                "atUserIds": {"title": "被@人的用户userid", "type": "array"},
+                                "isAtAll": {"title": "@所有人是true，否则为false", "type": "boolean"},
+                                "btns": { "title": "按钮", "type":"array", "items": {
+                                    "properties": {
+                                        "title": { "title": "标题" },
+                                        "url": { "title": "链接地址" },
+                                        "image": { "title": "图片地址" }
+                                    }
+                                } }
+                            },
+                            "allOf": [
+                                {"$ref": "#/definitions/common_data"}
+                            ]
+                        }
+                    },
+                    "allOf": [
+                        {"$ref": "#/definitions/common_cfg"}
+                    ]
+                },
+                {
+                    "type": "object",
+                    "properties": {
                         "type": {"const": "schedule", "title": "定时任务"},
                         "data": {
                             "type": "object",
