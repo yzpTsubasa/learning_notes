@@ -140,6 +140,7 @@
                             "properties": {
                                 "actions": {"title": "操作集"}
                             },
+                            "required": ["actions"],
                             "allOf": [
                                 {"$ref": "#/definitions/common_data"}
                             ]
@@ -173,6 +174,7 @@
                                     }
                                 } }
                             },
+                            "required": [ "webhook", "msgtype" ],
                             "allOf": [
                                 {"$ref": "#/definitions/common_data"}
                             ]
@@ -196,7 +198,7 @@
                                 },
                                 "value": {"title": "值"}
                             },
-                            "required": ["schedule_type"],
+                            "required": ["schedule_type", "value"],
                             "allOf": [
                                 {"$ref": "#/definitions/common_data"}
                             ]
@@ -223,6 +225,7 @@
                                         "url": {"title": "请求地址"}
                                     }
                                 },
+                                "src": {"title": "请求地址"},
                                 "enable_cache": {"title": "启用缓存(类型)"},
                                 "options": {
                                     "type": "object",
@@ -309,7 +312,7 @@
                                 "repeat_mapping": {"title": "总重复次数保存名称"},
                                 "times_mapping": {"title": "已重复次数保存名称"}
                             },
-                            "required": ["code"],
+                            "required": ["delay"],
                             "allOf": [
                                 {"$ref": "#/definitions/common_data"}
                             ]
@@ -471,6 +474,7 @@
                                     "enum": ["blake2b512", "blake2s256", "md4", "md5", "md5-sha1", "mdc2", "ripemd160", "rsa-sha1", "sha1", "sha224", "sha256", "sha3-224", "sha3-256", "sha3-384", "sha3-512", "sha384", "sha512", "sha512-224", "sha512-256", "shake128", "shake256", "sm3", "whirlpool"]
                                 }
                             },
+                            "required": ["digestEncoding", "algorithm"],
                             "allOf": [
                                 {"$ref": "#/definitions/common_data"}
                             ]
@@ -512,13 +516,15 @@
                                             "type": "string",
                                             "title": "区域"
                                         }
-                                    }
+                                    },
+                                    "required": [ "secret_id","secret_key","bucket","appid","region" ]
                                 },
                                 "mode": {
                                     "title": "模式",
                                     "enum": ["VIEW", "DOWNLOAD", "UPLOAD_FILE", "UPLOAD", "UPLOAD_FILES"]
                                 }
                             },
+                            "required": ["config", "mode"],
                             "allOf": [
                                 {"$ref": "#/definitions/common_data"}
                             ]
