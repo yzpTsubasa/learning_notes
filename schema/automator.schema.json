@@ -13,7 +13,6 @@
                     "type": "array",
                     "items": {"$ref": "#/definitions/command"}
                 },
-                "timeout": {"title": "延时"},
                 "force": {"title": "强制执行"},
                 "full_match": {"title": "保留完整匹配对象"},
                 "flags": {"title": "flags"},
@@ -115,7 +114,7 @@
                         "type": {
                             "type": "string",
                             "title": "命令类型",
-                            "enum": ["assemble", "disassemble", "read_cache", "write_cache", "stream", "ftp", "edit_excel", "write_excel", "read_only_excel", "mysql_connect", "mysql_end", "mysql_query", "write_query", "abort", "base", "confirm", "copy", "write_clipboard", "read_clipboard", "debugger", "exec_from_file", "files", "first_exist", "flatten", "git_commit", "git_export_diff_head", "git_is_dirty", "input", "list2dict", "loop", "loop_forever", "move", "modify", "open", "parse", "pause", "print", "read_cfg", "read_plain", "remove", "retrieve", "reveal", "sleep", "storage", "store", "storage_optional", "store_optional", "svn_commit", "svn_is_dirty", "svn_update", "svn_export_diff_head", "test", "truncate", "truncate_all", "void", "write_cfg", "write_plain", "zip", "valid_required", "continue", "break", "stringify", "commit", "export_diff_head", "is_dirty", "move_local", "alert", "interval", "traversal", "notify", "log", "file_info", "read_excel", "ts_sort", "divination", "suan_gua", "file_size", "updating_revision", "revision_info", "unzip", "download"]
+                            "enum": ["assemble", "disassemble", "read_cache", "write_cache", "stream", "ftp", "edit_excel", "write_excel", "read_only_excel", "mysql_connect", "mysql_end", "mysql_query", "write_query", "abort", "base", "confirm", "copy", "write_clipboard", "read_clipboard", "debugger", "exec_from_file", "files", "first_exist", "flatten", "git_commit", "git_export_diff_head", "git_is_dirty", "input", "list2dict", "loop", "loop_forever", "move", "modify", "open", "parse", "pause", "print", "read_cfg", "read_plain", "remove", "retrieve", "reveal", "storage", "store", "storage_optional", "store_optional", "svn_commit", "svn_is_dirty", "svn_update", "svn_export_diff_head", "test", "truncate", "truncate_all", "void", "write_cfg", "write_plain", "zip", "valid_required", "continue", "break", "stringify", "commit", "export_diff_head", "is_dirty", "move_local", "alert", "interval", "traversal", "notify", "log", "file_info", "read_excel", "ts_sort", "divination", "suan_gua", "file_size", "updating_revision", "revision_info", "unzip", "download"]
                         },
                         "data": {
                             "type": "object",
@@ -460,6 +459,26 @@
                 {
                     "type": "object",
                     "properties": {
+                        "type": {"const": "sleep", "title": "睡眠"},
+                        "data": {
+                            "type": "object",
+                            "title": "命令参数",
+                            "properties": {
+                                "timeout": {"title": "延时(ms)"}
+                            },
+                            "required": ["timeout"],
+                            "allOf": [
+                                {"$ref": "#/definitions/common_data"}
+                            ]
+                        }
+                    },
+                    "allOf": [
+                        {"$ref": "#/definitions/common_cfg"}
+                    ]
+                },
+                {
+                    "type": "object",
+                    "properties": {
                         "type": {"const": "hash", "title": "散列值"},
                         "data": {
                             "type": "object",
@@ -537,7 +556,7 @@
                 {
                     "type": "string",
                     "title": "命令类型",
-                    "enum": ["abort", "base", "confirm", "copy", "write_clipboard", "read_clipboard", "date", "debugger", "eval", "exec_from_file", "exec_shell", "files", "first_exist", "flatten", "git_commit", "git_export_diff_head", "git_is_dirty", "http_request", "input", "list2dict", "loop", "loop_forever", "move", "multi_select", "modify", "open", "parse", "pause", "print", "read_cfg", "read_plain", "remove", "request", "retrieve", "reveal", "select", "shell", "sleep", "storage", "store", "storage_optional", "store_optional", "svn_commit", "svn_is_dirty", "svn_update", "svn_export_diff_head", "test", "truncate", "truncate_all", "void", "write_cfg", "write_plain", "zip", "valid_required", "continue", "break", "stringify", "commit", "export_diff_head", "is_dirty", "which", "move_local", "edit", "schedule", "alert", "interval", "traversal", "notify", "log", "file_info", "read_excel", "web_socket", "ts_sort", "divination", "suan_gua", "file_size", "hash"]
+                    "enum": ["abort", "base", "confirm", "copy", "write_clipboard", "read_clipboard", "date", "debugger", "eval", "exec_from_file", "exec_shell", "files", "first_exist", "flatten", "git_commit", "git_export_diff_head", "git_is_dirty", "http_request", "input", "list2dict", "loop", "loop_forever", "move", "multi_select", "modify", "open", "parse", "pause", "print", "read_cfg", "read_plain", "remove", "request", "retrieve", "reveal", "select", "shell", "storage", "store", "storage_optional", "store_optional", "svn_commit", "svn_is_dirty", "svn_update", "svn_export_diff_head", "test", "truncate", "truncate_all", "void", "write_cfg", "write_plain", "zip", "valid_required", "continue", "break", "stringify", "commit", "export_diff_head", "is_dirty", "which", "move_local", "edit", "schedule", "alert", "interval", "traversal", "notify", "log", "file_info", "read_excel", "web_socket", "ts_sort", "divination", "suan_gua", "file_size", "hash"]
                 }
             ]
         }
