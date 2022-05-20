@@ -464,7 +464,7 @@
                             "type": "object",
                             "title": "命令参数",
                             "properties": {
-                                "timeout": {"title": "延时(ms)"}
+                                "timeout": {"title": "延时(ms)", "default": 3000, "type":"integer"}
                             },
                             "required": ["timeout"],
                             "allOf": [
