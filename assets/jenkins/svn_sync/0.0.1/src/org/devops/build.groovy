@@ -317,7 +317,7 @@ def sendCommonResult2DingTalk() {
             currentBuild.result == 'FAILURE' ? [
                 "***",
                 "- **<font color=${result_color}>失败日志</font>**",
-                getTailLogString(),
+                getTailLogString(10),
             ] : []
         )
     )
