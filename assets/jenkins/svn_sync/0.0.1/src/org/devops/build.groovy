@@ -523,18 +523,14 @@ def checkoutComplexSVN(scm) {
 }
 
 def pub200AutomaticIntegrated() {
-    dir('automator') {
-        checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: 'master']], extensions: [], userRemoteConfigs: [[url: 'http://192.168.1.205:3000/yzp/automator.git']]]
-        bat 'npm i'
-    }
     // 编译
     dir("project") {
         checkoutSVN(params.HG_REPOSITORY_SRC)
         if (needCompile()) {
             // sendStart2DingTalk()
             // 有环境才执行排序
-            if (fileExists('./tools/cfg/generate_sorted_ts.yml')) {
-                bat([label: '更新manifest', returnStdout: false, script: 'node "../automator/main.js" "./tools/cfg/generate_sorted_ts.yml" --FULL_AUTOMATIC 1'])
+            if (fileExists('./tools/main.exe') && fileExists('./tools/cfg/generate_sorted_ts.yml')) {
+                bat([label: '更新manifest', returnStdout: false, script: '"./tools/main.exe" "./tools/cfg/generate_sorted_ts.yml" --QUIET_MODE 1'])
             }
             def pub_200_out_bat = ""
             // 编译代码的备选批处理文件
@@ -582,17 +578,13 @@ mklink /j "resource" "../resource"
 }
 
 def pub200AutomaticOldIntegrated() {
-    dir('automator') {
-        checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: 'master']], extensions: [], userRemoteConfigs: [[url: 'http://192.168.1.205:3000/yzp/automator.git']]]
-        bat 'npm i'
-    }
     // 编译
     dir("project") {
         checkoutSVN(params.HG_REPOSITORY_SRC)
         if (needCompile()) {
             // 有环境才执行排序
-            if (fileExists('./tools/cfg/generate_sorted_ts.yml')) {
-                bat([label: '更新manifest', returnStdout: false, script: 'node ../automator/main.js "./tools/cfg/generate_sorted_ts.yml" --FULL_AUTOMATIC 1'])
+            if (fileExists('./tools/main.exe') && fileExists('./tools/cfg/generate_sorted_ts.yml')) {
+                bat([label: '更新manifest', returnStdout: false, script: '"./tools/main.exe" "./tools/cfg/generate_sorted_ts.yml" --QUIET_MODE 1'])
             }
             def pub_200_out_bat = ""
             // 编译代码的备选批处理文件
