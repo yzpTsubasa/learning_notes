@@ -1,3 +1,4 @@
+/* groovylint-disable CompileStatic, NestedBlockDepth, NoDef, UnnecessaryGString, VariableName, VariableTypeRequired */
 @Library("jenkins_library") _
 
 def build = new org.devops.build()
@@ -9,7 +10,7 @@ pipeline {
     }
     options {
         disableConcurrentBuilds()
-        buildDiscarder logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '')
+        preserveStashes()
     }
     stages {
         stage('build') {
@@ -20,9 +21,9 @@ pipeline {
             }
         }
     }
-    
-    post { 
-        always { 
+
+    post {
+        always {
             script {
                 print 'Done'
                 if (build.needCompile()) {
@@ -34,6 +35,4 @@ pipeline {
             }
         }
     }
-
-    
 }

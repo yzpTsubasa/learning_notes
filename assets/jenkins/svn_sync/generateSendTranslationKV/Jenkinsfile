@@ -9,6 +9,7 @@ pipeline {
     }
     options {
         disableConcurrentBuilds()
+        preserveStashes()
         ansiColor('xterm')
     }
 
