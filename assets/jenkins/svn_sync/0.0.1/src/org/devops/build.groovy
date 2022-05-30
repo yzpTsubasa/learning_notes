@@ -526,12 +526,17 @@ def pub200AutomaticIntegrated() {
         checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: 'master']], extensions: [], userRemoteConfigs: [[url: 'http://192.168.1.205:3000/yzp/automator.git']]]
         bat 'npm i'
     }
-    // 编译
     dir('project') {
+        // 检出代码
         checkoutSVN(params.HG_REPOSITORY_SRC)
+
+        // 资源修改检测
+        bat([label: '资源修改检测', returnStdout: false, script: "node %WORKSPACE%/automator/main.js %WORKSPACE%/automator/cfg/dldl/generate_sorted_ts.yml --FULL_AUTOMATIC --workspaceFolder %WORKSPACE%/project --revisions \"${getRevisions()}\" --jenkins ${JENKINS_URL} --webhook https://oapi.dingtalk.com/robot/send?access_token=d49fdc03b05ac8d52da7ad4167b94823a2c77225bb93d943440a0340db5dd313"])
+
+        // 编译
         if (needCompile()) {
             // 执行manifest排序
-            bat([label: '更新manifest', returnStdout: false, script: 'node %WORKSPACE%/automator/main.js %WORKSPACE%/automator/cfg/dldl/generate_sorted_ts.yml --FULL_AUTOMATIC --workspaceFolder %WORKSPACE%/project'])
+            bat([label: '更新manifest', returnStdout: false, script: 'node %WORKSPACE%/automator/main.js %WORKSPACE%/automator/cfg/dldl/monitor_resource_modification.yml --FULL_AUTOMATIC --workspaceFolder %WORKSPACE%/project'])
             def pub_200_out_bat = ''
             // 编译代码的备选批处理文件
             def pub_200_out_bat_alternatives = [
