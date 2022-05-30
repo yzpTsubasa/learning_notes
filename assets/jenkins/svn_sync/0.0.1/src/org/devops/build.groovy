@@ -530,7 +530,7 @@ def pub200AutomaticIntegrated() {
         // 检出代码
         checkoutSVN(params.HG_REPOSITORY_SRC)
 
-        if (!params.HG_QUIET) {
+        if (params.HG_MONITOR) {
             // 资源修改检测
             bat([label: '资源修改检测', returnStdout: false, script: "node %WORKSPACE%/automator/main.js %WORKSPACE%/automator/cfg/dldl/monitor_resource_modification.yml --FULL_AUTOMATIC --workspaceFolder %WORKSPACE%/project --revisions \"${getRevisions()}\" --jenkins ${JENKINS_URL} --webhook https://oapi.dingtalk.com/robot/send?access_token=d49fdc03b05ac8d52da7ad4167b94823a2c77225bb93d943440a0340db5dd313"])
         }
