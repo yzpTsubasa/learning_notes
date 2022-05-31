@@ -538,7 +538,7 @@ def pub200AutomaticIntegrated() {
         // 编译
         if (needCompile()) {
             // 执行manifest排序
-            bat([label: '更新manifest', returnStdout: false, script: 'node %WORKSPACE%/automator/main.js %WORKSPACE%/automator/cfg/dldl/monitor_resource_modification.yml --FULL_AUTOMATIC --workspaceFolder %WORKSPACE%/project'])
+            bat([label: '更新manifest', returnStdout: false, script: 'node %WORKSPACE%/automator/main.js %WORKSPACE%/automator/cfg/dldl/generate_sorted_ts.yml --FULL_AUTOMATIC --workspaceFolder %WORKSPACE%/project'])
             def pub_200_out_bat = ''
             // 编译代码的备选批处理文件
             def pub_200_out_bat_alternatives = [
