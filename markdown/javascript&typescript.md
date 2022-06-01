@@ -1,5 +1,13 @@
 ## javascript&typescript
 
+## npm install 出错
+``` sh
+# 报错内容 Cannot read property 'pickAlgorithm' of null
+
+# 执行缓存清理，再重新尝试安装
+npm cache clear --force
+```
+
 ## protocol buffer 相关
 - 下载 `protoc` https://github.com/protocolbuffers/protobuf/releases
 - 新建一个空项目，安装 `npm i ts-proto`
