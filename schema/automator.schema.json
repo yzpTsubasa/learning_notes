@@ -330,9 +330,11 @@
                             "type": "object",
                             "title": "命令参数",
                             "properties": {
-                                "url": {"title": "连接地址"},
+                                "url": {"title": "连接地址", "default": "ws://"},
+                                "timeout": {"title": "连接超时(ms)", "default": 5000 },
+                                "quiet": {"title": "安静模式", "default": true },
                                 "protocols": {"title": "协议"},
-                                "little_endian": {"title": "最低有效字节位于最前(小端)"},
+                                "little_endian": {"title": "最低有效字节位于最前(小端)", "default": true },
                                 "headers": {"title": "头部解析"},
                                 "body_retrieval": {"title": "包体类型拼接"},
                                 "bodies": {"title": "包体解析"},
