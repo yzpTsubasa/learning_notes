@@ -78,7 +78,8 @@ def sendResult2DingTalk() {
     env.result = currentBuild.result == 'SUCCESS' ? '成功' : currentBuild.result == 'FAILURE' ? '失败' : '取消'
     env.description = currentBuild.description
     env.durationString = currentBuild.durationString.minus(' and counting')
-    def atUsers = getAtUsers()
+    // 失败时，@提交者
+    def atUsers = getAtUsers(currentBuild.result == 'FAILURE')
     dingtalk(
         robot: 'automator',
         type: 'ACTION_CARD',
@@ -223,7 +224,7 @@ def sendStart2DingTalk_PubWeb() {
 }
 
 // 获取要@的用户
-def getAtUsers() {
+def getAtUsers(includeCommitUser = false) {
     def AT_USERS_STR = params.AT_USERS != null ? params.AT_USERS : ''
     def AT_USERS = AT_USERS_STR.tokenize(',')
     // 添加构建者(需要允许指定的API)
@@ -231,8 +232,7 @@ def getAtUsers() {
     if (builderMobile) {
         AT_USERS.add(builderMobile)
     }
-    // 失败时，@提交者
-    if (currentBuild.result == 'FAILURE') {
+    if (includeCommitUser) {
         AT_USERS += getCommitUserMobiles()
     }
     // 去重
