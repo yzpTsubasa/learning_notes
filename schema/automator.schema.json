@@ -88,7 +88,7 @@
                 "delimiter": {"title": "分隔符", "default": ","},
                 "props": {"title": "属性"},
                 "lifetime": {"title": "生命周期(ms)", "default": 5000},
-                "store_validator": { "title": "结果值校验", "default": "(ret) => {\n  return [true, \"success\"];\n  }" },
+                "store_validator": { "title": "结果值校验", "default": "(ret) => [true, 'success']" },
                 "store_confirm": {"title": "结果值确认", "default": true}
             }
         },
