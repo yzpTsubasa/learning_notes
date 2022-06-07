@@ -115,7 +115,7 @@
                         "type": {
                             "type": "string",
                             "title": "命令类型",
-                            "enum": ["assemble", "disassemble", "read_cache", "write_cache", "stream", "ftp", "edit_excel", "write_excel", "read_only_excel", "mysql_connect", "mysql_end", "mysql_query", "write_query", "abort", "base", "confirm", "copy", "write_clipboard", "read_clipboard", "debugger", "exec_from_file", "files", "first_exist", "flatten", "git_commit", "git_export_diff_head", "git_is_dirty", "input", "list2dict", "loop", "loop_forever", "move", "modify", "open", "parse", "pause", "print", "read_cfg", "read_plain", "remove", "retrieve", "reveal", "storage", "store", "storage_optional", "store_optional", "svn_commit", "svn_is_dirty", "svn_update", "svn_export_diff_head", "test", "truncate", "truncate_all", "void", "write_cfg", "write_plain", "zip", "valid_required", "continue", "break", "stringify", "commit", "export_diff_head", "is_dirty", "move_local", "alert", "interval", "traversal", "notify", "log", "file_info", "read_excel", "ts_sort", "divination", "suan_gua", "file_size", "updating_revision", "revision_info", "unzip", "download"]
+                            "enum": ["assemble", "disassemble", "read_cache", "write_cache", "stream", "ftp", "edit_excel", "write_excel", "read_only_excel", "mysql_connect", "mysql_end", "mysql_query", "write_query", "abort", "base", "confirm", "copy", "write_clipboard", "read_clipboard", "debugger", "exec_from_file", "files", "first_exist", "flatten", "git_commit", "git_export_diff_head", "git_is_dirty", "input", "list2dict", "loop", "loop_forever", "move", "modify", "open", "parse", "pause", "print", "read_cfg", "read_plain", "remove", "retrieve", "reveal", "storage", "store", "storage_optional", "store_optional", "svn_commit", "svn_is_dirty", "svn_update", "svn_export_diff_head", "test", "truncate", "truncate_all", "void", "write_cfg", "write_plain", "zip", "valid_required", "continue", "break", "stringify", "commit", "export_diff_head", "is_dirty", "move_local", "alert", "interval", "traversal", "notify", "log", "file_info", "read_excel", "ts_sort", "divination", "suan_gua", "file_size", "updating_revision", "revision_info", "unzip"]
                         },
                         "data": {
                             "type": "object",
@@ -212,8 +212,8 @@
                     "type": "object",
                     "properties": {
                         "type": {
-                            "enum": ["http_request", "request"],
-                            "title": "http请求"
+                            "enum": ["http_request", "request", "download"],
+                            "title": "http请求/下载"
                         },
                         "data": {
                             "type": "object",
@@ -231,7 +231,18 @@
                                 "options": {
                                     "type": "object",
                                     "properties": {
-                                        "method": {"title": "方式"}
+                                        "method": {"title": "方式", "enum": ["GET", "HEAD", "POST", "PUT", "DELETE", "CONNECT", "OPTIONS", "TRACE", "PATCH"]},
+                                        "headers": {"title": "头部", "properties": {
+                                            "Authorization": { "title": "授权密钥" }
+                                        }},
+                                        "formData": { "title": "表单数据", "properties": {
+                                            "file": { "title": "文件" , "properties": {
+                                                "value": { "title": "二进制数据" },
+                                                "options": { "title": "文件选项" , "properties": {
+                                                    "filename":{ "title": "文件名" }
+                                                }}
+                                            }}
+                                        }}
                                     }
                                 }
                             },
