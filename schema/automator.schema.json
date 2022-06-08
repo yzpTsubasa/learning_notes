@@ -441,6 +441,7 @@
                             "type": "object",
                             "title": "命令参数",
                             "properties": {
+                                "tip_key": {"title": "提示键", "default": true},
                                 "value_mapping": {"title": "循环值映射"},
                                 "key_mapping": {"title": "循环键映射"},
                                 "index_mapping": {"title": "循环索引映射"}
