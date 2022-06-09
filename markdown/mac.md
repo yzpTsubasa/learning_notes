@@ -1,5 +1,11 @@
 ## mac
 
+## 添加 PATH
+``` sh
+# 全局,一行一个路径
+/etc/paths
+```
+
 ## 查看隐藏的文件
 <kbd>command</kbd> + <kbd>shift</kbd> + <kbd>.</kbd>
 
