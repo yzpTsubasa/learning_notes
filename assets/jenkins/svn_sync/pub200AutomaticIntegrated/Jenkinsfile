@@ -6,7 +6,7 @@ def build = new org.devops.build()
 pipeline {
     agent any
     triggers {
-        pollSCM 'H/1 * * * *'
+        pollSCM '* * * * *'
     }
     options {
         disableConcurrentBuilds()
