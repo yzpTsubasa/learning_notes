@@ -458,6 +458,32 @@
                 {
                     "type": "object",
                     "properties": {
+                        "type": {"const": "watch_mail", "title": "监听邮件"},
+                        "data": {
+                            "type": "object",
+                            "title": "命令参数",
+                            "properties": {
+                                "user": {"title": "用户名", "default": "foobar@outlook.com"},
+                                "password": {"title": "密码", "default": "***"},
+                                "host": {"title": "服务器名称", "default": "outlook.office365.com"},
+                                "port": {"title": "端口", "default": 993},
+                                "tls": {"title": "启用ssl安全链接", "default": true},
+                                "search": {"title": "邮件数据映射", "default": [ "UNSEEN" ] },
+                                "value_mapping": {"title": "邮件数据映射", "default": "mail_data" }
+                            },
+                            "required": [ "user", "password", "host" ],
+                            "allOf": [
+                                {"$ref": "#/definitions/common_data"}
+                            ]
+                        }
+                    },
+                    "allOf": [
+                        {"$ref": "#/definitions/common_cfg"}
+                    ]
+                },
+                {
+                    "type": "object",
+                    "properties": {
                         "type": {"const": "loop_forever", "title": "无限循环"},
                         "data": {
                             "type": "object",
