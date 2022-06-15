@@ -123,7 +123,7 @@ def pubToWebIntegrated() {
         env.prg_dir = pwd()
     }
     dir('publish') {
-        checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: '*/yzp']], extensions: [], userRemoteConfigs: [[url: 'http://192.168.1.205:3000/fangjie/publish.git']]]
+        checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'http://192.168.1.205:3000/fangjie/publish.git']]]
         bat '''
 npm i
 '''
@@ -151,7 +151,7 @@ def pubToWebIntegratedCommonOld() {
         sendStart2DingTalk_PubWeb()
     }
     dir('publish') {
-        checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: '*/yzp']], extensions: [], userRemoteConfigs: [[url: 'http://192.168.1.205:3000/fangjie/publish.git']]]
+        checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'http://192.168.1.205:3000/fangjie/publish.git']]]
         bat '''
 npm i
 '''
@@ -180,7 +180,7 @@ def pubToWebIntegratedCommon() {
     }
     // 发布
     dir('publish') {
-        checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: '*/yzp']], extensions: [], userRemoteConfigs: [[url: 'http://192.168.1.205:3000/fangjie/publish.git']]]
+        checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'http://192.168.1.205:3000/fangjie/publish.git']]]
         bat '''
 npm i
 '''
