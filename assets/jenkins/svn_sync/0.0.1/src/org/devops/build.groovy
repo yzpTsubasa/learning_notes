@@ -332,15 +332,15 @@ def retrieveTranslationAPI() {
         dir('project/resource/assets/cfgjson') {
             checkoutComplexSVN([scm: [$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '', excludedRegions: '', excludedRevprop: '', excludedUsers: '', filterChangelog: true, ignoreDirPropChanges: false, includedRegions: '''.*/resource/assets/cfgjson/\\w+\\.json
     .*/resource/assets/cfgjson/base/\\w+\\.json
-    .*/resource/js/common\\.js''', locations: [[cancelProcessOnExternalsFail: true, credentialsId: env.HG_CREDENTIALS_ID ? env.HG_CREDENTIALS_ID : "dfb8344e-2d0c-4750-8154-9503745a01f9", depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: "$SCM_URL/resource/assets/cfgjson"]], quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']]])
+    .*/resource/js/common\\.js''', locations: [[cancelProcessOnExternalsFail: true, credentialsId: getCredentialsId(), depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: "$SCM_URL/resource/assets/cfgjson"]], quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']]])
         }
         dir('project/resource/js') {
             checkoutComplexSVN([scm: [$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '', excludedRegions: '', excludedRevprop: '', excludedUsers: '', filterChangelog: true, ignoreDirPropChanges: false, includedRegions: '''.*/resource/assets/cfgjson/\\w+\\.json
     .*/resource/assets/cfgjson/base/\\w+\\.json
-    .*/resource/js/common\\.js''', locations: [[cancelProcessOnExternalsFail: true, credentialsId: env.HG_CREDENTIALS_ID ? env.HG_CREDENTIALS_ID : "dfb8344e-2d0c-4750-8154-9503745a01f9", depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: "$SCM_URL/resource/js"]], quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']]])
+    .*/resource/js/common\\.js''', locations: [[cancelProcessOnExternalsFail: true, credentialsId: getCredentialsId(), depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: "$SCM_URL/resource/js"]], quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']]])
         }
         dir('translation') {
-            checkoutComplexSVN changelog: false, poll: false, scm: [$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '', excludedRegions: '', excludedRevprop: '', excludedUsers: '', filterChangelog: false, ignoreDirPropChanges: false, includedRegions: '', locations: [[cancelProcessOnExternalsFail: true, credentialsId: env.HG_CREDENTIALS_ID ? env.HG_CREDENTIALS_ID : "dfb8344e-2d0c-4750-8154-9503745a01f9", depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: 'https://svn100.hotgamehl.com/svn/Html5/trunk/dldl_WX/translation_keyvalue']], quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']]
+            checkoutComplexSVN changelog: false, poll: false, scm: [$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '', excludedRegions: '', excludedRevprop: '', excludedUsers: '', filterChangelog: false, ignoreDirPropChanges: false, includedRegions: '', locations: [[cancelProcessOnExternalsFail: true, credentialsId: getCredentialsId(), depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: 'https://svn100.hotgamehl.com/svn/Html5/trunk/dldl_WX/translation_keyvalue']], quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']]
         }
         dir('convert2src') {
             retry(1) {
@@ -358,17 +358,17 @@ def generateTranslationKV_API() {
             bat 'npm i'
         }
         dir('translation') {
-            checkoutComplexSVN changelog: false, poll: false, scm: [$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '', excludedRegions: '', excludedRevprop: '', excludedUsers: '', filterChangelog: false, ignoreDirPropChanges: false, includedRegions: '', locations: [[cancelProcessOnExternalsFail: true, credentialsId: env.HG_CREDENTIALS_ID ? env.HG_CREDENTIALS_ID : "dfb8344e-2d0c-4750-8154-9503745a01f9", depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: 'https://svn100.hotgamehl.com/svn/Html5/trunk/dldl_WX/translation_keyvalue']], quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']]
+            checkoutComplexSVN changelog: false, poll: false, scm: [$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '', excludedRegions: '', excludedRevprop: '', excludedUsers: '', filterChangelog: false, ignoreDirPropChanges: false, includedRegions: '', locations: [[cancelProcessOnExternalsFail: true, credentialsId: getCredentialsId(), depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: 'https://svn100.hotgamehl.com/svn/Html5/trunk/dldl_WX/translation_keyvalue']], quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']]
         }
         dir('project/resource/assets/cfgjson') {
             checkoutComplexSVN([$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '', excludedRegions: '', excludedRevprop: '', excludedUsers: '', filterChangelog: true, ignoreDirPropChanges: false, includedRegions: '''.*/resource/assets/cfgjson/\\w+\\.json
     .*/resource/assets/cfgjson/base/\\w+\\.json
-    .*/resource/js/common\\.js''', locations: [[cancelProcessOnExternalsFail: true, credentialsId: env.HG_CREDENTIALS_ID ? env.HG_CREDENTIALS_ID : "dfb8344e-2d0c-4750-8154-9503745a01f9", depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: "$SCM_URL/resource/assets/cfgjson"]], quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']])
+    .*/resource/js/common\\.js''', locations: [[cancelProcessOnExternalsFail: true, credentialsId: getCredentialsId(), depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: "$SCM_URL/resource/assets/cfgjson"]], quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']])
         }
         dir('project/resource/js') {
             checkoutComplexSVN([$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '', excludedRegions: '', excludedRevprop: '', excludedUsers: '', filterChangelog: true, ignoreDirPropChanges: false, includedRegions: '''.*/resource/assets/cfgjson/\\w+\\.json
     .*/resource/assets/cfgjson/base/\\w+\\.json
-    .*/resource/js/common\\.js''', locations: [[cancelProcessOnExternalsFail: true, credentialsId: env.HG_CREDENTIALS_ID ? env.HG_CREDENTIALS_ID : "dfb8344e-2d0c-4750-8154-9503745a01f9", depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: "$SCM_URL/resource/js"]], quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']])
+    .*/resource/js/common\\.js''', locations: [[cancelProcessOnExternalsFail: true, credentialsId: getCredentialsId(), depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: "$SCM_URL/resource/js"]], quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']])
         }
         dir('convert2src') {
             bat 'node %WORKSPACE%/automator/main.js %WORKSPACE%/automator/cfg/dldl/conversion_to_src@api.yml --FULL_AUTOMATIC 1 --projectFolder %WORKSPACE%/project --conversionWorkspaceFolder %WORKSPACE%/conversion --translationFolder %WORKSPACE%/translation'
@@ -465,7 +465,7 @@ def getPubWebVersion() {
 // 上传资源到FTP上
 def ftpUploadSource() {
     dir('source') {
-        checkout([$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '', excludedRegions: '', excludedRevprop: '', excludedUsers: '', filterChangelog: true, ignoreDirPropChanges: false, includedRegions: ".*/${LOCAL_FILE}", locations: [[cancelProcessOnExternalsFail: true, credentialsId: env.HG_CREDENTIALS_ID ? env.HG_CREDENTIALS_ID : "dfb8344e-2d0c-4750-8154-9503745a01f9", depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: "$SCM_URL"]], quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']])
+        checkout([$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '', excludedRegions: '', excludedRevprop: '', excludedUsers: '', filterChangelog: true, ignoreDirPropChanges: false, includedRegions: ".*/${LOCAL_FILE}", locations: [[cancelProcessOnExternalsFail: true, credentialsId: getCredentialsId(), depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: "$SCM_URL"]], quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']])
     }
     dir('automator') {
             checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: 'master']], extensions: [], userRemoteConfigs: [[url: 'http://192.168.1.205:3000/yzp/automator.git']]]
@@ -495,7 +495,7 @@ def checkoutSVN(scmUrl) {
         bat(script: "svn checkout ${scmUrl} . --quiet")
 }
     // pollSCM
-    checkout([$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '', excludedRegions: '', excludedRevprop: '', excludedUsers: '', filterChangelog: true, ignoreDirPropChanges: false, includedRegions: '', locations: [[cancelProcessOnExternalsFail: true, credentialsId: env.HG_CREDENTIALS_ID ? env.HG_CREDENTIALS_ID : "dfb8344e-2d0c-4750-8154-9503745a01f9", depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: "${scmUrl}"]], quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']])
+    checkout([$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '', excludedRegions: '', excludedRevprop: '', excludedUsers: '', filterChangelog: true, ignoreDirPropChanges: false, includedRegions: '', locations: [[cancelProcessOnExternalsFail: true, credentialsId: getCredentialsId(), depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: "${scmUrl}"]], quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']])
 }
 
 // 使用本地环境的 svn 检出, 不需要 svn upgrade
@@ -641,6 +641,10 @@ def getRevisions() {
     }.join('')
 }
 
+def getCredentialsId() {
+    return env.HG_CREDENTIALS_ID ? env.HG_CREDENTIALS_ID : "dfb8344e-2d0c-4750-8154-9503745a01f9"
+}
+
 // 发送翻译KV表_API
 def generateSendTranslationKV_API() {
     lock(resource: 'conversion_api') {
@@ -651,12 +655,12 @@ def generateSendTranslationKV_API() {
         dir('project/resource/assets/cfgjson') {
             checkoutComplexSVN(changelog: false, poll: false, scm: [$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '', excludedRegions: '', excludedRevprop: '', excludedUsers: '', filterChangelog: true, ignoreDirPropChanges: false, includedRegions: '''.*/resource/assets/cfgjson/\\w+\\.json
     .*/resource/assets/cfgjson/base/\\w+\\.json
-    .*/resource/js/common\\.js''', locations: [[cancelProcessOnExternalsFail: true, credentialsId: env.HG_CREDENTIALS_ID ? env.HG_CREDENTIALS_ID : "dfb8344e-2d0c-4750-8154-9503745a01f9", depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: "$SCM_URL/resource/assets/cfgjson"]], quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']])
+    .*/resource/js/common\\.js''', locations: [[cancelProcessOnExternalsFail: true, credentialsId: getCredentialsId(), depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: "$SCM_URL/resource/assets/cfgjson"]], quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']])
         }
         dir('project/resource/js') {
             checkoutComplexSVN(changelog: false, poll: false, scm: [$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '', excludedRegions: '', excludedRevprop: '', excludedUsers: '', filterChangelog: true, ignoreDirPropChanges: false, includedRegions: '''.*/resource/assets/cfgjson/\\w+\\.json
     .*/resource/assets/cfgjson/base/\\w+\\.json
-    .*/resource/js/common\\.js''', locations: [[cancelProcessOnExternalsFail: true, credentialsId: env.HG_CREDENTIALS_ID ? env.HG_CREDENTIALS_ID : "dfb8344e-2d0c-4750-8154-9503745a01f9", depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: "$SCM_URL/resource/js"]], quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']])
+    .*/resource/js/common\\.js''', locations: [[cancelProcessOnExternalsFail: true, credentialsId: getCredentialsId(), depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: "$SCM_URL/resource/js"]], quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']])
         }
         // .*/${PROJECT_NAME}/${PROJECT_VER}/cn/.*
         def common_js = readFile encoding: 'utf-8', file: 'project/resource/js/common.js'
@@ -667,7 +671,7 @@ def generateSendTranslationKV_API() {
         def projectVer = ((localeCfg =~ /projectVer\: "(.*?)"/)[0][1])
         print projectVer
         dir('translation') {
-            checkoutComplexSVN([$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '', excludedRegions: '', excludedRevprop: '', excludedUsers: '', filterChangelog: false, ignoreDirPropChanges: false, includedRegions: ".*/${projectName}/${projectVer}/cn/.*", locations: [[cancelProcessOnExternalsFail: true, credentialsId: env.HG_CREDENTIALS_ID ? env.HG_CREDENTIALS_ID : "dfb8344e-2d0c-4750-8154-9503745a01f9", depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: 'https://svn100.hotgamehl.com/svn/Html5/trunk/dldl_WX/translation_keyvalue']], quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']])
+            checkoutComplexSVN([$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '', excludedRegions: '', excludedRevprop: '', excludedUsers: '', filterChangelog: false, ignoreDirPropChanges: false, includedRegions: ".*/${projectName}/${projectVer}/cn/.*", locations: [[cancelProcessOnExternalsFail: true, credentialsId: getCredentialsId(), depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: 'https://svn100.hotgamehl.com/svn/Html5/trunk/dldl_WX/translation_keyvalue']], quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']])
         }
         dir('convert2src') {
             retry(1) {
