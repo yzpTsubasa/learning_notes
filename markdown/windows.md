@@ -199,3 +199,19 @@ FlipFlopWheel = 1
 FlipFlopHWheel = 1
 reboot
 ```
+## 安装系统时出现"Windows无法安装到这个磁盘"
+### 原因分析
+win8/ windows10系统均添加快速启动功能，预装的win8/windows10电脑默认都是`UEFI引导`和`GPT硬盘`，传统的引导方式为`Legacy引导`和`MBR硬盘`
+
+UEFI必须跟GPT对应，同理Legacy必须跟MBR对应。如果BIOS开启UEFI，而硬盘分区表格式为MBR则无法安装；BIOS关闭UEFI而硬盘分区表格式为GPT也是无法安装Windows
+
+### 解决办法
+#### 其一 改启动引导项(推荐)
+可以在主板设置选项里面改，根据需要改引导方式为`UEFI引导`或`Legacy引导`
+#### 其二 转硬盘格式
+1. 在当前安装界面按住 <kbd>SHIFT</kbd>+<kbd>F10</kbd>调出命令提示符窗口；
+2. 输入`diskpart`，按回车执行;
+3. 进入**DISKPART命令模式**，输入`list disk`回车，列出当前磁盘信息；
+4. 要转换磁盘0格式，则输入`select disk 0`回车，输入`clean`，删除磁盘分区；
+5. 输入`convert gpt`则转为GPT；或者输入`convert MBR` 转换为 MBR格式；
+6. 最后输入两次 `exit` 回车退出命令提示符，返回安装界面继续安装系统。
