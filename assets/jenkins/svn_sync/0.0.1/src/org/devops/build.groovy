@@ -133,9 +133,9 @@ npm i
             // 发布
             bat([label: '发布', returnStdout: false, script: """
 if "%chkdst%" == "true" (
-npx hgbuild walk ${HG_PUB_RES} ${HG_PUB_TYPE} --noUserOp --chkdst
+npx hgbuild walk ${HG_PUB_RES} ${HG_PUB_TYPE} --noUserOp --noProjectUpdate --chkdst
 ) else (
-npx hgbuild walk ${HG_PUB_RES} ${HG_PUB_TYPE} --noUserOp
+npx hgbuild walk ${HG_PUB_RES} ${HG_PUB_TYPE} --noUserOp --noProjectUpdate
 )"""])
         }
     }
@@ -161,9 +161,9 @@ npm i
         dir('publish') {
             bat([label: '发布', returnStdout: false, script: """
 if "%chkdst%" == "true" (
-    hgbuild run _11_common_old --prg_dir ${WORKSPACE}/project --upload_filter ${params.upload_filter} --toolTag ${params.toolTag} --cfg_dir ${params.cfg_dir} --noUserOp --chkdst
+    hgbuild run _11_common_old --prg_dir ${WORKSPACE}/project --upload_filter ${params.upload_filter} --toolTag ${params.toolTag} --cfg_dir ${params.cfg_dir} --noUserOp --noProjectUpdate --chkdst
 ) else (
-    hgbuild run _11_common_old --prg_dir ${WORKSPACE}/project --upload_filter ${params.upload_filter} --toolTag ${params.toolTag} --cfg_dir ${params.cfg_dir} --noUserOp
+    hgbuild run _11_common_old --prg_dir ${WORKSPACE}/project --upload_filter ${params.upload_filter} --toolTag ${params.toolTag} --cfg_dir ${params.cfg_dir} --noUserOp --noProjectUpdate
 )"""])
         }
     }
@@ -189,9 +189,9 @@ npm i
         dir('publish') {
             bat([label: '发布', returnStdout: false, script: """
 if "%chkdst%" == "true" (
-    hgbuild run _10_common --prg_dir ${WORKSPACE}/project --upload_filter ${params.upload_filter} --toolTag ${params.toolTag} --cfg_dir ${params.cfg_dir} --noUserOp --chkdst
+    hgbuild run _10_common --prg_dir ${WORKSPACE}/project --upload_filter ${params.upload_filter} --toolTag ${params.toolTag} --cfg_dir ${params.cfg_dir} --noUserOp --noProjectUpdate --chkdst
 ) else (
-    hgbuild run _10_common --prg_dir ${WORKSPACE}/project --upload_filter ${params.upload_filter} --toolTag ${params.toolTag} --cfg_dir ${params.cfg_dir} --noUserOp
+    hgbuild run _10_common --prg_dir ${WORKSPACE}/project --upload_filter ${params.upload_filter} --toolTag ${params.toolTag} --cfg_dir ${params.cfg_dir} --noUserOp --noProjectUpdate
 )"""])
         }
     }
@@ -554,7 +554,7 @@ def pub200AutomaticIntegrated() {
                 bat([label: '编译代码', returnStdout: false, script: pub_200_out_bat])
                 bat([label: 'SVN提交', returnStdout: false, script: "svn commit -m \"out [${getLastChangedRev()}]\" out/main.min.* manifest.json src/base/WND_ID_CFG.ts ui_ctrl out/index.html"])
             } else {
-                bat([label: '发布200', returnStdout: false, script: 'node scripts --hgt _200 --noUserOp'])
+                bat([label: '发布200', returnStdout: false, script: 'node scripts --hgt _200 --noUserOp --noProjectUpdate'])
             }
         }
     }
@@ -572,7 +572,7 @@ def pub200AutomaticNewIntegrated() {
     dir('project') {
         checkoutSVN(params.HG_REPOSITORY_SRC)
         if (needCompile()) {
-            bat([label: '发布200', returnStdout: false, script: 'node scripts --hgt _200 --noUserOp'])
+            bat([label: '发布200', returnStdout: false, script: 'node scripts --hgt _200 --noUserOp --noProjectUpdate'])
         }
     }
     // 创建out目录resource链接
