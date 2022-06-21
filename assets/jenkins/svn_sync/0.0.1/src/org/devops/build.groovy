@@ -161,9 +161,9 @@ npm i
         dir('publish') {
             bat([label: '发布', returnStdout: false, script: """
 if "%chkdst%" == "true" (
-    hgbuild run _11_common_old --prg_dir ${WORKSPACE}/project --upload_filter ${params.upload_filter} --toolTag ${params.toolTag} --cfg_dir ${params.cfg_dir} --noUserOp --noProjectUpdate --chkdst
+    hgbuild run _11_common_old --prg_dir ${WORKSPACE}/project --upload_filter ${params.upload_filter} --toolTag ${params.toolTag} --cfg_dir ${params.cfg_dir} --hgVerTag ${params.hgVerTag ? params.hgVerTag : "hgvc_ver"} --noUserOp --noProjectUpdate --chkdst
 ) else (
-    hgbuild run _11_common_old --prg_dir ${WORKSPACE}/project --upload_filter ${params.upload_filter} --toolTag ${params.toolTag} --cfg_dir ${params.cfg_dir} --noUserOp --noProjectUpdate
+    hgbuild run _11_common_old --prg_dir ${WORKSPACE}/project --upload_filter ${params.upload_filter} --toolTag ${params.toolTag} --cfg_dir ${params.cfg_dir} --hgVerTag ${params.hgVerTag ? params.hgVerTag : "hgvc_ver"} --noUserOp --noProjectUpdate
 )"""])
         }
     }
@@ -189,9 +189,9 @@ npm i
         dir('publish') {
             bat([label: '发布', returnStdout: false, script: """
 if "%chkdst%" == "true" (
-    hgbuild run _10_common --prg_dir ${WORKSPACE}/project --upload_filter ${params.upload_filter} --toolTag ${params.toolTag} --cfg_dir ${params.cfg_dir} --noUserOp --noProjectUpdate --chkdst
+    hgbuild run _10_common --prg_dir ${WORKSPACE}/project --upload_filter ${params.upload_filter} --toolTag ${params.toolTag} --cfg_dir ${params.cfg_dir}  --hgVerTag ${params.hgVerTag ? params.hgVerTag : "hgvc_ver"} --noUserOp --noProjectUpdate --chkdst
 ) else (
-    hgbuild run _10_common --prg_dir ${WORKSPACE}/project --upload_filter ${params.upload_filter} --toolTag ${params.toolTag} --cfg_dir ${params.cfg_dir} --noUserOp --noProjectUpdate
+    hgbuild run _10_common --prg_dir ${WORKSPACE}/project --upload_filter ${params.upload_filter} --toolTag ${params.toolTag} --cfg_dir ${params.cfg_dir}  --hgVerTag ${params.hgVerTag ? params.hgVerTag : "hgvc_ver"} --noUserOp --noProjectUpdate
 )"""])
         }
     }
