@@ -537,8 +537,6 @@ def pub200AutomaticIntegrated() {
 
         // 编译
         if (needCompile()) {
-            // 执行manifest排序
-            bat([label: '更新manifest', returnStdout: false, script: 'node %WORKSPACE%/automator/main.js %WORKSPACE%/automator/cfg/dldl/generate_sorted_ts.yml --FULL_AUTOMATIC --workspaceFolder %WORKSPACE%/project'])
             def pub_200_out_bat = ''
             // 编译代码的备选批处理文件
             def pub_200_out_bat_alternatives = [
@@ -550,7 +548,8 @@ def pub200AutomaticIntegrated() {
                     break
                 }
             }
-            if (pub_200_out_bat) {
+            if (pub_200_out_bat) {// 执行manifest排序
+                bat([label: '更新manifest', returnStdout: false, script: 'node %WORKSPACE%/automator/main.js %WORKSPACE%/automator/cfg/dldl/generate_sorted_ts.yml --FULL_AUTOMATIC --workspaceFolder %WORKSPACE%/project'])
                 bat([label: '编译代码', returnStdout: false, script: pub_200_out_bat])
                 bat([label: 'SVN提交', returnStdout: false, script: "svn commit -m \"out [${getLastChangedRev()}]\" out/main.min.* manifest.json src/base/WND_ID_CFG.ts ui_ctrl out/index.html"])
             } else {
@@ -567,57 +566,6 @@ mklink /j "resource" "../resource"
     }
 }
 
-def pub200AutomaticNewIntegrated() {
-    // 编译
-    dir('project') {
-        checkoutSVN(params.HG_REPOSITORY_SRC)
-        if (needCompile()) {
-            bat([label: '发布200', returnStdout: false, script: 'node scripts --hgt _200 --noUserOp --noProjectUpdate'])
-        }
-    }
-    // 创建out目录resource链接
-    dir('project/out') {
-        bat '''if not exist "resource" (
-mklink /j "resource" "../resource"
-)
-'''
-    }
-}
-
-def pub200AutomaticOldIntegrated() {
-    dir('automator') {
-        checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: 'master']], extensions: [], userRemoteConfigs: [[url: 'http://192.168.1.205:3000/yzp/automator.git']]]
-        bat 'npm i'
-    }
-    // 编译
-    dir('project') {
-        checkoutSVN(params.HG_REPOSITORY_SRC)
-        if (needCompile()) {
-            // 执行manifest排序
-            bat([label: '更新manifest', returnStdout: false, script: 'node %WORKSPACE%/automator/main.js %WORKSPACE%/automator/cfg/dldl/generate_sorted_ts.yml --FULL_AUTOMATIC --workspaceFolder %WORKSPACE%/project'])
-            def pub_200_out_bat = ''
-            // 编译代码的备选批处理文件
-            def pub_200_out_bat_alternatives = [
-                'pub_200_out.bat',
-            ]
-            for (alternative in pub_200_out_bat_alternatives) {
-                if (fileExists(alternative)) {
-                    pub_200_out_bat = alternative
-                    break
-                }
-            }
-            bat([label: '编译代码', returnStdout: false, script: pub_200_out_bat])
-            bat([label: 'SVN提交', returnStdout: false, script: "svn commit -m \"out [${getLastChangedRev()}]\" out/main.min.* manifest.json src/base/WND_ID_CFG.ts ui_ctrl out/index.html"])
-        }
-    }
-    // 创建out目录resource链接
-    dir('project/out') {
-        bat '''if not exist "resource" (
-mklink /j "resource" "../resource"
-)
-'''
-    }
-}
 
 // 获取末尾的几条日志
 def getTailLogString(size = 50) {
