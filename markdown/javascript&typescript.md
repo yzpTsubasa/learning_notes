@@ -8,18 +8,6 @@
 npm cache clear --force
 ```
 
-## protocol buffer 相关
-- 下载 `protoc` https://github.com/protocolbuffers/protobuf/releases
-- 新建一个空项目，安装 `npm i ts-proto`
-### 在Windows中使用
-``` bash
-# 生成 包含完整类定义的 typescript 代码
-protoc --plugin=protoc-gen-ts_proto=.\\node_modules\\.bin\\protoc-gen-ts_proto.cmd --ts_proto_out=. ./messages.proto
-# 生成 仅包含接口的 typescript 代码
-protoc --plugin=protoc-gen-ts_proto=.\\node_modules\\.bin\\protoc-gen-ts_proto.cmd --ts_proto_out=. --ts_proto_opt=outputEncodeMethods=false,outputJsonMethods=false,outputClientImpl=false ./messages.proto
-```
-> 协议文件`messages.proto`要放在工作空间内部，并且以相对路径的写法传递给命令行参数
-
 ## express 解决跨域问题
 ``` js
 ////// 方案一
@@ -34,46 +22,6 @@ app.all('*', function(req, res, next) {
     res.header("Content-Type", "application/json;charset=utf-8");
     next();
 });
-
-```
-## protobuf.js
-``` javascript
-// https://github.com/protobufjs/protobuf.js
-
-/**
- * 版本 3.x.x ~ 5.x.x
- * 需要依赖 bytebuffer(包含long) 库
- */
-
-// 加载解析协议内容
-// protobuf-light.[.min]js 仅支持 json
-dcodeIO.ProtoBuf.loadJson
-dcodeIO.ProtoBuf.loadJsonFile
-dcodeIO.ProtoBuf.loadProto
-dcodeIO.ProtoBuf.loadProtoFile
-
-// 查找指定协议类型
-.lookup(...)
-
-// 构建
-.build(...)
-
-// 编解码
-.encode(...)
-.decode(...)
-
-/**
- * 版本 6.x.x ~
- * 需要可执行 eval/Function 的环境（小游戏环境无法使用）
- */
-
-// 加载解析协议内容, 支持 proto/json
-protobuf.parse(...)
-
-// ...
-
-...
-
 
 ```
 
@@ -746,3 +694,61 @@ function Ins<T>(cls: IAnyClass<T>): T {
 ```
 ##  Native调用（decodeURIComponent）
 [NativeBridgeProxy.js](../assets/attachments/NativeBridgeProxy.js)
+
+
+## protocol buffer 相关
+- 下载 `protoc` https://github.com/protocolbuffers/protobuf/releases
+- 新建一个空项目，安装 `npm i ts-proto`
+### 在Windows中使用
+``` bash
+# 生成 包含完整类定义的 typescript 代码
+protoc --plugin=protoc-gen-ts_proto=.\\node_modules\\.bin\\protoc-gen-ts_proto.cmd --ts_proto_out=. ./messages.proto
+# 生成 仅包含接口的 typescript 代码
+protoc --plugin=protoc-gen-ts_proto=.\\node_modules\\.bin\\protoc-gen-ts_proto.cmd --ts_proto_out=. --ts_proto_opt=outputEncodeMethods=false,outputJsonMethods=false,outputClientImpl=false ./messages.proto
+```
+> 协议文件`messages.proto`要放在工作空间内部，并且以相对路径的写法传递给命令行参数
+
+## protocol buffer 2.x 和 3.x 区别
+- 3.x 有默认值的设定（减少不必要的数据传输），如 数值类型默认值为 0，字符串类型默认值为 ""。
+
+
+## protobuf.js
+``` javascript
+// https://github.com/protobufjs/protobuf.js
+
+/**
+ * 版本 3.x.x ~ 5.x.x
+ * 需要依赖 bytebuffer(包含long) 库
+ */
+
+// 加载解析协议内容
+// protobuf-light.[.min]js 仅支持 json
+dcodeIO.ProtoBuf.loadJson
+dcodeIO.ProtoBuf.loadJsonFile
+dcodeIO.ProtoBuf.loadProto
+dcodeIO.ProtoBuf.loadProtoFile
+
+// 查找指定协议类型
+.lookup(...)
+
+// 构建
+.build(...)
+
+// 编解码
+.encode(...)
+.decode(...)
+
+/**
+ * 版本 6.x.x ~
+ * 需要可执行 eval/Function 的环境（小游戏环境无法使用）
+ */
+
+// 加载解析协议内容, 支持 proto/json
+protobuf.parse(...)
+
+// ...
+
+...
+
+
+```
