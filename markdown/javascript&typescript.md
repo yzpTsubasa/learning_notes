@@ -711,6 +711,13 @@ protoc --plugin=protoc-gen-ts_proto=.\\node_modules\\.bin\\protoc-gen-ts_proto.c
 ## protocol buffer 2.x 和 3.x 区别
 - 3.x 有默认值的设定（减少不必要的数据传输），如 数值类型默认值为 0，字符串类型默认值为 ""。
 
+## protobuf long 的默认值类型问题
+`protobuf 3.x`，引入`Long.js`以支持64位的数值类型，提供到的字段默认值为是`Long`结构类型而非原始类型`number`。可以修改`Long.js`:
+``` javascript
+Long.ZERO = 0;
+Long.UZERO = 0;
+```
+
 
 ## protobuf.js
 ``` javascript
