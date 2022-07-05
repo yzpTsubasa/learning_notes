@@ -40,7 +40,7 @@ pipeline {
                 fileOperations([fileCopyOperation(excludes: '', flattenFiles: true, includes: 'protobuf/*.proto', renameFiles: false, sourceCaptureExpression: '', targetLocation: 'project/src/protobuf/proto', targetNameExpression: '')])
                 dir("project/src/protobuf/proto") {
                     bat 'svn add . --no-ignore --force'
-                    bat 'svn commit . -m "[0] Update protobuf file automatically"'
+                    bat "svn commit . -m \"[0] Sync protobuf - ${build.getChangeString().join(",").replaceAll('[\r\n]+', '')}\""
                 }
             }
         }
