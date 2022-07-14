@@ -6,8 +6,6 @@ pipeline {
     agent any
     options {
         disableConcurrentBuilds()
-        preserveStashes()
-        ansiColor('xterm')
     }
     // triggers {
     //     URLTrigger(
