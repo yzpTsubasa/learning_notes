@@ -250,3 +250,19 @@ nominatedUsers.each{
 }
 null
 ```
+## 取消jenkins的定时清理工作空间
+### 方案一
+修改启动参数，如在安裝版本配置 `jenkins.xml` 
+``` bash
+-Dhudson.model.WorkspaceCleanupThread.disabled=true
+```
+### 方案二
+每次重启jenkins都要在 `Script Console` 页面设置执行
+``` groovy
+hudson.model.WorkspaceCleanupThread.disabled = true
+```
+### 验证是否生效
+在 `Script Console` 页面中执行
+``` groovy
+println(hudson.model.WorkspaceCleanupThread.disabled)
+```
