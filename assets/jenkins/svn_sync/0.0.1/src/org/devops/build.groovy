@@ -536,6 +536,9 @@ def pub200AutomaticIntegrated() {
         if (params.HG_MONITOR_SKIN_GROUPNAME) {
             bat([label: '皮肤组名检测', returnStdout: false, script: "node %WORKSPACE%/automator/main.js %WORKSPACE%/automator/cfg/dldl/check_skin_notify.yml --FULL_AUTOMATIC --workspaceFolder %WORKSPACE%/project --webhook https://oapi.dingtalk.com/robot/send?access_token=d49fdc03b05ac8d52da7ad4167b94823a2c77225bb93d943440a0340db5dd313"])
         }
+        if (params.HG_MONITOR_IMAGE) {
+            bat([label: '图片资源检测', returnStdout: false, script: "node %WORKSPACE%/automator/main.js %WORKSPACE%/automator/cfg/dldl/check_image_notify.yml --FULL_AUTOMATIC --workspaceFolder %WORKSPACE%/project --webhook https://oapi.dingtalk.com/robot/send?access_token=d49fdc03b05ac8d52da7ad4167b94823a2c77225bb93d943440a0340db5dd313"])
+        }
 
         // 编译
         if (needCompile()) {
