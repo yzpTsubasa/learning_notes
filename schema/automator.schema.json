@@ -236,6 +236,8 @@
                                         "headers": {"title": "头部", "properties": {
                                             "Authorization": { "title": "授权密钥" }
                                         }},
+                                        "return_response": { "title": "返回完整响应", "default": true },
+                                        "body": { "title": "携带的字符串或者二进制数据", "default": "" },
                                         "formData": { "title": "表单数据", "properties": {
                                             "file": { "title": "文件" , "properties": {
                                                 "value": { "title": "二进制数据" },
