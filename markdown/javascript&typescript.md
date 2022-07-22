@@ -625,7 +625,8 @@ set ws = createobject("wscript.shell")
 ws.Run "node E:\\tsubasa\\node_http_server\\app.js E:\\projects\\DLDL_SVN", 0
 ```
 > Array.prototype.sort 在不同环境（如 Safari, Chrome 等）下的实现方式不同，执行过程中有可能会对原始数组进行修改，因此排序结束前，不应该去访问或者修改原始数组。
-##  typescript编译
+>
+> ##  typescript编译
 ``` bash
 tsc -b .\tsconfigDebug1.json
 tsc -w
@@ -759,3 +760,32 @@ protobuf.parse(...)
 
 
 ```
+
+## protobuf 数据类型
+![](../assets/protobuf_scalar_data_types.png)
+Protocol Buffer (Protobuf) supports a range of native scalar value types. The following table lists them all with their equivalent C# type:
+
+| Protobuf type | Notes |
+| ------------- | ----: |
+| double        |       |
+| float         |       |
+| int32         |     1 |
+| int64         |     1 |
+| uint32        |       |
+| uint64        |       |
+| sint32        |     1 |
+| sint64        |     1 |
+| fixed32       |     2 |
+| fixed64       |     2 |
+| sfixed32      |     2 |
+| sfixed64      |     2 |
+| bool          |       |
+| string        |     3 |
+| bytes         |     4 |
+
+#### Notes:
+1. The standard encoding for int32 and int64 is inefficient when you're working with signed values. 
+   If your field is likely to contain negative numbers, use sint32 or sint64 instead. These types map to the C# int and long types, respectively.
+2. The fixed fields always use the same number of bytes no matter what the value is. This behavior makes serialization and deserialization faster for larger values.
+3. Protobuf strings are UTF-8 (or 7-bit ASCII) encoded. The encoded length can't be greater than 2^32.
+4. The Protobuf runtime provides a ByteString type that maps easily to and from C# byte[] arrays.
