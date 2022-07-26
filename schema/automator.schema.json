@@ -317,6 +317,26 @@
                 {
                     "type": "object",
                     "properties": {
+                        "type": {"const": "translate", "title": "翻译"},
+                        "data": {
+                            "type": "object",
+                            "title": "命令参数",
+                            "properties": {
+                                "from": {"title": "来源语言", "default": "auto", "enum": ["auto", "ach", "afr", "aka", "alb", "amh", "ara", "arg", "arm", "arq", "asm", "ast", "aym", "aze", "bak", "bal", "baq", "bel", "bem", "ben", "ber", "bho", "bis", "bli", "bos", "bre", "bul", "bur", "cat", "ceb", "chr", "cht", "chv", "cor", "cos", "cre", "cri", "cs", "dan", "de", "div", "el", "en", "eno", "epo", "est", "fao", "fil", "fin", "fra", "fri", "frm", "frn", "fry", "ful", "geo", "gla", "gle", "glg", "glv", "gra", "grn", "guj", "hak", "hau", "haw", "heb", "hi", "hil", "hkm", "hmn", "hrv", "ht", "hu", "hup", "ibo", "ice", "id", "ido", "iku", "ina", "ing", "ir", "it", "jav", "jp", "kab", "kah", "kal", "kan", "kas", "kau", "kin", "kir", "kli", "kok", "kon", "kor", "kur", "lag", "lao", "lat", "lav", "lim", "lin", "lit", "log", "loj", "los", "ltz", "lug", "mac", "mah", "mai", "mal", "mao", "mar", "mau", "may", "mg", "mlt", "mot", "nbl", "nea", "nep", "nl", "nno", "nob", "nor", "nqo", "nya", "oci", "oji", "ori", "orm", "oss", "pam", "pan", "pap", "ped", "per", "pl", "pot", "pt", "pus", "que", "ro", "roh", "rom", "ru", "ruy", "san", "sec", "sha", "sil", "sin", "sk", "slo", "sm", "sme", "sna", "snd", "sol", "som", "sot", "spa", "src", "srd", "srp", "sun", "swa", "swe", "syr", "tam", "tat", "tel", "tet", "tgk", "tgl", "th", "tir", "tr", "tso", "tua", "tuk", "twi", "ukr", "ups", "urd", "ven", "vie", "wel", "wln", "wol", "wyw", "xho", "yid", "yor", "yue", "zaz", "zh", "zul"]},
+                                "to": {"title": "目标语言", "default": "zh", "enum": ["ach", "afr", "aka", "alb", "amh", "ara", "arg", "arm", "arq", "asm", "ast", "aym", "aze", "bak", "bal", "baq", "bel", "bem", "ben", "ber", "bho", "bis", "bli", "bos", "bre", "bul", "bur", "cat", "ceb", "chr", "cht", "chv", "cor", "cos", "cre", "cri", "cs", "dan", "de", "div", "el", "en", "eno", "epo", "est", "fao", "fil", "fin", "fra", "fri", "frm", "frn", "fry", "ful", "geo", "gla", "gle", "glg", "glv", "gra", "grn", "guj", "hak", "hau", "haw", "heb", "hi", "hil", "hkm", "hmn", "hrv", "ht", "hu", "hup", "ibo", "ice", "id", "ido", "iku", "ina", "ing", "ir", "it", "jav", "jp", "kab", "kah", "kal", "kan", "kas", "kau", "kin", "kir", "kli", "kok", "kon", "kor", "kur", "lag", "lao", "lat", "lav", "lim", "lin", "lit", "log", "loj", "los", "ltz", "lug", "mac", "mah", "mai", "mal", "mao", "mar", "mau", "may", "mg", "mlt", "mot", "nbl", "nea", "nep", "nl", "nno", "nob", "nor", "nqo", "nya", "oci", "oji", "ori", "orm", "oss", "pam", "pan", "pap", "ped", "per", "pl", "pot", "pt", "pus", "que", "ro", "roh", "rom", "ru", "ruy", "san", "sec", "sha", "sil", "sin", "sk", "slo", "sm", "sme", "sna", "snd", "sol", "som", "sot", "spa", "src", "srd", "srp", "sun", "swa", "swe", "syr", "tam", "tat", "tel", "tet", "tgk", "tgl", "th", "tir", "tr", "tso", "tua", "tuk", "twi", "ukr", "ups", "urd", "ven", "vie", "wel", "wln", "wol", "wyw", "xho", "yid", "yor", "yue", "zaz", "zh", "zul"]}
+                            },
+                            "allOf": [
+                                {"$ref": "#/definitions/common_data"}
+                            ]
+                        }
+                    },
+                    "allOf": [
+                        {"$ref": "#/definitions/common_cfg"}
+                    ]
+                },
+                {
+                    "type": "object",
+                    "properties": {
                         "type": {"const": "interval", "title": "间隔时间任务"},
                         "data": {
                             "type": "object",
