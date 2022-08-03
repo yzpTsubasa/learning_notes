@@ -789,3 +789,21 @@ Protocol Buffer (Protobuf) supports a range of native scalar value types. The fo
 2. The fixed fields always use the same number of bytes no matter what the value is. This behavior makes serialization and deserialization faster for larger values.
 3. Protobuf strings are UTF-8 (or 7-bit ASCII) encoded. The encoded length can't be greater than 2^32.
 4. The Protobuf runtime provides a ByteString type that maps easily to and from C# byte[] arrays.
+
+## 使用装饰器的hook执行埋点逻辑
+``` ts
+export function collectData(payload: Object) {
+    return function (
+        target: any,
+        propertyName: string,
+        descriptor: PropertyDescriptor
+    ) {
+        const oldValue = descriptor.value
+
+        descriptor.value = function (data: any) {
+            console.log(`触发埋点`, payload);
+            return oldValue.apply(this, arguments);
+        }
+    }
+}
+```
