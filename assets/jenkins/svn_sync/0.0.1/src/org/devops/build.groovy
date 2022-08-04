@@ -125,7 +125,7 @@ def pubToWebIntegrated() {
     dir('publish') {
         checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'http://192.168.1.205:3000/fangjie/publish.git']]]
         bat '''
-yarn
+npm i
 '''
     }
     lock(resource: 'pub2web') {
@@ -153,7 +153,7 @@ def pubToWebIntegratedCommonOld() {
     dir('publish') {
         checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'http://192.168.1.205:3000/fangjie/publish.git']]]
         bat '''
-yarn
+npm i
 '''
     }
     lock(resource: 'pub2web') {
@@ -182,7 +182,7 @@ def pubToWebIntegratedCommon() {
     dir('publish') {
         checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'http://192.168.1.205:3000/fangjie/publish.git']]]
         bat '''
-yarn
+npm i
 '''
     }
     lock(resource: 'pub2web') {
@@ -327,7 +327,7 @@ def retrieveTranslationAPI() {
     lock(resource: 'conversion_api') {
         dir('automator') {
             checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: 'master']], extensions: [], userRemoteConfigs: [[url: 'http://192.168.1.205:3000/yzp/automator.git']]]
-            bat 'yarn'
+            bat 'npm i'
         }
         dir('project/resource/assets/cfgjson') {
             checkoutComplexSVN([scm: [$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '', excludedRegions: '', excludedRevprop: '', excludedUsers: '', filterChangelog: true, ignoreDirPropChanges: false, includedRegions: '''.*/resource/assets/cfgjson/\\w+\\.json
@@ -355,7 +355,7 @@ def generateTranslationKV_API() {
     lock(resource: 'conversion_api') {
         dir('automator') {
             checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: 'master']], extensions: [], userRemoteConfigs: [[url: 'http://192.168.1.205:3000/yzp/automator.git']]]
-            bat 'yarn'
+            bat 'npm i'
         }
         dir('translation') {
             checkoutComplexSVN changelog: false, poll: false, scm: [$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '', excludedRegions: '', excludedRevprop: '', excludedUsers: '', filterChangelog: false, ignoreDirPropChanges: false, includedRegions: '', locations: [[cancelProcessOnExternalsFail: true, credentialsId: getCredentialsId(), depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: 'https://svn100.hotgamehl.com/svn/Html5/trunk/dldl_WX/translation_keyvalue']], quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']]
@@ -379,7 +379,7 @@ def generateTranslationKV_API() {
 def mergeSVN() {
     dir('automator') {
             checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: 'master']], extensions: [], userRemoteConfigs: [[url: 'http://192.168.1.205:3000/yzp/automator.git']]]
-            bat 'yarn'
+            bat 'npm i'
     }
     dir('project') {
         checkoutSVN(params.HG_REPOSITORY_SRC)
@@ -469,7 +469,7 @@ def ftpUploadSource() {
     }
     dir('automator') {
             checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: 'master']], extensions: [], userRemoteConfigs: [[url: 'http://192.168.1.205:3000/yzp/automator.git']]]
-            bat 'yarn'
+            bat 'npm i'
     }
     dir('ftp') {
         bat "node %WORKSPACE%/automator/main.js %WORKSPACE%/automator/cfg/dldl/ftp_upload.yml --FULL_AUTOMATIC 1 --remote_file %REMOTE_FILE% --local_file ${ params.LOCAL_FILE.tokenize(',').collect { env.WORKSPACE + '/source/' + it }.join(',')}"
@@ -524,7 +524,7 @@ def checkoutComplexSVN(scm) {
 def pub200AutomaticIntegrated() {
     dir('automator') {
         checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: 'master']], extensions: [], userRemoteConfigs: [[url: 'http://192.168.1.205:3000/yzp/automator.git']]]
-        bat 'yarn'
+        bat 'npm i'
     }
     dir('project') {
         // 检出代码
@@ -603,7 +603,7 @@ def generateSendTranslationKV_API() {
     lock(resource: 'conversion_api') {
         dir('automator') {
             checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: 'master']], extensions: [], userRemoteConfigs: [[url: 'http://192.168.1.205:3000/yzp/automator.git']]]
-            bat 'yarn'
+            bat 'npm i'
         }
         dir('project/resource/assets/cfgjson') {
             checkoutComplexSVN(changelog: false, poll: false, scm: [$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '', excludedRegions: '', excludedRevprop: '', excludedUsers: '', filterChangelog: true, ignoreDirPropChanges: false, includedRegions: '''.*/resource/assets/cfgjson/\\w+\\.json
