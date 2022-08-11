@@ -216,3 +216,9 @@ UEFI必须跟GPT对应，同理Legacy必须跟MBR对应。如果BIOS开启UEFI�
 4. 要转换磁盘0格式，则输入`select disk 0`回车，输入`clean`，删除磁盘分区；
 5. 输入`convert gpt`则转为GPT；或者输入`convert MBR` 转换为 MBR格式；
 6. 最后输入两次 `exit` 回车退出命令提示符，返回安装界面继续安装系统。
+
+## 定时关机
+``` sh
+# 12小时候自动关机
+shutdown -s -t 43200
+```
