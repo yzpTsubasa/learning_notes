@@ -23,7 +23,7 @@ def sendStart2DingTalk() {
         return
     }
     dingtalk(
-        robot: 'automator',
+        robot: getDingTalkRobot(),
         type: 'ACTION_CARD',
         title: "${currentBuild.fullDisplayName} 开始",
         text: [
@@ -47,7 +47,7 @@ def sendResult2DingTalkTest() {
     env.durationString = currentBuild.durationString.minus(' and counting')
     def atUsers = getAtUsers()
     dingtalk(
-        robot: 'test',
+        robot: getDingTalkRobot(),
         type: 'ACTION_CARD',
         title: "${currentBuild.fullDisplayName} ${result}",
         at: atUsers,
@@ -81,7 +81,7 @@ def sendResult2DingTalk() {
     // 失败时，@提交者
     def atUsers = getAtUsers(currentBuild.result == 'FAILURE')
     dingtalk(
-        robot: 'automator',
+        robot: getDingTalkRobot(),
         type: 'ACTION_CARD',
         title: "${currentBuild.fullDisplayName} ${result}",
         at: atUsers,
@@ -203,7 +203,7 @@ def sendStart2DingTalk_PubWeb() {
         return
     }
     dingtalk(
-        robot: 'automator',
+        robot: getDingTalkRobot(),
         type: 'ACTION_CARD',
         title: "${currentBuild.fullDisplayName} 开始",
         // at: getAtUsers(),
@@ -264,7 +264,7 @@ def sendResult2DingTalk_PubWeb() {
     env.durationString = currentBuild.durationString.minus(' and counting')
     def pubWebVersion = getPubWebVersion()
     dingtalk(
-        robot: 'automator',
+        robot: getDingTalkRobot(),
         type: 'ACTION_CARD',
         title: "${currentBuild.fullDisplayName} ${result}",
         at: getAtUsers(),
@@ -301,7 +301,7 @@ def sendCommonResult2DingTalk() {
     env.result = currentBuild.result == 'SUCCESS' ? '成功' : currentBuild.result == 'FAILURE' ? '失败' : '取消'
     env.durationString = currentBuild.durationString.minus(' and counting')
     dingtalk(
-        robot: 'automator',
+        robot: getDingTalkRobot(),
         type: 'ACTION_CARD',
         title: "${currentBuild.fullDisplayName} ${result}",
         at: getAtUsers(),
@@ -596,6 +596,10 @@ def getRevisions() {
 
 def getCredentialsId() {
     return env.HG_CREDENTIALS_ID ? env.HG_CREDENTIALS_ID : "dfb8344e-2d0c-4750-8154-9503745a01f9"
+}
+
+def getDingTalkRobot() {
+    return env.HG_DINGTALK_ROBOT ? env.HG_DINGTALK_ROBOT : "automator"
 }
 
 // 发送翻译KV表_API
