@@ -74,7 +74,7 @@ for /F "tokens=* delims=! " %A in (' git remote ') do git push "%A"
 # 创建全新分支
 git checkout --orphan <branch>
 
-# 撤销本地仓库的最近一次提交
+# 撤销(还原)最近一次提交
 git reset HEAD~1
 ```
 ## PowerShell 写法
