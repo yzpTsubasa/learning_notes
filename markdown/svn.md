@@ -31,6 +31,9 @@ svn update --set-depth infinity
 # 还原所有修改
 svn revert -R .
 
+# 更新/还原到指定版本
+svn up -r <revision>
+
 # 遍历当前目录下的所有未添加的文件，添加到版本控制中
 svn add . --no-ignore --force
 
