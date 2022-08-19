@@ -11,9 +11,9 @@
 223.5.5.5
 ```
 
-## 可能会引起安卓机器无法正常连接的域名
+## 可能会引起安卓机器无法正常连接的域名(RFC 952规范)
 ``` log
-RFC 952规范。美国国防部互联网主机表规范中的相关条文
+美国国防部互联网主机表规范中的相关条文
 A "name" (Net, Host, Gateway, or Domain name) is a text string
 up to 24 characters drawn from the alphabet (A-Z), digits (0-9),minus sign (-), and period (.)
 规范指出域名只能是字母、数字和短线（-）还有点（.）。
