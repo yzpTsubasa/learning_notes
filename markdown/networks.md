@@ -10,3 +10,12 @@
 # 国内 阿里
 223.5.5.5
 ```
+
+## 可能会引起安卓机器无法正常连接的域名
+``` log
+RFC 952规范。美国国防部互联网主机表规范中的相关条文
+A "name" (Net, Host, Gateway, or Domain name) is a text string
+up to 24 characters drawn from the alphabet (A-Z), digits (0-9),minus sign (-), and period (.)
+规范指出域名只能是字母、数字和短线（-）还有点（.）。
+2022-08-19 16:55:12.486 26260-28710/? E/EgretNative: J: WS: error (exception: java.lang.IllegalArgumentException: Invalid input to toASCII: ks-dl-bt2_01.hotgamehl.com)
+```
