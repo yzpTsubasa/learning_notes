@@ -76,6 +76,10 @@ git checkout --orphan <branch>
 
 # 撤销(还原)最近一次提交
 git reset HEAD~1
+
+# 添加一个远端
+git remote add <remote> <remote_url>
+git remote add 205 http://192.168.1.205:3000/yzp/node_http_server.git
 ```
 ## PowerShell 写法
 ``` ps1
