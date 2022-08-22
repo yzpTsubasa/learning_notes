@@ -562,9 +562,13 @@ def pub200AutomaticIntegrated() {
             if (pub_200_out_bat) {// 执行manifest排序
                 bat([label: '更新manifest', returnStdout: false, script: 'node %WORKSPACE%/automator/main.js %WORKSPACE%/automator/cfg/dldl/generate_sorted_ts.yml --FULL_AUTOMATIC --workspaceFolder %WORKSPACE%/project'])
                 bat([label: '编译代码', returnStdout: false, script: pub_200_out_bat])
-                bat([label: 'SVN提交', returnStdout: false, script: "svn commit -m \"out [${getLastChangedRev()}]\" out/main.min.* manifest.json src/base/WND_ID_CFG.ts ui_ctrl out/index.html"])
             } else {
-                bat([label: '发布200', returnStdout: false, script: 'node scripts --hgt _200 --noUserOp --noProjectUpdate'])
+                bat([label: '发布200', returnStdout: false, script: 'node scripts --hgt _200_loc --noUserOp --noProjectUpdate'])
+            }
+            // 获取凭证
+            withCredentials([usernamePassword(credentialsId: getCredentialsId(), passwordVariable: 'HG_CREDENTIAL_PASSWORD', usernameVariable: 'HG_CREDENTIAL_USERNAME')]) {
+                // 提交 SVN
+                bat([label: 'SVN提交', returnStdout: false, script: "svn commit -m \"out [${getLastChangedRev()}]\" --username %HG_CREDENTIAL_USERNAME% --password %HG_CREDENTIAL_PASSWORD% out/main.min.* manifest.json src/base/WND_ID_CFG.ts ui_ctrl out/index.html"])
             }
         }
     }
