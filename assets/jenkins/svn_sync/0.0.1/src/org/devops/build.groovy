@@ -491,8 +491,11 @@ def checkoutSVN(scmUrl) {
         // 还原
         bat returnStdout: true, script: '@echo off && svn revert -R .'
     } else {
-        // 拉取 SVN
-        bat(script: "svn checkout ${scmUrl} . --quiet")
+        // 获取凭证
+        withCredentials([usernamePassword(credentialsId: getCredentialsId(), passwordVariable: 'HG_CREDENTIAL_PASSWORD', usernameVariable: 'HG_CREDENTIAL_USERNAME')]) {
+            // 拉取 SVN
+            bat(script: "svn checkout ${scmUrl} . --quiet --username %HG_CREDENTIAL_USERNAME% --password %HG_CREDENTIAL_PASSWORD%")
+        }
 }
     // pollSCM
     checkout([$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '', excludedRegions: '', excludedRevprop: '', excludedUsers: '', filterChangelog: true, ignoreDirPropChanges: false, includedRegions: '', locations: [[cancelProcessOnExternalsFail: true, credentialsId: getCredentialsId(), depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: "${scmUrl}"]], quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']])
@@ -513,9 +516,12 @@ def checkoutComplexSVN(scm) {
         // 还原
         bat returnStdout: true, script: '@echo off && svn revert -R .'
     } else {
-        // 拉取 SVN
         def scmUrl = scm.scm ? scm.scm.locations[0].remote : scm.locations[0].remote
-        bat(script: "svn checkout ${scmUrl} . --quiet")
+        // 获取凭证
+        withCredentials([usernamePassword(credentialsId: getCredentialsId(), passwordVariable: 'HG_CREDENTIAL_PASSWORD', usernameVariable: 'HG_CREDENTIAL_USERNAME')]) {
+            // 拉取 SVN
+            bat(script: "svn checkout ${scmUrl} . --quiet --username %HG_CREDENTIAL_USERNAME% --password %HG_CREDENTIAL_PASSWORD%")
+        }
 }
     // pollSCM
     checkout(scm)
