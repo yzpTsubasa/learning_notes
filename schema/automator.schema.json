@@ -91,8 +91,8 @@
                 "lifetime": {"title": "生命周期(ms)", "default": 5000},
                 "store_validator": { "title": "结果值校验", "default": "(ret) => [true, 'success']" },
                 "credential": { "title": "凭证", "type": "object", "properties": {
-                    "username":{ "title": "用户名" },
-                    "password": { "title": "密码"}
+                    "username":{ "title": "用户名", "type": "string" },
+                    "password": { "title": "密码", "type": "string" }
                 } },
                 "store_confirm": {"title": "结果值确认", "default": true}
             }
