@@ -222,3 +222,9 @@ UEFI必须跟GPT对应，同理Legacy必须跟MBR对应。如果BIOS开启UEFI�
 # 12小时候自动关机
 shutdown -s -t 43200
 ```
+
+## 服务相关
+``` sh
+# 设置服务依赖关系
+sc config "Jenkins" depend="gogs"
+```
