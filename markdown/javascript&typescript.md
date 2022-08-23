@@ -807,3 +807,18 @@ export function collectData(payload: Object) {
     }
 }
 ```
+
+## iframe 中的权限问题
+``` javascript
+// 在 iframe 中请求权限会直接返回 'denied'
+navigator.permissions.query({name:'clipboard-write'}).then((result) => {
+    console.log("result", result)
+    // Output:
+    // result PermissionStatus {name: 'clipboard_write', state: 'denied', onchange: null}
+});
+```
+``` html
+<!-- 需要在 iframe 嵌入代码中添加 allow 属性 -->
+<iframe src="test.html" allow="clipboard-write">
+</iframe>
+```
