@@ -321,6 +321,28 @@
                 {
                     "type": "object",
                     "properties": {
+                        "type": {"const": "change_filter", "title": "变更过滤"},
+                        "data": {
+                            "type": "object",
+                            "title": "命令参数",
+                            "properties": {
+                                "key_name": {"title": "唯一标识的名称", "type": "string"},
+                                "status_name": {"title": "状态值的名称", "type": "string"},
+                                "default_status": {"title": "默认正确的状态值"}
+                            },
+                            "required": ["key_name", "status_name", "cache_key"],
+                            "allOf": [
+                                {"$ref": "#/definitions/common_data"}
+                            ]
+                        }
+                    },
+                    "allOf": [
+                        {"$ref": "#/definitions/common_cfg"}
+                    ]
+                },
+                {
+                    "type": "object",
+                    "properties": {
                         "type": {"const": "translate", "title": "翻译"},
                         "data": {
                             "type": "object",
