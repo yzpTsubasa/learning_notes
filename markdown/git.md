@@ -62,6 +62,9 @@ git clone -b <branch> <remote> <directory>
 # 检出项目以及递归子模块
 git clone --recursive <remote>
 
+# 更新子模块
+git submodule update
+
 # 删除远程分支
 git push <remote> --delete <branch>
 
