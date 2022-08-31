@@ -571,6 +571,23 @@
                 {
                     "type": "object",
                     "properties": {
+                        "type": {"const": "cheerio", "title": "解析html得到cheerio对象"},
+                        "data": {
+                            "type": "object",
+                            "title": "命令参数",
+                            "properties": {},
+                            "allOf": [
+                                {"$ref": "#/definitions/common_data"}
+                            ]
+                        }
+                    },
+                    "allOf": [
+                        {"$ref": "#/definitions/common_cfg"}
+                    ]
+                },
+                {
+                    "type": "object",
+                    "properties": {
                         "type": {"const": "sleep", "title": "睡眠"},
                         "data": {
                             "type": "object",
