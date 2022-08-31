@@ -322,6 +322,24 @@
                 {
                     "type": "object",
                     "properties": {
+                        "type": {"const": "temp", "title": "获取临时文件名"},
+                        "data": {
+                            "type": "object",
+                            "title": "命令参数",
+                            "properties": {
+                            },
+                            "allOf": [
+                                {"$ref": "#/definitions/common_data"}
+                            ]
+                        }
+                    },
+                    "allOf": [
+                        {"$ref": "#/definitions/common_cfg"}
+                    ]
+                },
+                {
+                    "type": "object",
+                    "properties": {
                         "type": {"const": "change_filter", "title": "变更过滤"},
                         "data": {
                             "type": "object",
