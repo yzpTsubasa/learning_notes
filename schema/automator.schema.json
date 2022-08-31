@@ -21,6 +21,8 @@
                     "title": "额外选项",
                     "type": "object",
                     "properties": {
+                        "encoding": {"title": "编码方式", "default": null, "enum": [null, "ascii", "utf8", "utf-8", "utf16le", "ucs2", "ucs-2", "base64", "latin1", "binary", "hex"]},
+                        "auto_encoding":{"title": "自动检查编码", "default": true},
                         "rename": {
                             "anyOf": [
                                 {"title": "新文件名", "type": "string"},
@@ -237,7 +239,6 @@
                                 "options": {
                                     "type": "object",
                                     "properties": {
-                                        "encoding": {"title": "编码方式(为null时，返回Buffer)", "default": null, "enum": [null, "ascii", "utf8", "utf-8", "utf16le", "ucs2", "ucs-2", "base64", "latin1", "binary", "hex"]},
                                         "method": {"title": "方式", "enum": ["GET", "HEAD", "POST", "PUT", "DELETE", "CONNECT", "OPTIONS", "TRACE", "PATCH"]},
                                         "headers": {"title": "头部", "properties": {
                                             "Authorization": { "title": "授权密钥" }
