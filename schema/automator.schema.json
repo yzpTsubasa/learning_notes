@@ -444,8 +444,8 @@
                             "title": "命令参数",
                             "properties": {
                                 "trim": {"title": "裁剪输出结果"},
-                                "capture_stdout": {"title": "捕获输出"},
-                                "ignore_code": {"title": "忽略错误码"},
+                                "capture_stdout": {"title": "捕获输出", "default": true },
+                                "ignore_code": {"title": "忽略错误码", "default": true },
                                 "inputs": {"title": "输入"},
                                 "encoding": {"title": "编码"},
                                 "shell": {"title": "shell模式执行"},
