@@ -37,7 +37,7 @@ pipeline {
         }
         stage('sync protobuf file') {
             steps {
-                fileOperations([fileCopyOperation(excludes: '', flattenFiles: true, includes: 'protobuf/*.proto', renameFiles: false, sourceCaptureExpression: '', targetLocation: "project/" + (env.HG_PROTOBUF_PATH ? env.HG_PROTOBUF_PATH : "src/protobuf/proto", targetNameExpression: '')])
+                fileOperations([fileCopyOperation(excludes: '', flattenFiles: true, includes: 'protobuf/*.proto', renameFiles: false, sourceCaptureExpression: '', targetLocation: "project/" + (env.HG_PROTOBUF_PATH ? env.HG_PROTOBUF_PATH : "src/protobuf/proto"), targetNameExpression: '')])
                 dir("project/" + (env.HG_PROTOBUF_PATH ? env.HG_PROTOBUF_PATH : "src/protobuf/proto")) {
                     bat 'svn add . --no-ignore --force'
                     bat 'svn commit . -m "[0] Update protobuf file automatically"'
