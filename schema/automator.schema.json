@@ -303,6 +303,37 @@
                 {
                     "type": "object",
                     "properties": {
+                        "type": {"const": "switch", "title": "选择要执行的命令"},
+                        "data": {
+                            "type": "object",
+                            "title": "命令参数",
+                            "properties": {
+                                "commands_cfgs": {"title": "命令配置集", "type": "array", "items": {
+                                    "type": "object",
+                                    "title": "命令配置",
+                                    "properties": {
+                                        "title": { "title": "命令标题" },
+                                        "commands":{ 
+                                            "title": "命令集",
+                                            "type": "array",
+                                            "items": {"$ref": "#/definitions/command"}
+                                        }
+                                    }
+                                }}
+                            },
+                            "required": ["commands_cfgs"],
+                            "allOf": [
+                                {"$ref": "#/definitions/common_data"}
+                            ]
+                        }
+                    },
+                    "allOf": [
+                        {"$ref": "#/definitions/common_cfg"}
+                    ]
+                },
+                {
+                    "type": "object",
+                    "properties": {
                         "type": {"const": "eval", "title": "运行代码"},
                         "data": {
                             "type": "object",
