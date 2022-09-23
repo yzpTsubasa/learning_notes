@@ -318,7 +318,8 @@
                                             "type": "array",
                                             "items": {"$ref": "#/definitions/command"}
                                         }
-                                    }
+                                    },
+                                    "required": ["title", "commands"]
                                 }}
                             },
                             "required": ["commands_cfgs"],
