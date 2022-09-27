@@ -243,6 +243,7 @@
                                         "headers": {"title": "头部", "properties": {
                                             "Authorization": { "title": "授权密钥" }
                                         }},
+                                        "proxy": { "title": "代理", "default": "http://127.0.0.1:1080" },
                                         "body": { "title": "携带的字符串或者二进制数据", "default": "" },
                                         "formData": { "title": "表单数据", "properties": {
                                             "file": { "title": "文件" , "properties": {
