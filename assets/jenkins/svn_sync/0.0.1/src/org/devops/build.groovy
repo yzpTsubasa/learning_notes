@@ -228,7 +228,7 @@ def getAtUsers(includeCommitUser = false) {
     def AT_USERS_STR = params.AT_USERS != null ? params.AT_USERS : ''
     def AT_USERS = AT_USERS_STR.tokenize(',')
     // 添加构建者(需要允许指定的API)
-    def builderMobile = currentBuild.getBuildCauses()[0].userId ? hudson.model.User.getById(currentBuild.getBuildCauses()[0].userId, false).getProperty(io.jenkins.plugins.DingTalkUserProperty.class).getMobile() : ''
+    def builderMobile = (currentBuild.getBuildCauses()[0] && currentBuild.getBuildCauses()[0].userId) ? hudson.model.User.getById(currentBuild.getBuildCauses()[0].userId, false).getProperty(io.jenkins.plugins.DingTalkUserProperty.class).getMobile() : ''
     if (builderMobile) {
         AT_USERS.add(builderMobile)
     }
