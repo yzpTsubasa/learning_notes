@@ -123,7 +123,7 @@ def pubToWebIntegrated() {
         env.prg_dir = pwd()
     }
     dir('publish') {
-        checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'http://192.168.1.205:3000/fangjie/publish.git']]]
+        checkoutGit("http://192.168.1.205:3000/fangjie/publish.git")
         bat '''
 npm i
 '''
@@ -151,7 +151,7 @@ def pubToWebIntegratedCommonOld() {
         sendStart2DingTalk_PubWeb()
     }
     dir('publish') {
-        checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'http://192.168.1.205:3000/fangjie/publish.git']]]
+        checkoutGit("http://192.168.1.205:3000/fangjie/publish.git")
         bat '''
 npm i
 '''
@@ -180,7 +180,7 @@ def pubToWebIntegratedCommon() {
     }
     // 发布
     dir('publish') {
-        checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'http://192.168.1.205:3000/fangjie/publish.git']]]
+        checkoutGit("http://192.168.1.205:3000/fangjie/publish.git")
         bat '''
 npm i
 '''
@@ -326,7 +326,7 @@ def sendCommonResult2DingTalk() {
 def retrieveTranslationAPI() {
     lock(resource: 'conversion_api') {
         dir('automator') {
-            checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: 'master']], extensions: [], userRemoteConfigs: [[url: 'http://192.168.1.205:3000/yzp/automator.git']]]
+            checkoutGit("http://192.168.1.205:3000/yzp/automator.git")
             bat 'npm i'
         }
         dir('project/resource/assets/cfgjson') {
@@ -354,7 +354,7 @@ def retrieveTranslationAPI() {
 def generateTranslationKV_API() {
     lock(resource: 'conversion_api') {
         dir('automator') {
-            checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: 'master']], extensions: [], userRemoteConfigs: [[url: 'http://192.168.1.205:3000/yzp/automator.git']]]
+            checkoutGit("http://192.168.1.205:3000/yzp/automator.git")
             bat 'npm i'
         }
         dir('translation') {
@@ -378,7 +378,7 @@ def generateTranslationKV_API() {
 
 def mergeSVN() {
     dir('automator') {
-            checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: 'master']], extensions: [], userRemoteConfigs: [[url: 'http://192.168.1.205:3000/yzp/automator.git']]]
+            checkoutGit("http://192.168.1.205:3000/yzp/automator.git")
             bat 'npm i'
     }
     dir('project') {
@@ -468,7 +468,7 @@ def ftpUploadSource() {
         checkout([$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '', excludedRegions: '', excludedRevprop: '', excludedUsers: '', filterChangelog: true, ignoreDirPropChanges: false, includedRegions: ".*/${LOCAL_FILE}", locations: [[cancelProcessOnExternalsFail: true, credentialsId: getCredentialsId(), depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: "$SCM_URL"]], quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']])
     }
     dir('automator') {
-            checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: 'master']], extensions: [], userRemoteConfigs: [[url: 'http://192.168.1.205:3000/yzp/automator.git']]]
+            checkoutGit("http://192.168.1.205:3000/yzp/automator.git")
             bat 'npm i'
     }
     dir('ftp') {
@@ -551,7 +551,6 @@ def checkoutGit(url, branch = "master") {
 
 def pub200AutomaticIntegrated() {
     dir('automator') {
-        // checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: 'master']], extensions: [], userRemoteConfigs: [[url: 'http://192.168.1.205:3000/yzp/automator.git']]]
         checkoutGit("http://192.168.1.205:3000/yzp/automator.git")
         bat 'npm i'
     }
@@ -644,7 +643,7 @@ def getDingTalkRobot() {
 def generateSendTranslationKV_API() {
     lock(resource: 'conversion_api') {
         dir('automator') {
-            checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: 'master']], extensions: [], userRemoteConfigs: [[url: 'http://192.168.1.205:3000/yzp/automator.git']]]
+            checkoutGit("http://192.168.1.205:3000/yzp/automator.git")
             bat 'npm i'
         }
         dir('project/resource/assets/cfgjson') {
