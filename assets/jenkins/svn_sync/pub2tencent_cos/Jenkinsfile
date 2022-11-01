@@ -18,7 +18,7 @@ pipeline {
                         build.sendStart2DingTalk_PubWeb()
                     }
                     dir('automator') {
-                        checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: 'master']], extensions: [], userRemoteConfigs: [[url: 'https://e.coding.net/tsubasaohzora/playground/automator.git']]]
+                        build.checkoutGit("http://192.168.1.205:3000/yzp/automator.git")
                         bat 'npm i'
                     }
                     lock(resource: "pub2web") {
