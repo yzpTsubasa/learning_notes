@@ -527,9 +527,32 @@ def checkoutComplexSVN(scm) {
     checkout(scm)
 }
 
+def checkoutGit(url, branch = "master") {
+    def git_remote = ""
+    def git_remote_url = ""
+    def git_branch = ""
+    if (fileExists('.git')) {
+        git_remote = bat([returnStdout: true, script: '@echo off && git remote']).trim()
+        git_remote_url = bat([returnStdout: true, script: "@echo off && git remote get-url ${git_remote}"]).trim()
+        git_branch = bat([returnStdout: true, script: "@echo off && git branch --show-current"]).trim()
+    }
+    // print git_remote
+    // print git_remote_url
+    // print git_branch
+    // print git_remote_url == url
+    // print git_branch == branch
+    def changed = git_remote_url != url || git_branch != branch
+    if (changed) {
+        git changelog: false, poll: false, url: url, branch: branch
+    } else {
+        bat "git pull ${git_remote} ${git_branch}"
+    }
+}
+
 def pub200AutomaticIntegrated() {
     dir('automator') {
-        checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: 'master']], extensions: [], userRemoteConfigs: [[url: 'http://192.168.1.205:3000/yzp/automator.git']]]
+        // checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: 'master']], extensions: [], userRemoteConfigs: [[url: 'http://192.168.1.205:3000/yzp/automator.git']]]
+        checkoutGit("http://192.168.1.205:3000/yzp/automator.git")
         bat 'npm i'
     }
     dir('project') {
