@@ -518,6 +518,23 @@
                 {
                     "type": "object",
                     "properties": {
+                        "type": {"const": "merge_files", "title": "合并多个文件"},
+                        "data": {
+                            "type": "object",
+                            "title": "命令参数",
+                            "required": ["src", "base", "dst"],
+                            "allOf": [
+                                {"$ref": "#/definitions/common_data"}
+                            ]
+                        }
+                    },
+                    "allOf": [
+                        {"$ref": "#/definitions/common_cfg"}
+                    ]
+                },
+                {
+                    "type": "object",
+                    "properties": {
                         "type": {"const": "date", "title": "日期"},
                         "data": {
                             "type": "object",
