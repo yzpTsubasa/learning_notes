@@ -228,3 +228,13 @@ shutdown -s -t 43200
 # 设置服务依赖关系
 sc config "Jenkins" depend="gogs"
 ```
+
+## windows10 激活
+``` sh
+slmgr /ipk W269N-WFGWX-YVC9B-4J6C9-T83GX
+
+slmgr /skms kms.03k.org
+
+slmgr /ato
+
+```
