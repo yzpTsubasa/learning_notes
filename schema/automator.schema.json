@@ -459,7 +459,7 @@
                                     "type": "object", 
                                     "title": "额外选项",
                                     "properties": {
-                                        "rejectUnauthorized":{ "title": "拒绝未授权证书", "default": false }
+                                        "rejectUnauthorized":{ "title": "拒绝未授权证书", "default": true }
                                     }
                                 }
                             },
