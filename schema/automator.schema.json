@@ -454,7 +454,14 @@
                                 "headers": {"title": "头部解析"},
                                 "body_retrieval": {"title": "包体类型拼接"},
                                 "bodies": {"title": "包体解析"},
-                                "sends": {"title": "连接成功后发送"}
+                                "sends": {"title": "连接成功后发送"},
+                                "options": { 
+                                    "type": "object", 
+                                    "title": "额外选项",
+                                    "properties": {
+                                        "rejectUnauthorized":{ "title": "拒绝未授权证书", "default": false }
+                                    }
+                                }
                             },
                             "required": ["url"],
                             "allOf": [
