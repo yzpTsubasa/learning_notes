@@ -97,6 +97,7 @@
                     "username":{ "title": "用户名", "type": "string" },
                     "password": { "title": "密码", "type": "string" }
                 } },
+                "prompt": {"title": "提示语", "type": "string"},
                 "store_confirm": {"title": "结果值确认", "default": true}
             }
         },
