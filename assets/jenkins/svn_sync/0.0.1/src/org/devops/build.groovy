@@ -372,6 +372,10 @@ def retrieveTranslationAPI() {
             }
         }
     }
+    // 自动构建发布任务
+    if (params.BUILD_NEXT_JOB && params.NEXT_JOB) {
+        build wait: false, job: params.NEXT_JOB, parameters: [extendedChoice(name: 'HG_REPOSITORY_SRC', value: params.SCM_URL)]
+    }
 }
 
 // 生成翻译KV表_API
