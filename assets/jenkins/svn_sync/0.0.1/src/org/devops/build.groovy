@@ -29,7 +29,7 @@ def sendStart2DingTalk() {
         text: [
             "- 任务 [${currentBuild.fullDisplayName}](${BUILD_URL}) ",
             '- 状态 开始',
-            "- 发起 ${currentBuild.getBuildCauses()[0].userName ? currentBuild.getBuildCauses()[0].userName : currentBuild.getBuildCauses()[0].shortDescription.minus('Started by ').replace('timer', '定时器').replace('an SCM change', 'SCM轮询')}",
+            "- 发起 ${getRootBuildTriggerDesc()}",
             "- 时刻 ${new Date().format('yyyy-MM-dd(E)HH:mm:ss', TimeZone.getTimeZone('Asia/Shanghai')) - '星期'}",
             '- 记录',
             '***',
@@ -55,7 +55,7 @@ def sendResult2DingTalkTest() {
         text: [
             "- **任务** [${currentBuild.fullDisplayName}](${BUILD_URL}) ",
             "- **状态** <font color=${result_color}>${result}</font>",
-            "1. **发起** ${currentBuild.getBuildCauses()[0].userName ? currentBuild.getBuildCauses()[0].userName : currentBuild.getBuildCauses()[0].shortDescription.minus('Started by ').replace('timer', '定时器').replace('an SCM change', 'SCM轮询')}",
+            "1. **发起** ${getRootBuildTriggerDesc()}",
             "2. **时刻** ${new Date().format('yyyy-MM-dd(E)HH:mm:ss', TimeZone.getTimeZone('Asia/Shanghai')) - '星期'}",
             "3. **用时** ${durationString}",
             '4. **记录**',
@@ -89,7 +89,7 @@ def sendResult2DingTalk() {
         text: [
             "- 任务 [${currentBuild.fullDisplayName}](${BUILD_URL}) ",
             "- 状态 <font color=${result_color}>${result}</font>",
-            "- 发起 ${currentBuild.getBuildCauses()[0].userName ? currentBuild.getBuildCauses()[0].userName : currentBuild.getBuildCauses()[0].shortDescription.minus('Started by ').replace('timer', '定时器').replace('an SCM change', 'SCM轮询')}",
+            "- 发起 ${getRootBuildTriggerDesc()}",
             "- 时刻 ${new Date().format('yyyy-MM-dd(E)HH:mm:ss', TimeZone.getTimeZone('Asia/Shanghai')) - '星期'}",
             "- 用时 ${durationString}",
             '- 记录',
@@ -236,7 +236,7 @@ def sendStart2DingTalk_PubWeb() {
             "# **[${currentBuild.fullDisplayName}](${BUILD_URL})**",
             '***',
             '- 状态 开始',
-            "- 发起 ${currentBuild.getBuildCauses()[0].userName ? currentBuild.getBuildCauses()[0].userName : currentBuild.getBuildCauses()[0].shortDescription.minus('Started by ').replace('timer', '定时器').replace('an SCM change', 'SCM轮询')}",
+            "- 发起 ${getRootBuildTriggerDesc()}",
             "- 时刻 ${new Date().format('yyyy-MM-dd(E)HH:mm:ss', TimeZone.getTimeZone('Asia/Shanghai')) - '星期'}",
             '- 仓库',
             params.HG_REPOSITORY_SRC ? (params.HG_REPOSITORY_SRC - ~/.*\//) : 'Unknown',
@@ -252,7 +252,7 @@ def getAtUsers(includeCommitUser = false) {
     def AT_USERS_STR = params.AT_USERS != null ? params.AT_USERS : ''
     def AT_USERS = AT_USERS_STR.tokenize(',')
     // 添加构建者(需要允许指定的API)
-    def builderMobile = (currentBuild.getBuildCauses()[0] && currentBuild.getBuildCauses()[0].userId) ? hudson.model.User.getById(currentBuild.getBuildCauses()[0].userId, false).getProperty(io.jenkins.plugins.DingTalkUserProperty.class).getMobile() : ''
+    def builderMobile = getRootBuildMobile()
     if (builderMobile) {
         AT_USERS.add(builderMobile)
     }
@@ -298,7 +298,7 @@ def sendResult2DingTalk_PubWeb() {
             '***',
             "- 状态 <font color=${result_color}>${result}</font>",
             "- 资源版本 <font color=${result_color}>${pubWebVersion ? pubWebVersion : 'Unknown'}</font>",
-            "- 发起 ${currentBuild.getBuildCauses()[0].userName ? currentBuild.getBuildCauses()[0].userName : currentBuild.getBuildCauses()[0].shortDescription.minus('Started by ').replace('timer', '定时器').replace('an SCM change', 'SCM轮询')}",
+            "- 发起 ${getRootBuildTriggerDesc()}",
             "- 时刻 ${new Date().format('yyyy-MM-dd(E)HH:mm:ss', TimeZone.getTimeZone('Asia/Shanghai')) - '星期'}",
             "- 用时 ${durationString}",
             '- 仓库',
@@ -733,5 +733,40 @@ def hasLogo2Refresh() {
                 return (path =~ /(\\|^)resource\\loading\\res\\logo.*\.png$/).find()
             }
         }
+    }
+}
+
+// 获取最上游构建的发起描述
+def getRootBuildTriggerDesc() {
+    def build = getRootBuild(currentBuild)
+    def desc = build.getBuildCauses()[0].userName ? build.getBuildCauses()[0].userName : build.getBuildCauses()[0].shortDescription.minus('Started by ').replace('timer', '定时器').replace('an SCM change', 'SCM轮询')
+    if (build.getAbsoluteUrl() != currentBuild.getAbsoluteUrl()) {
+        desc += "[${build.getFullDisplayName()}](${build.getAbsoluteUrl()})"
+    }
+    return desc
+}
+
+// 获取最上游构建的发起人id
+def getRootBuildUserId() {
+    def build = getRootBuild(currentBuild)
+    return build.getBuildCauses()[0] && build.getBuildCauses()[0].userId
+}
+
+// 获取最上游构建的发起人手机
+def getRootBuildMobile() {
+    def userId = getRootBuildUserId()
+    if (!userId) {
+        return ""
+    } else {
+        return hudson.model.User.getById(userId, false).getProperty(io.jenkins.plugins.DingTalkUserProperty.class).getMobile()
+    }
+}
+
+// 获取最上游构建
+def getRootBuild(build) {
+    if (build.upstreamBuilds.size() == 0) {
+        return build
+    } else {
+        return getRootBuild(build.upstreamBuilds[0]);
     }
 }
