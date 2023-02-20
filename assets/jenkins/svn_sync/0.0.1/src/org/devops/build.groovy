@@ -712,12 +712,13 @@ def needCompile() {
 
 // 判断是否有代码需要编译
 def hasCode2Compile() {
+    def FILES_TRIGGER_COMPILE = (params.FILES_TRIGGER_COMPILE ? params.FILES_TRIGGER_COMPILE : "").tokenize(",")
     return currentBuild.changeSets.any {
         return it.items.any {
             return it.getAffectedFiles().any {
                 def path = it.getPath()
                 // print path
-                return (path =~ /([\\\/]|^)(src|src_base|src_ext|dep_libs|index)[\\\/].*\.(ts|js)$/).find() && path != "src\\base\\WND_ID_CFG.ts"
+                return ((path =~ /([\\\/]|^)(src|src_base|src_ext|dep_libs|index)[\\\/].*\.(ts|js)$/).find() && path != "src\\base\\WND_ID_CFG.ts") || FILES_TRIGGER_COMPILE.any { path == it }
             }
         }
     }
