@@ -5,11 +5,25 @@ import org.yaml.snakeyaml.Yaml
 
 def getChangeString() {
     MAX_MSG_LEN = 500
-    echo 'Gathering SCM changes......'
+    // echo 'Gathering SCM changes......'
+    def MAX_ITEMS = 100 // 限制记录条数上限为100条
+    def isExceeded = false // 是否超过上限条数
+    def numItem = 0
     return currentBuild.changeSets.collect {
         def i = 1
         it.items.findAll {
-            !((it.msg.take(MAX_MSG_LEN) =~ /^(auto )?out \[\d+\]/).find())
+            if (isExceeded) {
+                return false;
+            }
+            def ret = !((it.msg.take(MAX_MSG_LEN) =~ /^(auto )?out \[\d+\]/).find())
+            if (!ret) {
+                return false
+            }
+            numItem++
+            if (numItem == MAX_ITEMS) {
+                isExceeded = true
+            }
+            return true
         }.collect {
             return it.collect {
                 "${i++}. ${it.msg.take(MAX_MSG_LEN).replaceAll('[\r\n]+', '')} by ${it.author.getFullName()} at ${it.getCommitId()}"
