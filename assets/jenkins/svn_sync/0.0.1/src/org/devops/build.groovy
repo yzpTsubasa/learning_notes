@@ -67,17 +67,17 @@ def sendResult2DingTalkTest() {
         at: atUsers,
         atAll: false,
         text: [
-            "- **任务** [${currentBuild.fullDisplayName}](${BUILD_URL}) ",
-            "- **状态** <font color=${result_color}>${result}</font>",
-            "1. **发起** ${getRootBuildTriggerDesc()}",
-            "2. **时刻** ${new Date().format('yyyy-MM-dd(E)HH:mm:ss', TimeZone.getTimeZone('Asia/Shanghai')) - '星期'}",
-            "3. **用时** ${durationString}",
-            '4. **记录**',
+            "- 任务 [${currentBuild.fullDisplayName}](${BUILD_URL}) ",
+            "- 状态 <font color=${result_color}>${result}</font>",
+            "1. 发起 ${getRootBuildTriggerDesc()}",
+            "2. 时刻 ${new Date().format('yyyy-MM-dd(E)HH:mm:ss', TimeZone.getTimeZone('Asia/Shanghai')) - '星期'}",
+            "3. 用时 ${durationString}",
+            '4. 记录',
             '***',
         ] + getChangeString() + (
             currentBuild.result == 'FAILURE' ? [
                 '***',
-                "- **<font color=${result_color}>失败日志</font>**",
+                "- <font color=${result_color}>失败日志</font>",
                 getTailLogString(),
             ] : []
         )
@@ -347,13 +347,13 @@ def sendCommonResult2DingTalk() {
         text: [
             "# **[${currentBuild.fullDisplayName}](${BUILD_URL})**",
             '***',
-            "- **状态** <font color=${result_color}>${result}</font>",
-            "- **时刻** ${new Date().format('yyyy-MM-dd(E)HH:mm:ss', TimeZone.getTimeZone('Asia/Shanghai')) - '星期'}",
-            "- **用时** ${durationString}",
+            "- 状态 <font color=${result_color}>${result}</font>",
+            "- 时刻 ${new Date().format('yyyy-MM-dd(E)HH:mm:ss', TimeZone.getTimeZone('Asia/Shanghai')) - '星期'}",
+            "- 用时 ${durationString}",
         ] + (
             currentBuild.result == 'FAILURE' ? [
                 '***',
-                "- **<font color=${result_color}>失败日志</font>**",
+                "- <font color=${result_color}>失败日志</font>",
                 getTailLogString(10),
             ] : []
         )
