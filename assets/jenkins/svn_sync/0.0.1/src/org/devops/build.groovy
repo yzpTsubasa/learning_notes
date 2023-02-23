@@ -754,7 +754,7 @@ def hasLogo2Refresh() {
 // 获取最上游构建的发起描述
 def getRootBuildTriggerDesc() {
     def build = getRootBuild(currentBuild)
-    def desc = build.getBuildCauses()[0].userName ? build.getBuildCauses()[0].userName : build.getBuildCauses()[0].shortDescription.minus('Started by ').replace('timer', '定时器').replace('an SCM change', 'SCM轮询')
+    def desc = build.getBuildCauses()[0] && (build.getBuildCauses()[0].userName ? build.getBuildCauses()[0].userName : build.getBuildCauses()[0].shortDescription.minus('Started by ').replace('timer', '定时器').replace('an SCM change', 'SCM轮询'))
     if (build.getAbsoluteUrl() != currentBuild.getAbsoluteUrl()) {
         desc += "[${build.getFullDisplayName()}](${build.getAbsoluteUrl()})"
     }
