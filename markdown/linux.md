@@ -77,6 +77,7 @@ IPADDR=192.168.10.117
 NETMASK=255.255.255.0
 GATEWAY=192.168.10.1
 DNS1=114.114.114.114
+DNS1=8.8.8.8
 [root@localhost ~]# systemctl restart network
 ```
 
