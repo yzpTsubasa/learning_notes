@@ -1,5 +1,11 @@
 ## networks
 
+## curl
+``` bash
+# 使用 -k 或 --insecure 参数（不验证 TSL 证书）
+curl -X GET https://seirei-jp-web1.pro.g123-cpp.com/hotgame/test.php?src=1 -k
+```
+
 ## 访问 raw.githubusercontent.com
 ``` bash
 # 详情见 https://blog.csdn.net/bryong/article/details/108374261
