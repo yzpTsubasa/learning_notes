@@ -6,7 +6,7 @@ import org.yaml.snakeyaml.Yaml
 def getChangeString() {
     MAX_MSG_LEN = 500
     // echo 'Gathering SCM changes......'
-    def MAX_ITEMS = 100 // 限制记录条数上限为100条
+    def MAX_ITEMS = 10 // 限制记录条数上限为10条
     def isExceeded = false // 是否超过上限条数
     def numItem = 0
     return currentBuild.changeSets.collect {
