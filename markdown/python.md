@@ -38,3 +38,8 @@ tmp = dict([(value, key) for (key, value) in tmp.items()])
 ``` bash
 pip install Pillow==6.2.2 -i https://pypi.doubanio.com/simple
 ```
+## Python2 报错 LookupError: unknown encoding: cp65001
+在 bat 文件中其实可以形成这样的模式来支持中文路径：
+``` bat
+set PYTHONIOENCODING=UTF-8
+```
