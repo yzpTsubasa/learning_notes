@@ -587,6 +587,7 @@ def checkoutGit(url, branch = "master") {
     if (changed) {
         git changelog: false, poll: false, url: url, branch: branch
     } else {
+        bat "git checkout -- *" // 先还原
         bat "git pull ${git_remote} ${git_branch}"
     }
 }
