@@ -43,6 +43,7 @@ brew upgrade jenkins-lts
 ## 使用 Pipeline Script from SCM 的问题
 > SCM中其他文件的变更，也会触发 pollSCM，暂时不清楚如何屏蔽，只能暂时弃用这个方案。
 > 除非单独给每个Jenkinsfile分配一个目录
+![](../assets/jenkins/pipeline_by_jenkinsfile.png)
 
 > 如果使用 pollSCM 会有很大的额外消耗, 尽量还是避免使用
 
