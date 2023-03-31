@@ -1,10 +1,16 @@
 ## python
 ## pip 生成和安装requirements.txt
 ``` bash
-# 生成文件
+# 方案一
 pip freeze > requirements.txt
+
+# 方案二（推荐）
+pip install pipreqs
+pipreqs ./ --encoding=utf8
+
 # 从requirements.txt安装依赖库
 pip install -r requirements.txt
+
 ```
 ##  打包成可执行文件
 > 先安装 pytinstaller
