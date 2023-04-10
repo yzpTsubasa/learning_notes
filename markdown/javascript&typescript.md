@@ -807,3 +807,5 @@ export function collectData(payload: Object) {
     }
 }
 ```
+
+## 使用 json-dup-key-validator 检查 json 中的重复 key
