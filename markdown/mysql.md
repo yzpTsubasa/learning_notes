@@ -51,52 +51,52 @@ mysqldump -uroot -proot test user > test.user.sql
 1. [下载 MySQL Community Server](https://dev.mysql.com/downloads/mysql/)
 2. 解压到自定义目录 `x:\mysql-xxx`
 3. 配置环境变量
-   ```
-   MYSQL_HOME: x:\mysql-xxx
-   Path：%MYSQL_HOME%\bin
-   ```
+```
+MYSQL_HOME: x:\mysql-xxx
+Path：%MYSQL_HOME%\bin
+```
 4. 在`%MYSQL_HOME%\bin`目录下创建 `my.ini`
-	``` ini
-	[client]
-	port=3306
-	default-character-set=utf8
-	[mysqld]
-	port=3306
-	character_set_server=utf8
-	basedir=%MYSQL_HOME%
-	datadir=%MYSQL_HOME%\data
-	[WinMySQLAdmin]
-	%MYSQL_HOME%\bin\mysqld.exe
-	```
+``` ini
+[client]
+port=3306
+default-character-set=utf8
+[mysqld]
+port=3306
+character_set_server=utf8
+basedir=%MYSQL_HOME%
+datadir=%MYSQL_HOME%\data
+[WinMySQLAdmin]
+%MYSQL_HOME%\bin\mysqld.exe
+```
 5. 以管理员身份安装mysql服务 
-   ``` bat
-   mysqld.exe –install
-   ```
-   提示 `Service successfully installed` 安装完成
+``` bat
+mysqld.exe –install
+```
+提示 `Service successfully installed` 安装完成
 6. 初始化 mysql
-   ``` bat
-   mysqld --initialize-insecure
-   ```
+``` bat
+mysqld --initialize-insecure
+```
 7. 启动 mysql
-   ``` bat
-   net start mysql
-   ```
+``` bat
+net start mysql
+```
 8. 设置初始密码
-   ``` bat
-   mysqladmin -u root -p password
-   ```
-   > 根据提示输入密码
+``` bat
+mysqladmin -u root -p password
+```
+> 根据提示输入密码
 9. 关闭 mysql
-   ``` bat
-   net stop mysql
-   ```
+``` bat
+net stop mysql
+```
 ### node.js连接mysql出现错误： ER_NOT_SUPPORTED_AUTH_MODE
 1. 连接 mysql
-   ``` bat
-   mysql -u root -p
-   ```
+``` bat
+mysql -u root -p
+```
 2. 执行指令
-   ``` sql
-   ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '<密码>';
-   FLUSH PRIVILEGES;
-   ```
+``` sql
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'root';
+FLUSH PRIVILEGES;
+```
