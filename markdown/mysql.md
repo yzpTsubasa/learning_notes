@@ -85,7 +85,18 @@ mysqldump -uroot -proot test user > test.user.sql
    ``` bat
    mysqladmin -u root -p password
    ```
+   > 根据提示输入密码
 9. 关闭 mysql
    ``` bat
    net stop mysql
+   ```
+### node.js连接mysql出现错误： ER_NOT_SUPPORTED_AUTH_MODE
+1. 连接 mysql
+   ``` bat
+   mysql -u root -p
+   ```
+2. 执行指令
+   ``` sql
+   ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '<密码>';
+   FLUSH PRIVILEGES;
    ```
