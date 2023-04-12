@@ -238,3 +238,17 @@ slmgr /skms kms.03k.org
 slmgr /ato
 
 ```
+## 睡眠等待
+``` bat
+timeout /t 30
+```
+
+### The timeout would get interrupted if the user hits any key; however, the command also accepts the optional switch /nobreak, which effectively ignores anything the user may press, except an explicit CTRL-C:
+``` bat
+timeout /t 30 /nobreak`
+```
+
+### Additionally, if you don't want the command to print its countdown on the screen, you can redirect its output to NUL:
+``` bat
+timeout /t 30 /nobreak > NUL`
+```
