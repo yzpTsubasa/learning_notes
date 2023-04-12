@@ -1,6 +1,6 @@
 ## mysql
 
-### 使用 ip 访问
+## 使用 ip 访问
 ``` bash
 mysql -h<IP> -P<PORT> -u<USER> -p<PASSWORD> -e "source xxx.sql"
 ```
@@ -9,18 +9,18 @@ mysql -h<IP> -P<PORT> -u<USER> -p<PASSWORD> -e "source xxx.sql"
 ERROR 1045 (28000): Access denied for user 'root'@'DESKTOP-QDDVAQ3' (using password: YES)
 ```
 
-### ERROR 1130: Host ’XXX′ is not allowed to connect to this MySQL server 没有权限连接指定IP的主机
+## ERROR 1130: Host ’XXX′ is not allowed to connect to this MySQL server 没有权限连接指定IP的主机
 > 授权
 ``` bash
 GRANT ALL PRIVILEGES ON *.* TO '<username>'@'%' IDENTIFIED BY 'password' WITH GRANT OPTION;
 # 如：
 GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'root' WITH GRANT OPTION;
 ```
-### MySQL 版本
+## MySQL 版本
 5.7
 
 > 在Macbook Pro 2016 的 Bootcamp 下无法运行mysql 5.x 版本
-### 语句
+## 语句
 ``` sql
 -- 创建库
 CREATE DATABASE `mybatis`;
@@ -38,7 +38,7 @@ INSERT INTO `user` (`id`, `name`, `pwd`) VALUES
 (2, 'Misaki', 'yyy'),
 (3, 'Hyuga', 'zzz')
 ```
-### 备份
+## 备份
 ``` bash
 # 备份库 test库
 mysqldump -uroot -proot -B test > test.sql
@@ -46,7 +46,7 @@ mysqldump -uroot -proot -B test > test.sql
 mysqldump -uroot -proot test user > test.user.sql
 ```
 
-### MySQL Community Server下载与安装配置(解压版本)
+## MySQL Community Server下载与安装配置(解压版本)
 
 1. [下载 MySQL Community Server](https://dev.mysql.com/downloads/mysql/)
 2. 解压到自定义目录 `x:\mysql-xxx`
@@ -90,7 +90,7 @@ mysqladmin -u root -p password
 ``` bat
 net stop mysql
 ```
-### node.js连接mysql出现错误： ER_NOT_SUPPORTED_AUTH_MODE
+## node.js连接mysql出现错误： ER_NOT_SUPPORTED_AUTH_MODE
 1. 连接 mysql
 ``` bat
 mysql -u root -p
