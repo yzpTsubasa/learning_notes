@@ -58,3 +58,13 @@ curl -X POST localhost:7001/api/todo -H "Content-Type: application/json" -d "{\"
 ``` bat
 curl -X PUT localhost:7001/api/todo/25?text=Update%20By%20Curl
 ```
+
+## curl 命令行参数
+> 参数 `-i` 查看响应头及响应内容
+``` bat
+curl -X POST localhost:7001/user/login -d "{\"username\": \"test1\", \"password\": \"test1\"}" -i
+```
+> 参数 `-v` 查看详细请求过程
+``` bat
+curl -X POST localhost:7001/user/login -d "{\"username\": \"test1\", \"password\": \"test1\"}" -v
+```
