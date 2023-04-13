@@ -25,3 +25,22 @@ up to 24 characters drawn from the alphabet (A-Z), digits (0-9),minus sign (-), 
 规范指出域名只能是字母、数字和短线（-）还有点（.）。
 2022-08-19 16:55:12.486 26260-28710/? E/EgretNative: J: WS: error (exception: java.lang.IllegalArgumentException: Invalid input to toASCII: ks-dl-bt2_01.hotgamehl.com)
 ```
+
+## REST 
+Representational
+表述性的
+- method
+- content-type
+- statusCode
+
+State
+- /api/todo
+- /api/user
+状态(资源)
+
+Transfer
+转移
+C <-> S
+
+> 通过语义化的方式请求资源URL
+> 并根据返回的语义来判断这次操作的返回类型和效果
