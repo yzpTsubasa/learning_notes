@@ -44,3 +44,12 @@ C <-> S
 
 > 通过语义化的方式请求资源URL
 > 并根据返回的语义来判断这次操作的返回类型和效果
+
+## Windows中使用curl命令报错curl unmatched close brace/bracket
+``` bat
+curl -X POST localhost:7001/api/todo -H 'Content-Type: application/json' -d `{"text": "Post by curl"}`
+```
+> window的command.exe不支持单引号，所以要处理一下命令：先转义双引号，然后把单引号改为双引号
+``` bat
+curl -X POST localhost:7001/api/todo -H "Content-Type: application/json" -d "{\"text\": \"Post by curl\"}"
+```
