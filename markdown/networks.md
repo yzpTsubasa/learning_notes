@@ -53,3 +53,8 @@ curl -X POST localhost:7001/api/todo -H 'Content-Type: application/json' -d `{"t
 ``` bat
 curl -X POST localhost:7001/api/todo -H "Content-Type: application/json" -d "{\"text\": \"Post by curl\"}"
 ```
+
+## curl 发送 query 参数
+``` bat
+curl -X PUT localhost:7001/api/todo/25?text=Update%20By%20Curl
+```
