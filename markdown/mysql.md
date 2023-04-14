@@ -91,6 +91,9 @@ mysqladmin -u root -p password
 net stop mysql
 ```
 ## node.js连接mysql出现错误： ER_NOT_SUPPORTED_AUTH_MODE
+### 方案一（推荐）
+移除 `mysql`，使用 `mysql2` 库
+### 方案二
 1. 连接 mysql
 ``` bat
 mysql -u root -p
@@ -100,3 +103,4 @@ mysql -u root -p
 ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'root';
 FLUSH PRIVILEGES;
 ```
+
