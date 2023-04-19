@@ -660,9 +660,9 @@ def validateDev() {
         if (needCompile()) {
             // bat([label: '校验', returnStdout: false, script: params.HG_VALIDATE_SCRIPT])
             compileLog = bat([label: '校验', returnStdout: true, script: params.HG_VALIDATE_SCRIPT])
+            print compileLog
             if(!(compileLog=~ /ts compile Found 0 errors/).find()) { // 结果有错误
                 // throw new Exception("validateDev failed")
-                print compileLog
                 error "validateDev failed"
             }
         }
