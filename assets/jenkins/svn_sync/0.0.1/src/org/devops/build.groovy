@@ -651,6 +651,17 @@ mklink /j "resource" "../resource"
     }
 }
 
+def validateDev() {
+    dir('project') {
+        // 检出代码
+        checkoutSVN(params.HG_REPOSITORY_SRC)
+
+        // 编译
+        if (needCompile()) {
+            bat([label: '校验', returnStdout: false, script: params.HG_VALIDATE_SCRIPT])
+        }
+    }
+}
 
 // 获取末尾的几条日志
 def getTailLogString(size = 50) {

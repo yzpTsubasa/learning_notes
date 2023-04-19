@@ -1,0 +1,36 @@
+/* groovylint-disable CompileStatic, NestedBlockDepth, NoDef, UnnecessaryGString, VariableName, VariableTypeRequired */
+@Library("jenkins_library") _
+
+def build = new org.devops.build()
+
+pipeline {
+    agent any
+    triggers {
+        pollSCM '* * * * *'
+    }
+    options {
+        disableConcurrentBuilds()
+    }
+    stages {
+        stage('build') {
+            steps {
+                script {
+                    build.validateDev()
+                }
+            }
+        }
+    }
+
+    post {
+        failure {
+            script {
+                if (build.needCompile()) {
+                    build.sendResult2DingTalk()
+                    if (params.MAIL_TO) {
+                        build.sendResult2Emailext()
+                    }
+                }
+            }
+        }
+    }
+}
