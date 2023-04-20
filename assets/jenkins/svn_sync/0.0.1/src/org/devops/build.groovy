@@ -613,6 +613,7 @@ def pub200AutomaticIntegrated() {
 
         // 编译
         if (needCompile()) {
+            addInfoBadge text: '触发编译'
             def pub_200_out_bat = ''
             // 编译代码的备选批处理文件
             def pub_200_out_bat_alternatives = [
@@ -658,6 +659,7 @@ def validateDev() {
 
         // 编译
         if (needCompile()) {
+            addInfoBadge text: '触发编译'
             // bat([label: '校验', returnStdout: false, script: params.HG_VALIDATE_SCRIPT])
             compileLog = bat([label: '校验', returnStdout: true, script: params.HG_VALIDATE_SCRIPT])
             print compileLog
