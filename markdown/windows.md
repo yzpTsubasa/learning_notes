@@ -252,3 +252,15 @@ timeout /t 30 /nobreak`
 ``` bat
 timeout /t 30 /nobreak > NUL`
 ```
+
+## 设置临时环境变量
+``` sh
+set NODE_ENV=development
+
+%NODE_ENV%
+```
+``` ps1
+$env:NODE_ENV="development"
+
+$env:NODE_ENV
+```
