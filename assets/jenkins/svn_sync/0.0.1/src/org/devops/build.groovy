@@ -664,13 +664,15 @@ def validateDev() {
             compileLog = bat([label: '校验', returnStdout: true, script: params.HG_VALIDATE_SCRIPT])
             print compileLog
             if (params.HG_VALIDATE_SUCCESS_KEYWORD) {
-                if(!(params.HG_CONTENT =~ /${params.HG_VALIDATE_SUCCESS_KEYWORD}/).find()) {
-                    error "success keyword \"${HG_VALIDATE_SUCCESS_KEYWORD}\" not found"
+                if(!(compileLog =~ /${params.HG_VALIDATE_SUCCESS_KEYWORD}/).find()) {
+                    print "success keyword \"${HG_VALIDATE_SUCCESS_KEYWORD}\" not found"
+                    error "validateDev failed"
                 }
             }
             if (params.HG_VALIDATE_FAILURE_KEYWORD) {
-                if((params.HG_CONTENT =~ /${params.HG_VALIDATE_FAILURE_KEYWORD}/).find()) {
-                        error "failure keyword \"${HG_VALIDATE_FAILURE_KEYWORD}\" found"
+                if((compileLog =~ /${params.HG_VALIDATE_FAILURE_KEYWORD}/).find()) {
+                    print "failure keyword \"${HG_VALIDATE_FAILURE_KEYWORD}\" found"
+                    error "validateDev failed"
                 }   
             }
         }
