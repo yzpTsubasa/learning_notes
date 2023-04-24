@@ -264,3 +264,13 @@ $env:NODE_ENV="development"
 
 $env:NODE_ENV
 ```
+
+## VBScript 代码示例
+``` vb
+Dim args
+args = ""
+For x = 0 to Wscript.Arguments.Count - 1
+    args = args + " " + Wscript.Arguments(x)
+Next
+CreateObject("Wscript.Shell").Run "node . ./cfg/tsubasa/hotkeys_tortoise.yml" + args, 6
+```
