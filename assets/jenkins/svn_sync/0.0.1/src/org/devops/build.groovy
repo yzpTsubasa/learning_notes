@@ -276,7 +276,8 @@ def getAtUsers(includeCommitUser = false) {
     // 去重
     AT_USERS.unique()
     // print AT_USERS
-    return AT_USERS
+    // 过滤空手机号
+    return AT_USERS.findAll { it }
 }
 
 // 获取当前提交者的手机号
@@ -284,8 +285,6 @@ def getCommitUserMobiles() {
     def mobiles = (currentBuild.changeSets.collect {
         it.items.collect {
             hudson.model.User.getById(it.author.getId(), false).getProperty(io.jenkins.plugins.DingTalkUserProperty.class).getMobile()
-        }.findAll {
-            it
         }
     }).flatten();
     return mobiles ? mobiles : []
