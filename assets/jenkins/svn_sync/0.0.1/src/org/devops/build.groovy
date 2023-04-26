@@ -312,6 +312,9 @@ def sendResult2DingTalk_PubWeb() {
     env.description = currentBuild.description
     env.durationString = currentBuild.durationString.minus(' and counting')
     def pubWebVersion = getPubWebVersion()
+    if (pubWebVersion) {
+        buildDescription ((currentBuild.description ? currentBuild.description + " " : "") + pubWebVersion)
+    }
     dingtalk(
         robot: getDingTalkRobot(),
         type: 'ACTION_CARD',
