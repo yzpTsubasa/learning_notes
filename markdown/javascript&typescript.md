@@ -72,6 +72,10 @@ npm config edit
 # 原npm地址
 npm config set registry http://registry.npmjs.org 
 ```
+## 临时使用 registry
+```sh
+npm --registry https://registry.npm.taobao.org install express
+```
 ## 生成nodejs可执行文件
 ``` shell
 # 安装指定版本的nodejs 推荐版本，根据 nexe 有编译发行的版本 https://github.com/nexe/nexe/releases?after=v3.3.4
