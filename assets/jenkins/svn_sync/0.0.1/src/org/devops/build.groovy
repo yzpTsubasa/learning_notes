@@ -315,6 +315,9 @@ def sendResult2DingTalk_PubWeb() {
     if (pubWebVersion) {
         buildDescription ((currentBuild.description ? currentBuild.description + " " : "") + pubWebVersion)
     }
+    if (params.HG_REPOSITORY_SRC) {
+        buildDescription ((currentBuild.description ? currentBuild.description + " " : "") + (params.HG_REPOSITORY_SRC - ~/.*\//))
+    }
     dingtalk(
         robot: getDingTalkRobot(),
         type: 'ACTION_CARD',
