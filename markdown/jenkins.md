@@ -16,6 +16,24 @@ print ret
 > 自启动可能需要特殊权限的任务时，比如 pm2 需要开启 daemon 守护进程，无法在 jenkins 中调用成功，需要设置系统自启动项，如 `pm2 list`，
 > 然后在由 jenkins 执行 `pm2 start ...`
 
+### 使用pm2的自启动功能
+```sh
+# 保存当前进程状态，用于重启用自启动
+pm2 save
+
+# 启用自启动(不适用于windows)
+pm2 startup 
+# 移除自启动(不适用于windows)
+pm2 unstartup
+
+# 安装自启动(windows)
+npm install pm2-windows-startup -g
+# 启用自启动(windows)
+pm2-startup install
+# 关闭自启动(windows)
+pm2-startup uninstall
+```
+
 ## 使用 PowerShell Core Script (powershell) 执行后台任务，版本 7.x
 > 默认的 PowerShell Script (pwsh) 使用的可能是旧版本，如 5.x，无法正常执行
 ``` groovy
