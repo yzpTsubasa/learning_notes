@@ -318,6 +318,9 @@ def sendResult2DingTalk_PubWeb() {
     if (params.HG_REPOSITORY_SRC) {
         buildDescription ((currentBuild.description ? currentBuild.description + " " : "") + (params.HG_REPOSITORY_SRC - ~/.*\//))
     }
+    if (env.SVN_LAST_CHANGED_REV) {
+        buildDescription ((currentBuild.description ? currentBuild.description + " r" : "") + (env.SVN_LAST_CHANGED_REV))
+    }
     dingtalk(
         robot: getDingTalkRobot(),
         type: 'ACTION_CARD',
@@ -535,6 +538,15 @@ def ftpUploadSource() {
     }
 }
 
+def getSVNInfo() {
+    // 获取凭证
+    withCredentials([usernamePassword(credentialsId: getCredentialsId(), passwordVariable: 'HG_CREDENTIAL_PASSWORD', usernameVariable: 'HG_CREDENTIAL_USERNAME')]) {
+        svn_info = bat returnStdout: true, script: "svn info --username %HG_CREDENTIAL_USERNAME% --password %HG_CREDENTIAL_PASSWORD%"
+        svn_last_changed_rev = ((svn_info =~ /Last Changed Rev\: (\d+)/)[0][1])
+        env.SVN_LAST_CHANGED_REV = svn_last_changed_rev
+    }
+}
+
 // 使用本地环境的 svn 检出, 不需要 svn upgrade
 def checkoutSVN(scmUrl) {
     if (fileExists('.svn')) {
@@ -558,6 +570,7 @@ def checkoutSVN(scmUrl) {
 }
     // pollSCM
     checkout([$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '', excludedRegions: '', excludedRevprop: '', excludedUsers: '', filterChangelog: true, ignoreDirPropChanges: false, includedRegions: '', locations: [[cancelProcessOnExternalsFail: true, credentialsId: getCredentialsId(), depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: "${scmUrl}"]], quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']])
+    getSVNInfo()
 }
 
 // 使用本地环境的 svn 检出, 不需要 svn upgrade
@@ -584,6 +597,7 @@ def checkoutComplexSVN(scm) {
 }
     // pollSCM
     checkout(scm)
+    getSVNInfo()
 }
 
 def checkoutGit(url, branch = "master") {
@@ -632,6 +646,9 @@ def pub200AutomaticIntegrated() {
         if (needCompile()) {
             addInfoBadge text: '触发编译'
             buildDescription ((currentBuild.description ? currentBuild.description + " " : "") + '编译 ' + getCommitUsernames())
+            if (env.SVN_LAST_CHANGED_REV) {
+                buildDescription ((currentBuild.description ? currentBuild.description + " r" : "") + (env.SVN_LAST_CHANGED_REV))
+            }
             def pub_200_out_bat = ''
             // 编译代码的备选批处理文件
             def pub_200_out_bat_alternatives = [
@@ -679,6 +696,9 @@ def validateDev() {
         if (needCompile()) {
             addInfoBadge text: '触发编译'
             buildDescription ((currentBuild.description ? currentBuild.description + " " : "") + '编译 ' + getCommitUsernames())
+            if (env.SVN_LAST_CHANGED_REV) {
+                buildDescription ((currentBuild.description ? currentBuild.description + " r" : "") + (env.SVN_LAST_CHANGED_REV))
+            }
             // bat([label: '校验', returnStdout: false, script: params.HG_VALIDATE_SCRIPT])
             compileLog = bat([label: '校验', returnStdout: true, script: params.HG_VALIDATE_SCRIPT])
             print compileLog
