@@ -274,3 +274,8 @@ For x = 0 to Wscript.Arguments.Count - 1
 Next
 CreateObject("Wscript.Shell").Run "node . ./cfg/tsubasa/hotkeys_tortoise.yml" + args, 6
 ```
+
+## 设置账户自动登录
+```sh
+control userpasswords2
+```
