@@ -45,3 +45,9 @@
     "C:\\Users\\Administrator\\AppData\\Local\\Programs\\Python\\Python37\\Scripts",
 ]
 ```
+
+## 关闭 HTML 属性自动提示添加引号
+``` json
+// 启用/禁用自动创建 HTML 属性分配的引号
+"html.autoCreateQuotes": false
+```
