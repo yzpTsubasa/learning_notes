@@ -77,6 +77,9 @@ for /F "tokens=* delims=! " %A in (' git remote ') do git push "%A"
 # 创建全新分支
 git checkout --orphan <branch>
 
+# 根据当前分支创建新分支
+git checkout -b <branch>
+
 # 撤销(还原)最近一次提交
 git reset HEAD~1
 
