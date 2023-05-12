@@ -385,7 +385,7 @@ def retrieveTranslationAPI() {
     lock(resource: 'conversion_api') {
         dir('automator') {
             checkoutGit("http://192.168.1.205:3000/yzp/automator.git")
-            bat 'npm i'
+            bat 'pnpm i --registry https://registry.npm.taobao.org'
         }
         dir('project/resource/assets/cfgjson') {
             checkoutComplexSVN([scm: [$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '', excludedRegions: '', excludedRevprop: '', excludedUsers: '', filterChangelog: true, ignoreDirPropChanges: false, includedRegions: '''.*/resource/assets/cfgjson/\\w+\\.json
@@ -417,7 +417,7 @@ def generateTranslationKV_API() {
     lock(resource: 'conversion_api') {
         dir('automator') {
             checkoutGit("http://192.168.1.205:3000/yzp/automator.git")
-            bat 'npm i'
+            bat 'pnpm i --registry https://registry.npm.taobao.org'
         }
         dir('translation') {
             checkoutComplexSVN changelog: false, poll: false, scm: [$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '', excludedRegions: '', excludedRevprop: '', excludedUsers: '', filterChangelog: false, ignoreDirPropChanges: false, includedRegions: '', locations: [[cancelProcessOnExternalsFail: true, credentialsId: getCredentialsId(), depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: 'https://svn100.hotgamehl.com/svn/Html5/trunk/dldl_WX/translation_keyvalue']], quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']]
@@ -441,7 +441,7 @@ def generateTranslationKV_API() {
 def mergeSVN() {
     dir('automator') {
             checkoutGit("http://192.168.1.205:3000/yzp/automator.git")
-            bat 'npm i'
+            bat 'pnpm i --registry https://registry.npm.taobao.org'
     }
     dir('project') {
         checkoutSVN(params.HG_REPOSITORY_SRC)
@@ -531,7 +531,7 @@ def ftpUploadSource() {
     }
     dir('automator') {
             checkoutGit("http://192.168.1.205:3000/yzp/automator.git")
-            bat 'npm i'
+            bat 'pnpm i --registry https://registry.npm.taobao.org'
     }
     dir('ftp') {
         bat "node %WORKSPACE%/automator/main.js %WORKSPACE%/automator/cfg/dldl/ftp_upload.yml --FULL_AUTOMATIC 1 --remote_file %REMOTE_FILE% --local_file ${ params.LOCAL_FILE.tokenize(',').collect { env.WORKSPACE + '/source/' + it }.join(',')}"
@@ -626,7 +626,7 @@ def checkoutGit(url, branch = "master") {
 def pub200AutomaticIntegrated() {
     dir('automator') {
         checkoutGit("http://192.168.1.205:3000/yzp/automator.git")
-        bat 'npm i'
+        bat 'pnpm i --registry https://registry.npm.taobao.org'
     }
     dir('project') {
         // 检出代码
@@ -753,7 +753,7 @@ def generateSendTranslationKV_API() {
     lock(resource: 'conversion_api') {
         dir('automator') {
             checkoutGit("http://192.168.1.205:3000/yzp/automator.git")
-            bat 'npm i'
+            bat 'pnpm i --registry https://registry.npm.taobao.org'
         }
         dir('project/resource/assets/cfgjson') {
             checkoutComplexSVN(changelog: false, poll: false, scm: [$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '', excludedRegions: '', excludedRevprop: '', excludedUsers: '', filterChangelog: true, ignoreDirPropChanges: false, includedRegions: '''.*/resource/assets/cfgjson/\\w+\\.json
