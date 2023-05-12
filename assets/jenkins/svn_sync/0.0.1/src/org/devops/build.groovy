@@ -304,13 +304,6 @@ def getCommitUsernames() {
 
 // pubToWeb构建结束
 def sendResult2DingTalk_PubWeb() {
-    if (params.HG_QUIET) {
-        return
-    }
-    env.result_color = currentBuild.result == 'SUCCESS' ? '#52c41a' : currentBuild.result == 'FAILURE' ? '#f5222d' : '#ff9f00'
-    env.result = currentBuild.result == 'SUCCESS' ? '成功' : currentBuild.result == 'FAILURE' ? '失败' : '取消'
-    env.description = currentBuild.description
-    env.durationString = currentBuild.durationString.minus(' and counting')
     def pubWebVersion = getPubWebVersion()
     if (pubWebVersion) {
         buildDescription ((currentBuild.description ? currentBuild.description + " " : "") + pubWebVersion)
@@ -321,6 +314,13 @@ def sendResult2DingTalk_PubWeb() {
     if (env.SVN_LAST_CHANGED_REV) {
         buildDescription ((currentBuild.description ? currentBuild.description + " r" : "") + (env.SVN_LAST_CHANGED_REV))
     }
+    if (params.HG_QUIET) {
+        return
+    }
+    env.result_color = currentBuild.result == 'SUCCESS' ? '#52c41a' : currentBuild.result == 'FAILURE' ? '#f5222d' : '#ff9f00'
+    env.result = currentBuild.result == 'SUCCESS' ? '成功' : currentBuild.result == 'FAILURE' ? '失败' : '取消'
+    env.description = currentBuild.description
+    env.durationString = currentBuild.durationString.minus(' and counting')
     dingtalk(
         robot: getDingTalkRobot(),
         type: 'ACTION_CARD',
