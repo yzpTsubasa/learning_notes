@@ -14,7 +14,7 @@ pipeline {
                 script {
                     dir('automator') {
                         build.checkoutGit("http://192.168.1.205:3000/yzp/automator.git")
-                        bat 'npm i'
+                        bat 'pnpm i --registry https://registry.npm.taobao.org'
                     }
                     print "${JENKINS_HOME}"
                     bat 'node %WORKSPACE%/automator/main.js %WORKSPACE%/automator/cfg/dldl/clean_expired.yml --FULL_AUTOMATIC 1 --workspaceFolder %JENKINS_HOME%/workspace --relative_path */project/bin-release/web/v*'
