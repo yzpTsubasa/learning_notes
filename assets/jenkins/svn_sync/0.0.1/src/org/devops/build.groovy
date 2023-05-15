@@ -305,14 +305,14 @@ def getCommitUsernames() {
 // pubToWeb构建结束
 def sendResult2DingTalk_PubWeb() {
     def pubWebVersion = getPubWebVersion()
+    if (env.SVN_LAST_CHANGED_REV) {
+        buildDescription ((currentBuild.description ? currentBuild.description + " r" : "") + (env.SVN_LAST_CHANGED_REV))
+    }
     if (pubWebVersion) {
-        buildDescription ((currentBuild.description ? currentBuild.description + " " : "") + pubWebVersion)
+        buildDescription ((currentBuild.description ? currentBuild.description + " v" : "") + pubWebVersion)
     }
     if (params.HG_REPOSITORY_SRC) {
         buildDescription ((currentBuild.description ? currentBuild.description + " " : "") + (params.HG_REPOSITORY_SRC - ~/.*\//))
-    }
-    if (env.SVN_LAST_CHANGED_REV) {
-        buildDescription ((currentBuild.description ? currentBuild.description + " r" : "") + (env.SVN_LAST_CHANGED_REV))
     }
     if (params.HG_QUIET) {
         return
