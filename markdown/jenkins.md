@@ -285,3 +285,7 @@ hudson.model.WorkspaceCleanupThread.disabled = true
 ``` groovy
 println(hudson.model.WorkspaceCleanupThread.disabled)
 ```
+
+## 版本升级
+- 2.303.1
+- 2.346.3 Require Java 11 or newer
