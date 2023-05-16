@@ -842,7 +842,11 @@ def getRootBuildMobile() {
     if (!userId) {
         return ""
     } else {
-        def property = hudson.model.User.getById(userId, false).getProperty(io.jenkins.plugins.DingTalkUserProperty.class)
+        def user = hudson.model.User.getById(userId, false);
+        if (!user) {
+            return ""
+        }
+        def property = user.getProperty(io.jenkins.plugins.DingTalkUserProperty.class)
         if (!property) {
             return ""
         }
