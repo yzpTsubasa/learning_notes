@@ -839,18 +839,10 @@ def getRootBuildUserId() {
 // 获取最上游构建的发起人手机
 def getRootBuildMobile() {
     def userId = getRootBuildUserId()
-    if (!userId) {
+    if (!userId || userId.getClass().name == "net.sf.json.JSONNull") {
         return ""
     } else {
-        def user = hudson.model.User.getById(userId, false);
-        if (!user) {
-            return ""
-        }
-        def property = user.getProperty(io.jenkins.plugins.DingTalkUserProperty.class)
-        if (!property) {
-            return ""
-        }
-        return property.getMobile()
+        return hudson.model.User.getById(userId, false).getProperty(io.jenkins.plugins.DingTalkUserProperty.class).getMobile()
     }
 }
 
