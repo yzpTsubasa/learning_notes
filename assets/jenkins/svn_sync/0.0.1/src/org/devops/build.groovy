@@ -696,8 +696,7 @@ def addBuildDescripion(str) {
 def validateDev() {
     dir('project') {
         // 检出代码
-        checkoutSVN(params.HG_REPOSITORY_SRC)
-
+        checkoutComplexSVN(changelog: true, poll: true, scm: [$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '', excludedRegions: '', excludedRevprop: '', excludedUsers: '', filterChangelog: true, ignoreDirPropChanges: false, includedRegions: '''.*/src/.*\\w+\\.ts''', locations: [[cancelProcessOnExternalsFail: true, credentialsId: getCredentialsId(), depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: "$HG_REPOSITORY_SRC"]], quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']])
         // 编译
         if (needCompile()) {
             addInfoBadge text: '触发编译'

@@ -22,7 +22,7 @@ pipeline {
     }
 
     post {
-        failure {
+        changed {
             script {
                 if (build.needCompile()) {
                     build.sendResult2DingTalk()
