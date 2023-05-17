@@ -304,16 +304,16 @@ def getCommitUsernames() {
 
 // pubToWeb构建结束
 def sendResult2DingTalk_PubWeb() {
-    buildDescription ((currentBuild.description ? currentBuild.description + " " : "") + "${new Date().format('yyyy-MM-dd(E)HH:mm:ss', TimeZone.getTimeZone('Asia/Shanghai')) - '星期'}")
+    addBuildDescripion ("${new Date().format('yyyy-MM-dd(E)HH:mm:ss', TimeZone.getTimeZone('Asia/Shanghai')) - '星期'}")
     def pubWebVersion = getPubWebVersion()
     if (env.SVN_LAST_CHANGED_REV) {
-        buildDescription ((currentBuild.description ? currentBuild.description + " r" : "") + (env.SVN_LAST_CHANGED_REV))
+        addBuildDescripion ("r" + (env.SVN_LAST_CHANGED_REV))
     }
     if (pubWebVersion) {
-        buildDescription ((currentBuild.description ? currentBuild.description + " v" : "") + pubWebVersion)
+        addBuildDescripion ("v" + pubWebVersion)
     }
     if (params.HG_REPOSITORY_SRC) {
-        buildDescription ((currentBuild.description ? currentBuild.description + " " : "") + (params.HG_REPOSITORY_SRC - ~/.*\//))
+        addBuildDescripion ((params.HG_REPOSITORY_SRC - ~/.*\//))
     }
     if (params.HG_QUIET) {
         return
@@ -646,9 +646,9 @@ def pub200AutomaticIntegrated() {
         // 编译
         if (needCompile()) {
             addInfoBadge text: '触发编译'
-            buildDescription ((currentBuild.description ? currentBuild.description + " " : "") + '编译 ' + getCommitUsernames())
+            addBuildDescripion (getCommitUsernames().join(","))
             if (env.SVN_LAST_CHANGED_REV) {
-                buildDescription ((currentBuild.description ? currentBuild.description + " r" : "") + (env.SVN_LAST_CHANGED_REV))
+                addBuildDescripion ("r" + env.SVN_LAST_CHANGED_REV)
             }
             def pub_200_out_bat = ''
             // 编译代码的备选批处理文件
@@ -688,6 +688,11 @@ mklink /j "resource" "../resource"
     }
 }
 
+def addBuildDescripion(str) {
+    if (!str) return
+    buildDescription ((currentBuild.description ? currentBuild.description + " | " : "") + str)
+}
+
 def validateDev() {
     dir('project') {
         // 检出代码
@@ -696,9 +701,9 @@ def validateDev() {
         // 编译
         if (needCompile()) {
             addInfoBadge text: '触发编译'
-            buildDescription ((currentBuild.description ? currentBuild.description + " " : "") + '编译 ' + getCommitUsernames())
+            addBuildDescripion(getCommitUsernames().join(","))
             if (env.SVN_LAST_CHANGED_REV) {
-                buildDescription ((currentBuild.description ? currentBuild.description + " r" : "") + (env.SVN_LAST_CHANGED_REV))
+                addBuildDescripion("r" + (env.SVN_LAST_CHANGED_REV))
             }
             // bat([label: '校验', returnStdout: false, script: params.HG_VALIDATE_SCRIPT])
             compileLog = bat([label: '校验', returnStdout: true, script: params.HG_VALIDATE_SCRIPT])
