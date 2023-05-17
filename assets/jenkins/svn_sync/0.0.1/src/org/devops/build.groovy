@@ -304,6 +304,7 @@ def getCommitUsernames() {
 
 // pubToWeb构建结束
 def sendResult2DingTalk_PubWeb() {
+    buildDescription ((currentBuild.description ? currentBuild.description + " " : "") + "${new Date().format('yyyy-MM-dd(E)HH:mm:ss', TimeZone.getTimeZone('Asia/Shanghai')) - '星期'}")
     def pubWebVersion = getPubWebVersion()
     if (env.SVN_LAST_CHANGED_REV) {
         buildDescription ((currentBuild.description ? currentBuild.description + " r" : "") + (env.SVN_LAST_CHANGED_REV))
