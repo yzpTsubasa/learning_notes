@@ -279,3 +279,8 @@ CreateObject("Wscript.Shell").Run "node . ./cfg/tsubasa/hotkeys_tortoise.yml" + 
 ```sh
 control userpasswords2
 ```
+
+## Powershell 连续执行命令
+```sh
+git status; git log
+```
