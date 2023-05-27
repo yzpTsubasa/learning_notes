@@ -284,3 +284,36 @@ control userpasswords2
 ```sh
 git status; git log
 ```
+
+## Powershell 环境变量
+```ps1
+#查看所有环境变量  
+ls env:
+
+#搜索环境变量   
+ls env:NODE*
+
+#查看单个环境变量 
+$env:NODE_ENV
+
+#添加/更新环境变量 
+$env:NODE_ENV=development
+
+#删除环境变量        
+del evn:NODE_ENV
+```
+
+## cmd 环境变量
+```sh
+#查看所有环境变量     
+set
+
+#查看单个环境变量     
+set NODE_ENV
+
+#添加/更新环境变量     
+set NODE_ENV=development
+
+#删除环境变量         
+set NODE_ENV=
+```
