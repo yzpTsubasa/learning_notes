@@ -647,9 +647,7 @@ def pub200AutomaticIntegrated() {
             addBuildDescripion ("r" + env.SVN_LAST_CHANGED_REV)
         }
         addBuildDescripion (getCommitUsernames().join(","))
-        if (params.HG_REPOSITORY_SRC) {
-            addBuildDescripion ((params.HG_REPOSITORY_SRC - ~/.*\//))
-        }
+        addBuildDescripion (getChangeString().join(","))
         // 编译
         if (needCompile()) {
             // addInfoBadge text: '触发编译'
@@ -706,9 +704,7 @@ def validateDev() {
             addBuildDescripion ("r" + env.SVN_LAST_CHANGED_REV)
         }
         addBuildDescripion (getCommitUsernames().join(","))
-        if (params.HG_REPOSITORY_SRC) {
-            addBuildDescripion ((params.HG_REPOSITORY_SRC - ~/.*\//))
-        }
+        addBuildDescripion (getChangeString().join(","))
         // 编译
         if (needCompile()) {
             // addInfoBadge text: '触发编译'
