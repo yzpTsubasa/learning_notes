@@ -642,14 +642,14 @@ def pub200AutomaticIntegrated() {
         if (params.HG_MONITOR_IMAGE) {
             bat([label: '图片资源检测', returnStdout: false, script: "node %WORKSPACE%/automator/main.js %WORKSPACE%/automator/cfg/dldl/check_image_notify.yml --FULL_AUTOMATIC --workspaceFolder %WORKSPACE%/project --webhook https://oapi.dingtalk.com/robot/send?access_token=d49fdc03b05ac8d52da7ad4167b94823a2c77225bb93d943440a0340db5dd313"])
         }
-
+        addBuildDescripion (getCommitUsernames().join(","))
+        if (env.SVN_LAST_CHANGED_REV) {
+            addBuildDescripion ("r" + env.SVN_LAST_CHANGED_REV)
+        }
         // 编译
         if (needCompile()) {
-            addInfoBadge text: '触发编译'
-            addBuildDescripion (getCommitUsernames().join(","))
-            if (env.SVN_LAST_CHANGED_REV) {
-                addBuildDescripion ("r" + env.SVN_LAST_CHANGED_REV)
-            }
+            // addInfoBadge text: '触发编译'
+            addBuildDescripion ("编译")
             def pub_200_out_bat = ''
             // 编译代码的备选批处理文件
             def pub_200_out_bat_alternatives = [
@@ -697,13 +697,14 @@ def validateDev() {
     dir('project') {
         // 检出代码
         checkoutComplexSVN(changelog: true, poll: true, scm: [$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '', excludedRegions: '', excludedRevprop: '', excludedUsers: '', filterChangelog: true, ignoreDirPropChanges: false, includedRegions: '''.*/src/.*\\w+\\.ts''', locations: [[cancelProcessOnExternalsFail: true, credentialsId: getCredentialsId(), depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: "$HG_REPOSITORY_SRC"]], quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']])
+        addBuildDescripion(getCommitUsernames().join(","))
+        if (env.SVN_LAST_CHANGED_REV) {
+            addBuildDescripion("r" + (env.SVN_LAST_CHANGED_REV))
+        }
         // 编译
         if (needCompile()) {
-            addInfoBadge text: '触发编译'
-            addBuildDescripion(getCommitUsernames().join(","))
-            if (env.SVN_LAST_CHANGED_REV) {
-                addBuildDescripion("r" + (env.SVN_LAST_CHANGED_REV))
-            }
+            // addInfoBadge text: '触发编译'
+            addBuildDescripion ("编译")
             // bat([label: '校验', returnStdout: false, script: params.HG_VALIDATE_SCRIPT])
             compileLog = bat([label: '校验', returnStdout: true, script: params.HG_VALIDATE_SCRIPT])
             print compileLog
