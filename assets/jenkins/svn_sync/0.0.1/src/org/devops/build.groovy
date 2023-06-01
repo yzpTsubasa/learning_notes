@@ -315,6 +315,7 @@ def sendResult2DingTalk_PubWeb() {
     if (params.HG_REPOSITORY_SRC) {
         addBuildDescripion ((params.HG_REPOSITORY_SRC - ~/.*\//))
     }
+    addBuildDescripion (getRootBuildTriggerDesc())
     if (params.HG_QUIET) {
         return
     }
