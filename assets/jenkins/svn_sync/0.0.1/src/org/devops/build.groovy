@@ -3,7 +3,7 @@ package org.devops
 
 import org.yaml.snakeyaml.Yaml
 
-def getChangeString() {
+def getChangeString(showIndex = true) {
     MAX_MSG_LEN = 500
     // echo 'Gathering SCM changes......'
     def MAX_ITEMS = 10 // 限制记录条数上限为10条
@@ -26,7 +26,7 @@ def getChangeString() {
             return true
         }.collect {
             return it.collect {
-                "${i++}. ${it.msg.take(MAX_MSG_LEN).replaceAll('[\r\n]+', '')} by ${it.author.getFullName()} at ${it.getCommitId()}"
+                (showIndex ? "${i++}. " : "") + "${it.msg.take(MAX_MSG_LEN).replaceAll('[\r\n]+', '')} by ${it.author.getFullName()} at ${it.getCommitId()}"
             }.join('\n')
         }.join('\n')
     }
@@ -647,7 +647,7 @@ def pub200AutomaticIntegrated() {
         //     addBuildDescripion ("r" + env.SVN_LAST_CHANGED_REV)
         // }
         // addBuildDescripion (getCommitUsernames().join(","))
-        addBuildDescripion (getChangeString().join(","))
+        addBuildDescripion (getChangeString(false).join(","))
         // 编译
         if (needCompile()) {
             // addInfoBadge text: '触发编译'
@@ -704,7 +704,7 @@ def validateDev() {
         //     addBuildDescripion ("r" + env.SVN_LAST_CHANGED_REV)
         // }
         // addBuildDescripion (getCommitUsernames().join(","))
-        addBuildDescripion (getChangeString().join(","))
+        addBuildDescripion (getChangeString(false).join(","))
         // 编译
         if (needCompile()) {
             // addInfoBadge text: '触发编译'
