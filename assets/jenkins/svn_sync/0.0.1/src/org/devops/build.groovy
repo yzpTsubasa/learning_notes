@@ -631,7 +631,9 @@ def pub200AutomaticIntegrated() {
     }
     dir('project') {
         // 检出代码
-        checkoutSVN(params.HG_REPOSITORY_SRC)
+        // checkoutSVN(params.HG_REPOSITORY_SRC)
+        checkoutComplexSVN(changelog: true, poll: true, scm: [$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '', excludedRegions: '''.*/out/.*''', excludedRevprop: '', excludedUsers: '', filterChangelog: true, ignoreDirPropChanges: false, includedRegions: '', locations: [[cancelProcessOnExternalsFail: true, credentialsId: getCredentialsId(), depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: "$HG_REPOSITORY_SRC"]], quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']])
+
 
         if (params.HG_MONITOR_SKIN_ID) {
             bat([label: '皮肤控件ID检测', returnStdout: false, script: "node %WORKSPACE%/automator/main.js %WORKSPACE%/automator/cfg/dldl/monitor_resource_modification.yml --FULL_AUTOMATIC --workspaceFolder %WORKSPACE%/project --revisions \"${getRevisions()}\" --jenkins ${JENKINS_URL} --webhook https://oapi.dingtalk.com/robot/send?access_token=d49fdc03b05ac8d52da7ad4167b94823a2c77225bb93d943440a0340db5dd313"])
