@@ -227,6 +227,9 @@ shutdown -s -t 43200
 ``` sh
 # 设置服务依赖关系
 sc config "Jenkins" depend="gogs"
+
+# 移除所有依赖
+sc config "Jenkins" depend=/
 ```
 
 ## windows10 激活
