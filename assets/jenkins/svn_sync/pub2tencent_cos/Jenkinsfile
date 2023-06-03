@@ -17,10 +17,7 @@ pipeline {
                         // 发送通知
                         build.sendStart2DingTalk_PubWeb()
                     }
-                    dir('automator') {
-                        build.checkoutGit("http://192.168.1.205:3000/yzp/automator.git")
-                        bat 'pnpm i --registry https://registry.npm.taobao.org'
-                    }
+                    build.checkoutAutomator()
                     lock(resource: "pub2web") {
                         env.pub_ver = bat returnStdout: true, script: '@echo off && node %WORKSPACE%/automator/main.js %WORKSPACE%/automator/cfg/dldl/pubver_upgrade.yml --FULL_AUTOMATIC 1 --LOG_LEVEL 99'
                         print env.pub_ver
