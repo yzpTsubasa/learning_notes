@@ -1,0 +1,62 @@
+import groovy.json.JsonSlurperClassic
+
+pipeline {
+    agent any
+    options{
+        disableConcurrentBuilds()
+        // retry(1)
+    }
+    stages {
+        
+        stage('checkout') {
+            steps {
+              dir('project') {
+                checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'http://192.168.1.205:3000/917/egret-ui-editor-opensource']]])
+              }
+            }
+        }
+        stage('build') {
+            steps {
+              dir('project') {
+                bat "npm run setup-win"
+                bat '''
+set HTTP_PROXY=http://127.0.0.1:1080
+set HTTPS_PROXY=http://127.0.0.1:1080
+npm run dist
+'''
+              }
+            }
+        }
+        stage('arrange') {
+            steps {
+                script {
+                  dir("project") {
+                    // 从文件中读取 JSON 字符串
+                    def jsonString = readFile(file: "${env.WORKSPACE}/project/package.json") // '{"k":"1", "n":"2"}'
+                    // 解析 JSON 字符串为对象
+                    def packageData = new JsonSlurperClassic().parseText(jsonString)
+                    print packageData
+                    bat """
+rem 修改编码为 utf-8
+chcp 65001 > nul
+copy /y \".\\artifacts\\out\\Egret UI Editor_${packageData.version}.exe\" \".\\artifacts\\out\\Egret UI Editor_latest.exe\"
+"""
+                    // mklink
+                    bat '''if not exist "project/artifacts/out/build" (
+mklink /j "artifacts/out/build" "build"
+)
+'''
+                    
+                  }
+                }
+            }
+        }
+    }
+    post {
+        always {
+            script {
+                print "Result: ${currentBuild.result}"
+            }
+        }
+    }
+}
