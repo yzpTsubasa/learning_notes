@@ -42,7 +42,7 @@ chcp 65001 > nul
 copy /y \".\\artifacts\\out\\Egret UI Editor_${packageData.version}.exe\" \".\\artifacts\\out\\Egret UI Editor_latest.exe\"
 """
                     // mklink
-                    bat '''if not exist "project/artifacts/out/build" (
+                    bat '''if not exist "artifacts/out/build" (
 mklink /j "artifacts/out/build" "build"
 )
 '''
