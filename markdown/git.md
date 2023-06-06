@@ -109,3 +109,26 @@ git 默认中文文件名是 \xxx\xxx 等八进制形式，是因为 对0x80以�
 
 git config --global core.quotepath false
 ```
+
+## git stash 贮藏
+```sh
+# 贮藏
+git stash save "顶栏消耗品可配置"
+
+# 显示贮藏列表
+git stash list
+
+# 显示贮藏概要 (0 代表 索引 0，即第一条)
+git stash show 0
+
+# 显示贮藏详情 (1 代表 索引 1，即第二条)。浏览过程中，按 "Q" 键退出
+git stash show -p 1
+
+# 应用贮藏（不会删除贮藏）
+git stash apply 0
+# 删除贮藏
+git stash drop 0
+
+# 弹出并应用贮藏（会删除贮藏）
+git stash pop 0
+```
