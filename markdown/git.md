@@ -114,6 +114,8 @@ git config --global core.quotepath false
 ```sh
 # 贮藏
 git stash save "顶栏消耗品可配置"
+# -u | --include-untracked ，包含未添加的
+git stash -u -m "存档"
 
 # 显示贮藏列表
 git stash list
