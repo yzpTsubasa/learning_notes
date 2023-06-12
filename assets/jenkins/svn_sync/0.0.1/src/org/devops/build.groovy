@@ -3,7 +3,7 @@ package org.devops
 
 import org.yaml.snakeyaml.Yaml
 
-def getChangeString(showIndex = true) {
+def getChangeString(showIndex = true, showDetail = true) {
     MAX_MSG_LEN = 500
     // echo 'Gathering SCM changes......'
     def MAX_ITEMS = 10 // 限制记录条数上限为10条
@@ -26,7 +26,7 @@ def getChangeString(showIndex = true) {
             return true
         }.collect {
             return it.collect {
-                (showIndex ? "${i++}. " : "") + "${it.msg.take(MAX_MSG_LEN).replaceAll('[\r\n]+', '')} by ${it.author.getFullName()} at ${it.getCommitId()}"
+                (showIndex ? "${i++}. " : "") + "${it.msg.take(MAX_MSG_LEN).replaceAll('[\r\n]+', '')}" + (showDetail ? " by ${it.author.getFullName()} at ${it.getCommitId()}" : "")
             }.join('\n')
         }.join('\n')
     }
