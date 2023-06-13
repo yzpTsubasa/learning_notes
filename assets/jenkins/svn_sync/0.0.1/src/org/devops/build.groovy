@@ -523,7 +523,7 @@ def getSVNInfo() {
 }
 
 // 使用本地环境的 svn 检出, 不需要 svn upgrade
-def checkoutSVN(scmUrl) {
+def checkoutSVN(scmUrl, poll = true, changelog = true, quiet = true, local = ".") {
     if (fileExists('.svn')) {
         // 检查状态
         def status = bat returnStdout: true, script: '@echo off && svn status'
@@ -544,7 +544,7 @@ def checkoutSVN(scmUrl) {
         }
 }
     // pollSCM
-    checkout([$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '', excludedRegions: '', excludedRevprop: '', excludedUsers: '', filterChangelog: true, ignoreDirPropChanges: false, includedRegions: '', locations: [[cancelProcessOnExternalsFail: true, credentialsId: getCredentialsId(), depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: "${scmUrl}"]], quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']])
+    checkout changelog: changelog, poll: poll, scm: [$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '', excludedRegions: '', excludedRevprop: '', excludedUsers: '', filterChangelog: false, ignoreDirPropChanges: false, includedRegions: '', locations: [[cancelProcessOnExternalsFail: true, credentialsId: getCredentialsId(), depthOption: 'infinity', ignoreExternalsOption: true, local: local, remote: "${scmUrl}"]], quietOperation: quiet, workspaceUpdater: [$class: 'UpdateUpdater']]
     getSVNInfo()
 }
 
