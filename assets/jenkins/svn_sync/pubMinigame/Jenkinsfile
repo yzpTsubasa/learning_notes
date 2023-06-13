@@ -9,7 +9,7 @@ pipeline {
     }
 
     stages {
-        stage('static_resource') {
+        stage('init') {
             steps{
                 script {
                     dir("project") {
@@ -20,6 +20,21 @@ pipeline {
                     build.checkoutAutomator()
                     // Environment Variables
                     env.WORKSPACE_FOLDER = "${env.WORKSPACE}/project"
+
+                    def parts = params.HG_MINIGAME_REPOSITORY_SRC.split("/")
+                    def minigame_folder = parts[parts.size() - 1]
+                    dir(minigame_folder) {
+                        build.checkoutSVN(params.HG_MINIGAME_REPOSITORY_SRC)
+                    }
+                    // Environment Variables
+                    env.MINIGAME_PROJECT = "${WORKSPACE}/${minigame_folder}"
+                }
+            }
+        }
+        
+        stage('publish_static_resource') {
+            steps{
+                script {
                     lock(resource: "pub2web") {
                         env.PUB_VER = bat returnStdout: true, script: '@echo off && node %WORKSPACE%/automator/main.js %WORKSPACE%/automator/cfg/release/web/web_upgrade_pub_ver.yml --FULL_AUTOMATIC 1 --LOG_LEVEL 99'
                         print env.PUB_VER
@@ -30,21 +45,21 @@ pipeline {
                     }
                 }
             }
+            when { expression { !params.SKIP_PUBLISH_STATIC_RESOURCE } }
         }
-        stage('minigame') {
+        stage('minigame_upgrade_version') {
             steps {
                 script {
-                    def parts = params.HG_MINIGAME_REPOSITORY_SRC.split("/")
-                    def minigame_folder = parts[parts.size() - 1]
-                    dir(minigame_folder) {
-                        build.checkoutSVN(params.HG_MINIGAME_REPOSITORY_SRC)
-                    }
-                    // Environment Variables
-                    env.MINIGAME_PROJECT = "${WORKSPACE}/${minigame_folder}"
-                    env.WORKSPACE_FOLDER = "${WORKSPACE}/project"
                     lock(resource: "pub2web") {
                         bat 'node %WORKSPACE%/automator/main.js %WORKSPACE%/automator/cfg/release/mini/mini_upgrade_pub_ver.yml --FULL_AUTOMATIC 1'
                     }
+                }
+            }
+            when { expression { !params.SKIP_MINIGAME_UPGRADE_VERSION } }
+        }
+        stage('minigame_upload') {
+            steps {
+                script {
                     bat 'node %WORKSPACE%/automator/main.js %WORKSPACE%/automator/cfg/release/mini/mini_upload.yml --FULL_AUTOMATIC 1'
                 }
             }
@@ -55,7 +70,7 @@ pipeline {
     post { 
         always { 
             script {
-                build.sendResult2DingTalk_PubWeb()
+                build.sendResult2DingTalk_PubMinigame()
                 if (params.MAIL_TO) {
                     build.sendResult2Emailext()
                 }

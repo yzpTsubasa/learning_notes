@@ -337,6 +337,55 @@ def sendResult2DingTalk_PubWeb() {
     )
 }
 
+def sendResult2DingTalk_PubMinigame() {
+    // addBuildDescripion ("${new Date().format('yyyy-MM-dd(E)HH:mm:ss', TimeZone.getTimeZone('Asia/Shanghai')) - '星期'}")
+    def pubWebVersion = getPubWebVersion()
+    if (env.SVN_LAST_CHANGED_REV) {
+        addBuildDescripion ("r" + (env.SVN_LAST_CHANGED_REV))
+    }
+    if (pubWebVersion) {
+        addBuildDescripion ("v" + pubWebVersion)
+    }
+    if (params.HG_REPOSITORY_SRC) {
+        addBuildDescripion ((params.HG_REPOSITORY_SRC - ~/.*\//))
+    }
+    addBuildDescripion (getRootBuildTriggerDesc())
+    if (params.HG_QUIET) {
+        return
+    }
+    env.result_color = currentBuild.result == 'SUCCESS' ? '#52c41a' : currentBuild.result == 'FAILURE' ? '#f5222d' : '#ff9f00'
+    env.result = currentBuild.result == 'SUCCESS' ? '成功' : currentBuild.result == 'FAILURE' ? '失败' : '取消'
+    env.description = currentBuild.description
+    env.durationString = currentBuild.durationString.minus(' and counting')
+    dingtalk(
+        robot: getDingTalkRobot(),
+        type: 'ACTION_CARD',
+        title: "${currentBuild.fullDisplayName} ${result}",
+        at: getAtUsers(),
+        atAll: false,
+        text: [
+            "# **[${currentBuild.fullDisplayName}](${BUILD_URL})**",
+            '***',
+            "- 状态 <font color=${result_color}>${result}</font>",
+            "- 资源版本 <font color=${result_color}>${pubWebVersion ? pubWebVersion : 'Unknown'}</font>",
+            "- 发起 ${getRootBuildTriggerDesc()}",
+            "- 时刻 ${new Date().format('yyyy-MM-dd(E)HH:mm:ss', TimeZone.getTimeZone('Asia/Shanghai')) - '星期'}",
+            "- 用时 ${durationString}",
+            '- 仓库',
+            params.HG_REPOSITORY_SRC ? (params.HG_REPOSITORY_SRC - ~/.*\//) : 'Unknown',
+            '- logo ' + (hasLogo2Refresh() ? '<font color=#ff9f00>已修改</font>' : '未修改'),
+            '- 记录',
+            '***',
+        ] + getChangeString() + (
+            currentBuild.result == 'FAILURE' ? [
+                '***',
+                "- <font color=${result_color}>失败日志</font>",
+                getTailLogString(),
+            ] : []
+        )
+    )
+}
+
 // 通用构建通知
 def sendCommonResult2DingTalk() {
     if (params.HG_QUIET) {
