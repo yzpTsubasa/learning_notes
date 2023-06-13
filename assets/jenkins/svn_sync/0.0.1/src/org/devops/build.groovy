@@ -339,6 +339,10 @@ def sendResult2DingTalk_PubWeb() {
 
 def sendResult2DingTalk_PubMinigame() {
     // addBuildDescripion ("${new Date().format('yyyy-MM-dd(E)HH:mm:ss', TimeZone.getTimeZone('Asia/Shanghai')) - '星期'}")
+    def minigameVersion = getMinigameVersion()
+    if (minigameVersion) {
+        addBuildDescripion (minigameVersion)
+    }
     def pubWebVersion = getPubWebVersion()
     if (env.SVN_LAST_CHANGED_REV) {
         addBuildDescripion ("r" + (env.SVN_LAST_CHANGED_REV))
@@ -368,6 +372,7 @@ def sendResult2DingTalk_PubMinigame() {
             '***',
             "- 状态 <font color=${result_color}>${result}</font>",
             "- 资源版本 <font color=${result_color}>${pubWebVersion ? pubWebVersion : 'Unknown'}</font>",
+            "- 小程序版本 <font color=${result_color}>${minigameVersion ? minigameVersion : 'Unknown'}</font>",
             "- 发起 ${getRootBuildTriggerDesc()}",
             "- 时刻 ${new Date().format('yyyy-MM-dd(E)HH:mm:ss', TimeZone.getTimeZone('Asia/Shanghai')) - '星期'}",
             "- 用时 ${durationString}",
@@ -549,6 +554,15 @@ def getPubWebVersion() {
         return result[0][1]
     }
     return null
+}
+
+def getMinigameVersion() {
+    def consoleText = httpRequest quiet: true, url: "${BUILD_URL}consoleText", wrapAsMultipart: false
+    def result = ((consoleText.content =~ /MiniGameVersion: "(.*)"/))
+    if (result.find()) {
+        return result[0][1]
+    }
+    return null;
 }
 
 // 上传资源到FTP上
