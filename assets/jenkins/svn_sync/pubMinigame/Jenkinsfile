@@ -24,7 +24,7 @@ pipeline {
                     def parts = params.HG_MINIGAME_REPOSITORY_SRC.split("/")
                     def minigame_folder = parts[parts.size() - 1]
                     dir(minigame_folder) {
-                        build.checkoutSVN(params.HG_MINIGAME_REPOSITORY_SRC)
+                        build.checkoutSVN(params.HG_MINIGAME_REPOSITORY_SRC, false, false)
                     }
                     // Environment Variables
                     env.MINIGAME_PROJECT = "${WORKSPACE}/${minigame_folder}"
