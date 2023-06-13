@@ -131,6 +131,9 @@ new Date().format("yyyy-MM-dd HH:mm:ss")
 new Date().format("yyyy-MM-dd'T'HH:mm:ss.SSS", TimeZone.getTimeZone('Asia/Shanghai'))
 ```
 
+## [添加公共库](http://192.168.1.205:8080/configure)
+![Global Pipeline Libraries](../assets/jenkins/192.168.1.205_8080_configure.png)
+
 ## 执行 sql 文件
 ``` groovy
 def sqlfile = unstashParam "SQL_FILE"
