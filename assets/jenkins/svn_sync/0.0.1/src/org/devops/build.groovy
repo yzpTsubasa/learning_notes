@@ -558,7 +558,7 @@ def getPubWebVersion() {
 
 def getMinigameVersion() {
     def consoleText = httpRequest quiet: true, url: "${BUILD_URL}consoleText", wrapAsMultipart: false
-    def result = ((consoleText.content =~ /MiniGameVersion: "(.*)"/))
+    def result = ((consoleText.content =~ /"MiniGameVersion: (.*)"/))
     if (result.find()) {
         return result[0][1]
     }
