@@ -343,6 +343,10 @@ def sendResult2DingTalk_PubMinigame() {
     if (minigameVersion) {
         addBuildDescripion (minigameVersion)
     }
+    def minigameToggleOperation = getMiniGameToggleOperation()
+    if (minigameToggleOperation) {
+        addBuildDescripion (minigameToggleOperation)
+    }
     def pubWebVersion = getPubWebVersion()
     if (env.SVN_LAST_CHANGED_REV) {
         addBuildDescripion ("r" + (env.SVN_LAST_CHANGED_REV))
@@ -373,11 +377,11 @@ def sendResult2DingTalk_PubMinigame() {
             "- 状态 <font color=${result_color}>${result}</font>",
             pubWebVersion ? "- 资源版本 <font color=${result_color}>${pubWebVersion}</font>" : "",
             "- 小游戏版本 <font color=${result_color}>${minigameVersion ? minigameVersion : 'Unknown'}</font>",
+            minigameToggleOperation ? "- 小游戏配置 <font color=${result_color}>${minigameToggleOperation}</font>" : "",
             "- 发起 ${getRootBuildTriggerDesc()}",
             "- 时刻 ${new Date().format('yyyy-MM-dd(E)HH:mm:ss', TimeZone.getTimeZone('Asia/Shanghai')) - '星期'}",
             "- 用时 ${durationString}",
-            '- 仓库',
-            params.HG_REPOSITORY_SRC ? (params.HG_REPOSITORY_SRC - ~/.*\//) : 'Unknown',
+            params.HG_REPOSITORY_SRC ? ('- 仓库 ' + (params.HG_REPOSITORY_SRC - ~/.*\//)) : "",
             '- 记录',
             '***',
         ] + getChangeString() + (
@@ -558,6 +562,15 @@ def getPubWebVersion() {
 def getMinigameVersion() {
     def consoleText = httpRequest quiet: true, url: "${BUILD_URL}consoleText", wrapAsMultipart: false
     def result = ((consoleText.content =~ /"MiniGameVersion: (.*)"/))
+    if (result.find()) {
+        return result[0][1]
+    }
+    return null;
+}
+
+def getMiniGameToggleOperation() {
+    def consoleText = httpRequest quiet: true, url: "${BUILD_URL}consoleText", wrapAsMultipart: false
+    def result = ((consoleText.content =~ /"MiniGameToggleOperation: (.*)"/))
     if (result.find()) {
         return result[0][1]
     }
