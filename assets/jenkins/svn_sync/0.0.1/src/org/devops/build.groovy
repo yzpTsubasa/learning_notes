@@ -390,7 +390,7 @@ def sendResult2DingTalk_PubMinigame() {
                 "- <font color=${result_color}>失败日志</font>",
                 getTailLogString(),
             ] : []
-        )).collect{ it }
+        )).findAll{ it }
     )
 }
 
