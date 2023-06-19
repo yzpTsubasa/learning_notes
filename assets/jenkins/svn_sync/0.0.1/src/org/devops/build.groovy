@@ -371,7 +371,7 @@ def sendResult2DingTalk_PubMinigame() {
         title: "${currentBuild.fullDisplayName} ${result}",
         at: getAtUsers(),
         atAll: false,
-        text: [
+        text: ([
             "# **[${currentBuild.fullDisplayName}](${BUILD_URL})**",
             '***',
             "- 状态 <font color=${result_color}>${result}</font>",
@@ -390,7 +390,7 @@ def sendResult2DingTalk_PubMinigame() {
                 "- <font color=${result_color}>失败日志</font>",
                 getTailLogString(),
             ] : []
-        )
+        )).collect{ it }
     )
 }
 
