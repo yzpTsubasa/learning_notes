@@ -64,7 +64,7 @@ pipeline {
                 }
             }
             options {
-                timeout(1)
+                timeout(5)
             }
         }
     }
