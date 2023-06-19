@@ -63,6 +63,9 @@ pipeline {
                     bat 'node %WORKSPACE%/automator/main.js %WORKSPACE%/automator/cfg/release/mini/mini_upload.yml --FULL_AUTOMATIC 1'
                 }
             }
+            options {
+                timeout(5)
+            }
         }
     }
 
