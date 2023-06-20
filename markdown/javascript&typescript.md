@@ -833,3 +833,10 @@ export function collectData(payload: Object) {
 //输出: 
 "https://www.baidu.com/s?returnURL=http%3A%2F%2Fwww.test.com%2F"
 ```
+
+## ~/.npmrc 配置
+```sh
+registry=https://registry.npmmirror.com/
+electron_mirror=https://cdn.npmmirror.com/binaries/electron/
+electron_builder_binaries_mirror=https://npmmirror.com/mirrors/electron-builder-binaries
+```
