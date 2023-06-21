@@ -134,3 +134,11 @@ git stash drop 0
 # 弹出并应用贮藏（会删除贮藏）
 git stash pop 0
 ```
+
+## git 分支重命名
+```sh
+# 重命名当前分支
+git branch -m [NEW_NAME]
+# 重命名指定的 OLD_NAME 分支
+git branch -m [OLD_NAME] [NEW_NAME]
+```
