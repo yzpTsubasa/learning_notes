@@ -840,3 +840,40 @@ registry=https://registry.npmmirror.com/
 electron_mirror=https://cdn.npmmirror.com/binaries/electron/
 electron_builder_binaries_mirror=https://npmmirror.com/mirrors/electron-builder-binaries
 ```
+
+## 为 js 配置 eslint / prettier
+```sh
+# 安装依赖
+npm i -D eslint eslint-plugin-prettier
+```
+
+创建 `.eslintrc.js` 文件
+```js
+module.exports = {
+    plugins: ["prettier"],
+    rules: {
+        "prettier/prettier": "error",
+    },
+    parserOptions: {
+        ecmaVersion: 6,
+        sourceType: "module",
+    },
+};
+```
+
+创建 `.prettierrc` 文件
+```js
+{
+  "tabWidth": 4,
+  "trailingComma": "all"
+}
+```
+> 额外的可以配置 `.vscode/settings.json`。在保存时自动格式化
+```json
+{
+  "editor.formatOnSave": true,
+  "[json]": {
+    "editor.formatOnSave": false
+  }
+}
+```
