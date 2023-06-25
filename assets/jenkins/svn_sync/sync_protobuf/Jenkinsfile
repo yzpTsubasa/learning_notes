@@ -29,11 +29,14 @@ pipeline {
                     if (!env.HG_PROTOBUF_PATH) {
                         env.HG_PROTOBUF_PATH = "src/protobuf/proto"
                     }
+                    if (!env.HG_EXTRA_CREDENTIALS_ID) {
+                        env.HG_EXTRA_CREDENTIALS_ID = '81e61ad7-0457-456c-b158-84db028669b9'
+                    }
                     dir("project/${env.HG_PROTOBUF_PATH}") {
-                        build.checkoutSVN("${params.HG_REPOSITORY_SRC}/${env.HG_PROTOBUF_PATH}")
+                        build.checkoutSVN("${params.HG_REPOSITORY_SRC}/${env.HG_PROTOBUF_PATH}", false, false)
                     }
                     dir("protobuf") {
-                        build.checkoutSVN(params.HG_REPOSITORY_SRC_PROTOBUF)
+                        checkout([$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '', excludedRegions: '', excludedRevprop: '', excludedUsers: '', filterChangelog: false, ignoreDirPropChanges: false, includedRegions: '', locations: [[cancelProcessOnExternalsFail: true, credentialsId: env.HG_EXTRA_CREDENTIALS_ID, depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: params.HG_REPOSITORY_SRC_PROTOBUF]], quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']])
                     }
                 }
             }
