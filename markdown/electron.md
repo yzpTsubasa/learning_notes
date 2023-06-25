@@ -5,3 +5,6 @@
 npm install --save-dev electron-packager
 npx electron-packager . egret_ui_editor --platform win32 --arch x64
 ```
+
+## ipc(inter process communication)
+![Alt text](../assets/electron/ipc.png)
