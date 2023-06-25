@@ -851,6 +851,7 @@ npm i -D eslint eslint-plugin-prettier
 ```js
 module.exports = {
     env: {
+        commonjs: true,
         browser: true,
         es2021: true,
         node: true,
