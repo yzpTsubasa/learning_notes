@@ -850,15 +850,22 @@ npm i -D eslint eslint-plugin-prettier
 创建 `.eslintrc.js` 文件
 ```js
 module.exports = {
+    env: {
+        browser: true,
+        es2021: true,
+        node: true,
+    },
     plugins: ["prettier"],
     rules: {
         "prettier/prettier": "error",
+        "no-undef": "error",
     },
     parserOptions: {
         ecmaVersion: 6,
         sourceType: "module",
     },
 };
+
 ```
 
 创建 `.prettierrc` 文件
@@ -874,6 +881,9 @@ module.exports = {
   "editor.formatOnSave": true,
   "[json]": {
     "editor.formatOnSave": false
+  },
+  "editor.codeActionsOnSave": {
+    "source.fixAll": true
   }
 }
 ```
