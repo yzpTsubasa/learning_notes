@@ -26,8 +26,11 @@ pipeline {
         stage('checkout') {
             steps {
                 script {
-                    dir("project") {
-                        build.checkoutComplexSVN([$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '', excludedRegions: '', excludedRevprop: '', excludedUsers: '', filterChangelog: true, ignoreDirPropChanges: false, includedRegions: '.*/src/protobuf/proto/\\\\w+\\\\.proto', locations: [[cancelProcessOnExternalsFail: true, credentialsId: 'dfb8344e-2d0c-4750-8154-9503745a01f9', depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: params.HG_REPOSITORY_SRC]], quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']])
+                    if (!env.HG_PROTOBUF_PATH) {
+                        env.HG_PROTOBUF_PATH = "src/protobuf/proto"
+                    }
+                    dir("project/${env.HG_PROTOBUF_PATH}") {
+                        build.checkoutSVN("${params.HG_REPOSITORY_SRC}/${env.HG_PROTOBUF_PATH}")
                     }
                     dir("protobuf") {
                         build.checkoutSVN(params.HG_REPOSITORY_SRC_PROTOBUF)
@@ -37,8 +40,8 @@ pipeline {
         }
         stage('sync protobuf file') {
             steps {
-                fileOperations([fileCopyOperation(excludes: '', flattenFiles: true, includes: 'protobuf/*.proto', renameFiles: false, sourceCaptureExpression: '', targetLocation: "project/" + (env.HG_PROTOBUF_PATH ? env.HG_PROTOBUF_PATH : "src/protobuf/proto"), targetNameExpression: '')])
-                dir("project/" + (env.HG_PROTOBUF_PATH ? env.HG_PROTOBUF_PATH : "src/protobuf/proto")) {
+                fileOperations([fileCopyOperation(excludes: '', flattenFiles: true, includes: 'protobuf/*.proto', renameFiles: false, sourceCaptureExpression: '', targetLocation: "project/${env.HG_PROTOBUF_PATH}", targetNameExpression: '')])
+                dir("project/${env.HG_PROTOBUF_PATH}") {
                     bat 'svn add . --no-ignore --force'
                     bat 'svn commit . -m "[0] Update protobuf file automatically"'
                 }
