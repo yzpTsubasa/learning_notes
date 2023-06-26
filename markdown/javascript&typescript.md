@@ -856,18 +856,17 @@ module.exports = {
         es2021: true,
         node: true,
     },
-    plugins: ["prettier"],
+    plugins: ['prettier'],
     rules: {
-        "prettier/prettier": "error",
-        "no-undef": "error",
+        'prettier/prettier': 'error',
+        'no-undef': 'error',
         'no-dupe-keys': 'error',
     },
     parserOptions: {
         ecmaVersion: 6,
-        sourceType: "module",
+        sourceType: 'module',
     },
 };
-
 ```
 
 创建 `.prettierrc` 文件
