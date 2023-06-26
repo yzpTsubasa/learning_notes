@@ -874,6 +874,7 @@ module.exports = {
 ```js
 {
   "tabWidth": 4,
+  "singleQuote": true,
   "trailingComma": "all"
 }
 ```
