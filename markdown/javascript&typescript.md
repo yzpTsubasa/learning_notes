@@ -860,6 +860,7 @@ module.exports = {
     rules: {
         "prettier/prettier": "error",
         "no-undef": "error",
+        'no-dupe-keys': 'error',
     },
     parserOptions: {
         ecmaVersion: 6,
