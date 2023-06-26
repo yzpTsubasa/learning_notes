@@ -889,3 +889,20 @@ module.exports = {
   }
 }
 ```
+
+## 添加全局声明
+`index.d.ts`
+```ts
+declare global {
+  function sendToMain(channel, ...args): void;
+  function receiveFromMain(channel, listener): void;
+}
+
+export {}
+```
+
+## eslint 添加全局声明
+```js
+/* global sendToMain */
+sendToMain('todo:add', document.querySelector('input').value);
+```
