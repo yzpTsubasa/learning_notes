@@ -88,6 +88,7 @@ def sendResult2DingTalk() {
     if (params.HG_QUIET) {
         return
     }
+    generatePatchFile()
     env.result_color = currentBuild.result == 'SUCCESS' ? '#52c41a' : currentBuild.result == 'FAILURE' ? '#f5222d' : '#ff9f00'
     env.result = currentBuild.result == 'SUCCESS' ? '成功' : currentBuild.result == 'FAILURE' ? '失败' : '取消'
     env.description = currentBuild.description
@@ -106,7 +107,7 @@ def sendResult2DingTalk() {
             "- 发起 ${getRootBuildTriggerDesc()}",
             "- 时刻 ${new Date().format('yyyy-MM-dd(E)HH:mm:ss', TimeZone.getTimeZone('Asia/Shanghai')) - '星期'}",
             "- 用时 ${durationString}",
-            '- 记录',
+            "- [记录](${env.HG_PATCH_FILE})",
             '***',
         ] + getChangeString() + (
             currentBuild.result == 'FAILURE' ? [
@@ -140,6 +141,22 @@ def sendResult2DingTalkSimple() {
             "- 时刻 ${new Date().format('yyyy-MM-dd(E)HH:mm:ss', TimeZone.getTimeZone('Asia/Shanghai')) - '星期'}",
         ]
     )
+}
+
+def generatePatchFile() {
+    def revisions = getRevisions()
+    if (revisions) {
+        def patches = ""
+        revisions.tokenize(",").each {
+            def revision = it
+            def patch = bat returnStdout: true, script: "@echo off && svn diff ${HG_REPOSITORY_SRC} -c${revision}"
+            patches += patch + "\n"
+        }
+        def filename = "patches/out/r${revisions}.patch";
+        def filepath = "http://192.168.1.205:8686/view/${WORKSPACE}/${filename}"
+        fileOperations([fileCreateOperation(fileContent: patches, fileName: filename)])
+        env.HG_PATCH_FILE = filepath
+    }
 }
 
 // 获取当前版本号
