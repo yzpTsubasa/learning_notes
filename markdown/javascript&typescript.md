@@ -847,26 +847,26 @@ electron_builder_binaries_mirror=https://npmmirror.com/mirrors/electron-builder-
 npm i -D eslint eslint-plugin-prettier
 ```
 
-创建 `.eslintrc.js` 文件
-```js
-module.exports = {
-    env: {
-        commonjs: true,
-        browser: true,
-        es2021: true,
-        node: true,
+创建 `.eslintrc.json` 文件
+```json
+{
+    "env": {
+        "commonjs": true, 
+        "browser": true, 
+        "es2021": true, 
+        "node": true
     },
-    plugins: ['prettier'],
-    rules: {
-        'prettier/prettier': 'error',
-        'no-undef': 'error',
-        'no-dupe-keys': 'error',
+    "plugins": ["prettier"],
+    "rules": {
+        "prettier/prettier": "error",
+        "no-undef": "error",
+        "no-dupe-keys": "error"
     },
-    parserOptions: {
-        ecmaVersion: 6,
-        sourceType: 'module',
-    },
-};
+    "parserOptions": {
+        "ecmaVersion": 8,
+        "sourceType": "module"
+    }
+}
 ```
 
 创建 `.prettierrc` 文件
