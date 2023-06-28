@@ -863,7 +863,10 @@ npm i -D eslint eslint-plugin-prettier
         "no-dupe-keys": "error"
     },
     "parserOptions": {
-        "ecmaVersion": 11,
+        "ecmaVersion": 2020,
+        "ecmaFeatures": {
+            "jsx": true
+        },
         "sourceType": "module"
     }
 }
@@ -905,4 +908,9 @@ export {}
 ```js
 /* global sendToMain */
 sendToMain('todo:add', document.querySelector('input').value);
+```
+
+## 使用 eslint 自动修复
+```sh
+.\node_modules\.bin\eslint . --fix
 ```
