@@ -870,6 +870,31 @@ npm i -D eslint eslint-plugin-prettier
         "sourceType": "module"
     }
 }
+// 需要安装 @babel/eslint-parser
+{
+    "env": {
+        "commonjs": true, 
+        "browser": true, 
+        "es2021": true, 
+        "node": true
+    },
+    "plugins": ["prettier"],
+    "rules": {
+        "prettier/prettier": "error",
+        "no-undef": "error",
+        "no-dupe-keys": "error"
+    },
+    "parser": "@babel/eslint-parser",
+    "parserOptions": {
+        "requireConfigFile": false,
+        "babelOptions": {
+            "parserOpts": {
+                "plugins": ["jsx"]
+            }
+        },
+        "sourceType": "module"
+    }
+}
 ```
 
 创建 `.prettierrc` 文件
