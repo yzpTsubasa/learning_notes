@@ -22,3 +22,11 @@ function sendToMain(channel, ...args) {
 // 导出 sendToMain 给 web 使用
 contextBridge.exposeInMainWorld("sendToMain", sendToMain);
 ```
+
+## 在网页环境集成node
+```js
+webPreferences: {
+    nodeIntegration: true,
+    contextIsolation: false,
+}
+```
