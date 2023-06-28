@@ -863,7 +863,7 @@ npm i -D eslint eslint-plugin-prettier
         "no-dupe-keys": "error"
     },
     "parserOptions": {
-        "ecmaVersion": 8,
+        "ecmaVersion": 11,
         "sourceType": "module"
     }
 }
