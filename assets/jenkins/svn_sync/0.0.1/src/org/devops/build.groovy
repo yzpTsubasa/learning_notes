@@ -9,9 +9,11 @@ def getChangeString(showIndex = true, showDetail = true) {
     def MAX_ITEMS = 20 // 限制记录条数上限为20条
     def isExceeded = false // 是否超过上限条数
     def numItem = 0
-    return currentBuild.changeSets.collect {
+    def totalChanges = 0
+    def logs = currentBuild.changeSets.collect {
         def i = 1
         it.items.findAll {
+            totalChanges++
             if (isExceeded) {
                 return false;
             }
@@ -30,6 +32,12 @@ def getChangeString(showIndex = true, showDetail = true) {
             }.join('\n')
         }.join('\n')
     }
+    if (totalChanges) {
+        logs.add(0, "*共${totalChanges}条*")
+    } else {
+        logs.add(0, "*无*")
+    }
+    return logs
 }
 
 def sendStart2DingTalk() {
