@@ -272,11 +272,11 @@ let funcMap = {
     // 备份
     globalTarget[tag + bak] = globalTarget[tag + bak] || src_parent[src_tag];
     src_parent[src_tag] = function() {
-        return callback(tag, globalTarget[tag + bak], src_parent, arguments);
+        return callback(tag, globalTarget[tag + bak], this, arguments, src_parent);
     };
 })(
     '',
-    function(tag, original, thisArg, args) {
+    function(tag, original, thisArg, args, tagParent) {
         // console.log.apply(console, Array.prototype.slice.apply(args).concat(tag));
         // 默认行为
         return original.apply(thisArg, args);
