@@ -152,6 +152,9 @@ def sendResult2DingTalkSimple() {
 }
 
 def generatePatchFile() {
+    if (!env.HG_REPOSITORY_SRC) {
+        return;
+    }
     def revisions = getRevisions()
     if (revisions) {
         def patches = ""
