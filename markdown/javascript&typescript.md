@@ -897,7 +897,6 @@ npm i -D eslint eslint-plugin-prettier
 }
 // typescript 插件 
 // npm i -D eslint eslint-plugin-prettier @typescript-eslint/parser
-// npm i -D eslint eslint-plugin-prettier @typescript-eslint/parser -g
 {
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
@@ -912,6 +911,7 @@ npm i -D eslint eslint-plugin-prettier
     "tabWidth": 4,
     "singleQuote": true,
     "endOfLine": "auto",
+    "quoteProps": "preserve",
     "trailingComma": "all"
 }
 ```
