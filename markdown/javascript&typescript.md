@@ -919,12 +919,18 @@ npm i -D eslint eslint-plugin-prettier
 > 额外的可以配置 `.vscode/settings.json`。在保存时自动格式化
 ```json
 {
-  "[js|jsx|ts|tsx]": {
-    "editor.formatOnSave": true
-  },
-  "editor.codeActionsOnSave": {
-    "source.fixAll": true
-  }
+    "eslint.enable": true,
+    "eslint.format.enable": true,
+    "[ts|js|jsx|tsx]": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+    },
+    "editor.codeActionsOnSave": {
+        "source.fixAll": true
+    },
+    "editor.detectIndentation": false,
+    "editor.tabSize": 4,
+    "editor.insertSpaces": true
 }
 ```
 
