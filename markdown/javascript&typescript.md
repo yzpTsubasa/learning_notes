@@ -841,7 +841,7 @@ electron_mirror=https://cdn.npmmirror.com/binaries/electron/
 electron_builder_binaries_mirror=https://npmmirror.com/mirrors/electron-builder-binaries
 ```
 
-## 为 js 配置 eslint / prettier
+## 为 ts/js 配置 eslint / prettier
 ```sh
 # 安装依赖
 npm i -D eslint eslint-plugin-prettier
@@ -893,6 +893,15 @@ npm i -D eslint eslint-plugin-prettier
             }
         },
         "sourceType": "module"
+    }
+}
+// typescript 插件 
+// npm i -D eslint eslint-plugin-prettier @typescript-eslint/parser
+// npm i -D eslint eslint-plugin-prettier @typescript-eslint/parser -g
+{
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "sourceType": "script", // 设置为 "script" (默认) 或 "module"（如果你的代码是 ECMAScript 模块)。 
     }
 }
 ```
