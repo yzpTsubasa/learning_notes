@@ -908,6 +908,7 @@ npm i -D eslint eslint-plugin-prettier
 创建 `.prettierrc` 文件
 ```js
 {
+    "printWidth": 160,
     "tabWidth": 4,
     "singleQuote": true,
     "endOfLine": "auto",
