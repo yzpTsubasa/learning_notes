@@ -909,9 +909,10 @@ npm i -D eslint eslint-plugin-prettier
 创建 `.prettierrc` 文件
 ```js
 {
-  "tabWidth": 4,
-  "singleQuote": true,
-  "trailingComma": "all"
+    "tabWidth": 4,
+    "singleQuote": true,
+    "endOfLine": "auto",
+    "trailingComma": "all"
 }
 ```
 > 额外的可以配置 `.vscode/settings.json`。在保存时自动格式化
