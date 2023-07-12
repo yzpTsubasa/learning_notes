@@ -12,6 +12,7 @@ pipeline {
         stage('init') {
             steps{
                 script {
+                    build.cleanupHGPubToolsDist()
                     dir("project") {
                         build.checkoutSVN(params.HG_REPOSITORY_SRC)
                         // Send Notify

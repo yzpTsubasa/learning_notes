@@ -12,6 +12,7 @@ pipeline {
         stage('init') {
             steps{
                 script {
+                    build.cleanupHGPubToolsDist()
                     build.checkoutAutomator()
                 }
             }

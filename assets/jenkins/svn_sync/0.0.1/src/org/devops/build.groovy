@@ -189,6 +189,7 @@ def pubToWebIntegrated() {
         env.prg_dir = pwd()
     }
     checkoutPublish()
+    cleanupHGPubToolsDist()
     lock(resource: 'pub2web') {
         dir('publish') {
             // 发布
@@ -212,6 +213,7 @@ def pubToWebIntegratedCommonOld() {
         sendStart2DingTalk_PubWeb()
     }
     checkoutPublish()
+    cleanupHGPubToolsDist()
     lock(resource: 'pub2web') {
         // 发布
         dir('publish') {
@@ -236,6 +238,7 @@ def pubToWebIntegratedCommon() {
     }
     // 发布
     checkoutPublish()
+    cleanupHGPubToolsDist()
     lock(resource: 'pub2web') {
         dir('publish') {
             bat([label: '发布', returnStdout: false, script: """
@@ -857,6 +860,18 @@ npm i
             print(e)
             currentBuild.result = 'UNSTABLE'
         }
+    }
+}
+
+def cleanupHGPubToolsDist() {
+    lock(resource: 'pub2web') {
+        // 检查状态
+        def status = bat returnStdout: true, script: '@echo off && svn status %DLDL_PUB_TOOLS_DIR%'
+        if (status && (status =~ /^.{2}L/).find()) {
+            print 'HGPubToolsDist is already locked'
+            bat 'svn cleanup %DLDL_PUB_TOOLS_DIR%'
+        } else {
+            print 'HGPubToolsDist is not locked'
     }
 }
 
