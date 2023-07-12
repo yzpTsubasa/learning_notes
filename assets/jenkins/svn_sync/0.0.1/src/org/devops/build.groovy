@@ -872,6 +872,7 @@ def cleanupHGPubToolsDist() {
             bat 'svn cleanup %DLDL_PUB_TOOLS_DIR%'
         } else {
             print 'HGPubToolsDist is not locked'
+        }
     }
 }
 
