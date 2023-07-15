@@ -163,7 +163,7 @@ def generatePatchFile() {
             def patch = bat returnStdout: true, script: "@echo off && svn diff ${HG_REPOSITORY_SRC} -c${revision}"
             patches += patch + "\n"
         }
-        def filename = "patches/out/r${revisions}.txt";
+        def filename = "patches/out/r${revisions}.patch";
         def filepath = "http://192.168.1.205:8686/file/${WORKSPACE.replaceAll('\\\\', '/')}/${filename}"
         fileOperations([fileCreateOperation(fileContent: patches, fileName: filename)])
         env.HG_PATCH_FILE = filepath
