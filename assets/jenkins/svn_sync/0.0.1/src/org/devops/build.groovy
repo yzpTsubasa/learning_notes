@@ -574,16 +574,17 @@ def sendResult2Emailext () {
 
 // 从控制台查找资源版本号
 def getPubWebVersion() {
-    def consoleText = httpRequest quiet: true, url: "${BUILD_URL}consoleText", wrapAsMultipart: false
-    def result = ((consoleText.content =~ /"autoIn":\["(\d+)"\]/))
+    def consoleTextUrl = "${JENKINS_HOME}/jobs/${JOB_NAME}/builds/${BUILD_NUMBER}/log"
+    def consoleText = readFile encoding: 'utf8', file:consoleTextUrl
+    def result = ((consoleText =~ /"autoIn":\["(\d+)"\]/))
     if (result.find()) {
         return result[0][1]
     }
-    result = ((consoleText.content =~ /build web base v(\d+) begin/))
+    result = ((consoleText =~ /build web base v(\d+) begin/))
     if (result.find()) {
         return result[0][1]
     }
-    result = ((consoleText.content =~ /bin\-release\\web\\v(\d+)/))
+    result = ((consoleText =~ /bin\-release\\web\\v(\d+)/))
     if (result.find()) {
         return result[0][1]
     }
@@ -591,8 +592,9 @@ def getPubWebVersion() {
 }
 
 def getMinigameVersion() {
-    def consoleText = httpRequest quiet: true, url: "${BUILD_URL}consoleText", wrapAsMultipart: false
-    def result = ((consoleText.content =~ /"MiniGameVersion: (.*)"/))
+    def consoleTextUrl = "${JENKINS_HOME}/jobs/${JOB_NAME}/builds/${BUILD_NUMBER}/log"
+    def consoleText = readFile encoding: 'utf8', file:consoleTextUrl
+    def result = ((consoleText =~ /"MiniGameVersion: (.*)"/))
     if (result.find()) {
         return result[0][1]
     }
@@ -600,8 +602,9 @@ def getMinigameVersion() {
 }
 
 def getMiniGameToggleOperation() {
-    def consoleText = httpRequest quiet: true, url: "${BUILD_URL}consoleText", wrapAsMultipart: false
-    def result = ((consoleText.content =~ /"MiniGameToggleOperation: (.*)"/))
+    def consoleTextUrl = "${JENKINS_HOME}/jobs/${JOB_NAME}/builds/${BUILD_NUMBER}/log"
+    def consoleText = readFile encoding: 'utf8', file:consoleTextUrl
+    def result = ((consoleText =~ /"MiniGameToggleOperation: (.*)"/))
     if (result.find()) {
         return result[0][1]
     }
@@ -809,10 +812,9 @@ def validateDev() {
 
 // 获取末尾的几条日志
 def getTailLogString(size = 50) {
-    // def consoleTextUrl = "http://192.168.1.205:8080/job/pipeline_dldl_h5_en_translation_ob_dev/20/consoleText"
-    def consoleTextUrl = "${BUILD_URL}consoleText"
-    def consoleText = httpRequest quiet: true, url: consoleTextUrl, wrapAsMultipart: false
-    def result = consoleText.content.tokenize('\n').findAll {
+    def consoleTextUrl = "${JENKINS_HOME}/jobs/${JOB_NAME}/builds/${BUILD_NUMBER}/log"
+    def consoleText = readFile encoding: 'utf8', file:consoleTextUrl
+    def result = consoleText.tokenize('\n').findAll {
         !((it =~ /\[Pipeline\]/).find())
     }.collect {
         (it - ~/^\[\d+\-\d+\-\d+T\d+\:\d+\:\d+\.\d+Z\] */).replaceAll("\\[\\d+m", '')
