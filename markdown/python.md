@@ -5,6 +5,7 @@
 pip freeze > requirements.txt
 
 # 方案二（推荐）
+# 出现网络错误时，需要启用vpn
 pip install pipreqs
 pipreqs ./ --encoding=utf8
 
