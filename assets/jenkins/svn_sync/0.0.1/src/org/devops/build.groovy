@@ -632,7 +632,7 @@ def getSVNInfo() {
 }
 
 // 使用本地环境的 svn 检出, 不需要 svn upgrade
-def checkoutSVN(scmUrl, poll = true, changelog = true, quiet = true, local = ".") {
+def checkoutSVN(scmUrl, poll = true, changelog = true, quiet = true, local = ".", includedRegions = "", excludedRegions = "") {
     if (fileExists('.svn')) {
         // 检查状态
         def status = bat returnStdout: true, script: '@echo off && svn status'
@@ -643,17 +643,17 @@ def checkoutSVN(scmUrl, poll = true, changelog = true, quiet = true, local = "."
         } else {
             print 'Workspace is not locked'
     }
-        // 还原
-        bat returnStdout: true, script: '@echo off && svn revert -R .'
+    // 还原
+    bat returnStdout: true, script: '@echo off && svn revert -R .'
     } else {
         // 获取凭证
         withCredentials([usernamePassword(credentialsId: getCredentialsId(), passwordVariable: 'HG_CREDENTIAL_PASSWORD', usernameVariable: 'HG_CREDENTIAL_USERNAME')]) {
             // 拉取 SVN
             bat(script: "svn checkout ${scmUrl} . --quiet --username %HG_CREDENTIAL_USERNAME% --password %HG_CREDENTIAL_PASSWORD%")
         }
-}
+    }
     // pollSCM
-    checkout changelog: changelog, poll: poll, scm: [$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '', excludedRegions: '', excludedRevprop: '', excludedUsers: '', filterChangelog: false, ignoreDirPropChanges: false, includedRegions: '', locations: [[cancelProcessOnExternalsFail: true, credentialsId: getCredentialsId(), depthOption: 'infinity', ignoreExternalsOption: true, local: local, remote: "${scmUrl}"]], quietOperation: quiet, workspaceUpdater: [$class: 'UpdateUpdater']]
+    checkout changelog: changelog, poll: poll, scm: [$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '', excludedRegions: excludedRegions, excludedRevprop: '', excludedUsers: '', filterChangelog: true, ignoreDirPropChanges: false, includedRegions: includedRegions, locations: [[cancelProcessOnExternalsFail: true, credentialsId: getCredentialsId(), depthOption: 'infinity', ignoreExternalsOption: true, local: local, remote: "${scmUrl}"]], quietOperation: quiet, workspaceUpdater: [$class: 'UpdateUpdater']]
     getSVNInfo()
 }
 
