@@ -1,0 +1,61 @@
+@Library("jenkins_library") _
+
+def build = new org.devops.build()
+
+import groovy.json.JsonSlurperClassic
+
+
+
+pipeline {
+    agent any
+    triggers {
+        pollSCM 'H/2 * * * *'
+    }
+    options {
+        disableConcurrentBuilds()
+    }
+
+    stages {
+        stage('checkout') {
+            steps {
+                script {
+                    print(env.TRANSLATION_SYNC_ALL)
+                    build.checkoutAutomator()
+                    def localization_folder = new File(LOCALIZATION_JSON).parent
+                    dir("project/$localization_folder") {
+                        build.checkoutSVN("$HG_REPOSITORY_SRC/$localization_folder", false, false)
+                    }
+                    dir('translation') {
+                        def localization_str = readFile encoding: 'utf-8', file: "$WORKSPACE/project/$LOCALIZATION_JSON"
+                        def localization_obj = new JsonSlurperClassic().parseText(localization_str)
+                        def includedRegions = ".*/${localization_obj.appId}/${localization_obj.from_language}/.*"
+                        print(includedRegions)
+                        build.checkoutSVN(HG_TRANSLATIONS_REPOSITORY_SRC, true, true, true, ".", includedRegions)
+                    }
+                    env.WORKSPACE_FOLDER = "${WORKSPACE}/project"
+                    env.TRANSLATION_FOLDER = "${WORKSPACE}/translation"
+                    if (!env.TRANSLATION_REVISIIONS) {
+                        env.TRANSLATION_REVISIIONS = build.getRevisions()
+                    }
+                    // 获取凭证
+                    withCredentials([usernamePassword(credentialsId: build.getCredentialsId(), passwordVariable: 'HG_CREDENTIAL_PASSWORD', usernameVariable: 'HG_CREDENTIAL_USERNAME')]) {
+                        env.SVN_CREDENTIAL = "--username ${HG_CREDENTIAL_USERNAME} --password ${HG_CREDENTIAL_PASSWORD}"
+                    }
+                    
+                }
+            }
+        }
+        
+        stage('build') {
+            steps {
+                script {
+                    lock(resource: 'translation') {
+                        dir('conversion') {
+                            bat 'node %WORKSPACE%/automator/main.js %WORKSPACE%/automator/cfg/translation_split/send.yml --FULL_AUTOMATIC 1'
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

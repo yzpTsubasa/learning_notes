@@ -1,0 +1,49 @@
+@Library("jenkins_library") _
+
+def build = new org.devops.build()
+
+pipeline {
+    agent any
+    options {
+        disableConcurrentBuilds()
+    }
+
+    stages {
+        stage('checkout') {
+            steps {
+                script {
+                    build.checkoutAutomator()
+                    dir("project/${CFGJSON_FOLDER}") {
+                        build.checkoutSVN("$HG_REPOSITORY_SRC/${CFGJSON_FOLDER}", false, false)
+                    }
+                    def localization_folder = new File(LOCALIZATION_JSON).parent
+                    dir("project/$localization_folder") {
+                        build.checkoutSVN("$HG_REPOSITORY_SRC/$localization_folder", false, false)
+                    }
+                    dir('translation') {
+                        build.checkoutSVN(HG_TRANSLATIONS_REPOSITORY_SRC, false, false)
+                    }
+                    env.WORKSPACE_FOLDER = "${WORKSPACE}/project"
+                    env.TRANSLATION_FOLDER = "${WORKSPACE}/translation"
+                    // 获取凭证
+                    withCredentials([usernamePassword(credentialsId: build.getCredentialsId(), passwordVariable: 'HG_CREDENTIAL_PASSWORD', usernameVariable: 'HG_CREDENTIAL_USERNAME')]) {
+                        env.SVN_CREDENTIAL = "--username ${HG_CREDENTIAL_USERNAME} --password ${HG_CREDENTIAL_PASSWORD}"
+                    }
+                    
+                }
+            }
+        }
+        
+        stage('build') {
+            steps {
+                script {
+                    lock(resource: 'translation') {
+                        dir('conversion') {
+                            bat 'node %WORKSPACE%/automator/main.js %WORKSPACE%/automator/cfg/translation_split/apply.yml --FULL_AUTOMATIC 1'
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
