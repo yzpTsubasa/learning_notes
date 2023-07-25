@@ -56,7 +56,6 @@ pipeline {
                     }
                 }
             }
-            when { expression { !params.SKIP_MINIGAME_UPGRADE_VERSION } }
         }
         stage('minigame_upload') {
             steps {
