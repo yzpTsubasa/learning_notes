@@ -142,3 +142,10 @@ git branch -m [NEW_NAME]
 # 重命名指定的 OLD_NAME 分支
 git branch -m [OLD_NAME] [NEW_NAME]
 ```
+
+## Github 不再支持用账号密码clone/push
+``` mermaid
+graph LR;
+  Settings-->Develop_settings-->Personal_access_tokens-->Tokens_classic
+```
+> 推送地址: https://[token]@github.com/yzpTsubasa/[repository].git
