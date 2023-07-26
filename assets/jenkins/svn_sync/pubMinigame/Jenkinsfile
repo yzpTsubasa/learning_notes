@@ -46,7 +46,7 @@ pipeline {
                     }
                 }
             }
-            when { expression { !params.SKIP_PUBLISH_STATIC_RESOURCE } }
+            when { expression { params.ENABLE_PUBLISH_STATIC_RESOURCE } }
         }
         stage('minigame_upgrade_version') {
             steps {
