@@ -860,6 +860,9 @@ npm i -D eslint eslint-plugin-prettier
     "rules": {
         "prettier/prettier": "error",
         "no-undef": "error",
+        "no-unused-expressions": "warn",
+        "no-unused-labels": "warn",
+        "no-unused-vars": "warn",
         "no-dupe-keys": "error"
     },
     "parserOptions": {
