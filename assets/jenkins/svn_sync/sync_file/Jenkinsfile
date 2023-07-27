@@ -64,7 +64,7 @@ svn commit -m "${COMMIT_MSG}" --username %HG_CREDENTIAL_USERNAME% --password %HG
     }
 
     post { 
-        failure { 
+        changed { 
             script {
                 build.sendCommonResult2DingTalk()
             }

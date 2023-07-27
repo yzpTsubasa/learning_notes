@@ -19,7 +19,7 @@ pipeline {
     }
     
     post { 
-        failure { 
+        changed { 
             script {
                 build.sendCommonResult2DingTalk()
             }
