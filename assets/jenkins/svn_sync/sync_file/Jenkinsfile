@@ -1,0 +1,73 @@
+@Library("jenkins_library") _
+
+def build = new org.devops.build()
+
+pipeline {
+    agent any
+    triggers {
+        pollSCM 'H/2 * * * *'
+    }
+    stages {
+        stage('clean') {
+            steps {
+                script {
+                    print("clean_workspace")
+                    deleteDir()
+                }
+            }
+            when { expression { params.CLEAN_WORKSPACE } }
+        }
+        stage('checkout') {
+            steps {
+                script {
+                    dir("from") {
+                        def idx = FROM_URL.lastIndexOf("/")
+                        env.FROM_FOLDER = FROM_URL[0..idx]
+                        env.FROM_FILE = FROM_URL[idx..-1]
+                        build.checkoutSVN(FROM_FOLDER)
+                    }
+                    dir("to") {
+                        def idx = TO_URL.lastIndexOf("/")
+                        env.TO_FOLDER = TO_URL[0..idx]
+                        env.TO_FILE = TO_URL[idx..-1]
+                        build.checkoutSVN(TO_FOLDER, false, false)
+                    }
+                }
+            }
+        }
+        stage("copy") {
+            steps {
+                script {
+                    bat """
+rem 修改编码为 utf-8
+chcp 65001 > nul
+copy /y \".\\from\\${FROM_FILE}\" \".\\to\\${TO_FILE}\"
+"""
+                }
+            }
+        }
+        
+        stage("commit") {
+            steps {
+                script {
+                    dir("to") {
+                        // 获取凭证
+                        withCredentials([usernamePassword(credentialsId: build.getCredentialsId(), passwordVariable: 'HG_CREDENTIAL_PASSWORD', usernameVariable: 'HG_CREDENTIAL_USERNAME')]) {
+                            bat """
+svn commit -m "${COMMIT_MSG}" --username %HG_CREDENTIAL_USERNAME% --password %HG_CREDENTIAL_PASSWORD%
+"""
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    post { 
+        failure { 
+            script {
+                build.sendCommonResult2DingTalk()
+            }
+        }
+    }
+}
