@@ -408,6 +408,7 @@ def sendResult2DingTalk_PubMinigame() {
             "- 状态 <font color=${result_color}>${result}</font>",
             pubWebVersion ? "- 资源版本 <font color=${result_color}>${pubWebVersion}</font>" : "",
             "- 小游戏版本 <font color=${result_color}>${minigameVersion ? minigameVersion : 'Unknown'}</font>",
+            "- 生效时间 <font color=${result_color}>${getDateByStep().format('yyyy-MM-dd(E)HH:mm', TimeZone.getTimeZone('Asia/Shanghai'))}</font>",
             minigameToggleOperation ? "- 小游戏配置 <font color=${result_color}>${minigameToggleOperation}</font>" : "",
             "- 发起 ${getRootBuildTriggerDesc()}",
             "- 时刻 ${new Date().format('yyyy-MM-dd(E)HH:mm:ss', TimeZone.getTimeZone('Asia/Shanghai')) - '星期'}",
@@ -981,4 +982,12 @@ def getRootBuild(build) {
     } else {
         return getRootBuild(build.upstreamBuilds[0]);
     }
+}
+
+def getDateByStep(step = 3e5) {
+    def timestamp = System.currentTimeMillis()
+    def takeEffectTimestamp = ((((timestamp / step) as int) + 1) * step) as long
+    def takeEffectTime = new Date()
+    takeEffectTime.setTime(takeEffectTimestamp)
+    return takeEffectTime;
 }
