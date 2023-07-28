@@ -16,7 +16,7 @@ pipeline {
                     dir("project") {
                         build.checkoutSVN(params.HG_REPOSITORY_SRC)
                         // Send Notify
-                        build.sendStart2DingTalk_PubWeb()
+                        build.sendStart2DingTalk_PubMinigame()
                     }
                     build.checkoutAutomator()
                     // Environment Variables

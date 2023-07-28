@@ -368,6 +368,33 @@ def sendResult2DingTalk_PubWeb() {
     )
 }
 
+def sendStart2DingTalk_PubMinigame() {
+    if (params.HG_QUIET) {
+        return
+    }
+    dingtalk(
+        robot: getDingTalkRobot(),
+        type: 'ACTION_CARD',
+        title: "${currentBuild.fullDisplayName} 开始",
+        // at: getAtUsers(),
+        // atAll: false,
+        text: [
+            "# **[${currentBuild.fullDisplayName}](${BUILD_URL})**",
+            '***',
+            '- 状态 开始',
+            "- 发起 ${getRootBuildTriggerDesc()}",
+            "- <font color=${env.ENABLE_PUBLISH_STATIC_RESOURCE == "true" ? "#52c41a" : "#888888"}>静态资源更新</font>",
+            "- <font color=${env.ENABLE_MINIGAME_UPLOAD == "true" ? "#52c41a" : "#888888"}>游戏包更新</font>",
+            "- 时刻 ${new Date().format('yyyy-MM-dd(E)HH:mm:ss', TimeZone.getTimeZone('Asia/Shanghai')) - '星期'}",
+            '- 仓库',
+            params.HG_REPOSITORY_SRC ? (params.HG_REPOSITORY_SRC - ~/.*\//) : 'Unknown',
+            '- logo ' + (hasLogo2Refresh() ? '<font color=#ff9f00>已修改</font>' : '未修改'),
+            '- 记录',
+            '***',
+        ] + getChangeString()
+    )
+}
+
 def sendResult2DingTalk_PubMinigame() {
     // addBuildDescripion ("${new Date().format('yyyy-MM-dd(E)HH:mm:ss', TimeZone.getTimeZone('Asia/Shanghai')) - '星期'}")
     def minigameVersion = getMinigameVersion()
@@ -406,11 +433,13 @@ def sendResult2DingTalk_PubMinigame() {
             "# **[${currentBuild.fullDisplayName}](${BUILD_URL})**",
             '***',
             "- 状态 <font color=${result_color}>${result}</font>",
+            "- 发起 ${getRootBuildTriggerDesc()}",
             pubWebVersion ? "- 资源版本 <font color=${result_color}>${pubWebVersion}</font>" : "",
             "- 小游戏版本 <font color=${result_color}>${minigameVersion ? minigameVersion : 'Unknown'}</font>",
-            "- 生效时间 <font color=${result_color}>${getDateByStep().format('yyyy-MM-dd(E)HH:mm', TimeZone.getTimeZone('Asia/Shanghai'))}</font>",
             minigameToggleOperation ? "- 小游戏配置 <font color=${result_color}>${minigameToggleOperation}</font>" : "",
-            "- 发起 ${getRootBuildTriggerDesc()}",
+            "- <font color=${env.ENABLE_PUBLISH_STATIC_RESOURCE == "true" ? "#52c41a" : "#888888"}>静态资源更新</font>",
+            "- <font color=${env.ENABLE_MINIGAME_UPLOAD == "true" ? "#52c41a" : "#888888"}>游戏包更新</font>",
+            "- 生效 ${getDateByStep().format('yyyy-MM-dd(E)HH:mm', TimeZone.getTimeZone('Asia/Shanghai'))}",
             "- 时刻 ${new Date().format('yyyy-MM-dd(E)HH:mm:ss', TimeZone.getTimeZone('Asia/Shanghai')) - '星期'}",
             "- 用时 ${durationString}",
             params.HG_REPOSITORY_SRC ? ('- 仓库 ' + (params.HG_REPOSITORY_SRC - ~/.*\//)) : "",
