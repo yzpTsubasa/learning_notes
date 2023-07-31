@@ -439,7 +439,7 @@ def sendResult2DingTalk_PubMinigame() {
             minigameToggleOperation ? "- 小游戏配置 <font color=${result_color}>${minigameToggleOperation}</font>" : "",
             "- ${env.ENABLE_PUBLISH_STATIC_RESOURCE == "true" ? "[x]" : "[ ]"} 静态资源更新",
             "- ${env.ENABLE_MINIGAME_UPLOAD == "true" ? "[x]" : "[ ]"} 游戏包更新",
-            "- 生效 ${getDateByStep().format('yyyy-MM-dd(E)HH:mm', TimeZone.getTimeZone('Asia/Shanghai'))}",
+            "- 生效 ${getDateByStep().format('yyyy-MM-dd(E)HH:mm:ss', TimeZone.getTimeZone('Asia/Shanghai')) - '星期'}",
             "- 时刻 ${new Date().format('yyyy-MM-dd(E)HH:mm:ss', TimeZone.getTimeZone('Asia/Shanghai')) - '星期'}",
             "- 用时 ${durationString}",
             params.HG_REPOSITORY_SRC ? ('- 仓库 ' + (params.HG_REPOSITORY_SRC - ~/.*\//)) : "",
