@@ -388,7 +388,6 @@ def sendStart2DingTalk_PubMinigame() {
             "- 时刻 ${new Date().format('yyyy-MM-dd(E)HH:mm:ss', TimeZone.getTimeZone('Asia/Shanghai')) - '星期'}",
             '- 仓库',
             params.HG_REPOSITORY_SRC ? (params.HG_REPOSITORY_SRC - ~/.*\//) : 'Unknown',
-            '- logo ' + (hasLogo2Refresh() ? '<font color=#ff9f00>已修改</font>' : '未修改'),
             '- 记录',
             '***',
         ] + getChangeString()
@@ -439,7 +438,6 @@ def sendResult2DingTalk_PubMinigame() {
             minigameToggleOperation ? "- 小游戏配置 <font color=${result_color}>${minigameToggleOperation}</font>" : "",
             "- <font color=${env.ENABLE_PUBLISH_STATIC_RESOURCE == "true" ? "#52c41a" : "#888888"}>静态资源${env.ENABLE_PUBLISH_STATIC_RESOURCE == "true" ? "" : "不"}更新</font>",
             "- <font color=${env.ENABLE_MINIGAME_UPLOAD == "true" ? "#52c41a" : "#888888"}>游戏包${env.ENABLE_PUBLISH_STATIC_RESOURCE == "true" ? "" : "不"}更新</font>",
-            "- 时刻 ${new Date().format('yyyy-MM-dd(E)HH:mm:ss', TimeZone.getTimeZone('Asia/Shanghai')) - '星期'}",
             "- <font color=${result_color}>生效 ${getDateByStep().format('yyyy-MM-dd(E)HH:mm:ss', TimeZone.getTimeZone('Asia/Shanghai')) - '星期'}</font>",
             "- 用时 ${durationString}",
             params.HG_REPOSITORY_SRC ? ('- 仓库 ' + (params.HG_REPOSITORY_SRC - ~/.*\//)) : "",
