@@ -871,7 +871,7 @@ def checkoutAutomator() {
     dir('automator') {
         try {
             checkoutGit("http://192.168.1.205:3000/yzp/automator.git")
-            bat 'pnpm i --registry https://registry.npm.taobao.org'
+            bat 'npm i'
         } catch (Exception e) {
             print(e)
             currentBuild.result = 'UNSTABLE'
