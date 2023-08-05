@@ -59,12 +59,36 @@ def sendStart2DingTalk() {
     )
 }
 
+def resolveResult() {   
+    switch(currentBuild.result) {
+        case "SUCCESS":
+            env.result_color = '#52c41a';
+            env.result = '成功';
+            break;
+        case "ABORTED":
+            env.result_color = '#333333';
+            env.result = '取消';
+            break;
+        case "FAILURE":
+            env.result_color = '#f5222d'
+            env.result = '失败';
+            break
+        case "UNSTABLE":
+            env.result_color = '#ff9f00'
+            env.result = '不稳定';
+            break;
+        default:
+            env.result_color = '#000000';
+            env.result = currentBuild.result;
+            break;
+    }
+}
+
 def sendResult2DingTalkTest() {
     if (params.HG_QUIET) {
         return
     }
-    env.result_color = currentBuild.result == 'SUCCESS' ? '#52c41a' : currentBuild.result == 'FAILURE' ? '#f5222d' : '#ff9f00'
-    env.result = currentBuild.result == 'SUCCESS' ? '成功' : currentBuild.result == 'FAILURE' ? '失败' : '取消'
+    resolveResult()
     env.description = currentBuild.description
     env.durationString = currentBuild.durationString.minus(' and counting')
     def atUsers = getAtUsers()
@@ -97,8 +121,7 @@ def sendResult2DingTalk() {
         return
     }
     generatePatchFile()
-    env.result_color = currentBuild.result == 'SUCCESS' ? '#52c41a' : currentBuild.result == 'FAILURE' ? '#f5222d' : '#ff9f00'
-    env.result = currentBuild.result == 'SUCCESS' ? '成功' : currentBuild.result == 'FAILURE' ? '失败' : '取消'
+    resolveResult()
     env.description = currentBuild.description
     env.durationString = currentBuild.durationString.minus(' and counting')
     // 失败时，@提交者
@@ -131,8 +154,7 @@ def sendResult2DingTalkSimple() {
     if (params.HG_QUIET) {
         return
     }
-    env.result_color = currentBuild.result == 'SUCCESS' ? '#52c41a' : currentBuild.result == 'FAILURE' ? '#f5222d' : '#ff9f00'
-    env.result = currentBuild.result == 'SUCCESS' ? '成功' : currentBuild.result == 'FAILURE' ? '失败' : '取消'
+    resolveResult()
     env.description = currentBuild.description
     env.durationString = currentBuild.durationString.minus(' and counting')
     // 失败时，@提交者
@@ -335,8 +357,7 @@ def sendResult2DingTalk_PubWeb() {
     if (params.HG_QUIET) {
         return
     }
-    env.result_color = currentBuild.result == 'SUCCESS' ? '#52c41a' : currentBuild.result == 'FAILURE' ? '#f5222d' : '#ff9f00'
-    env.result = currentBuild.result == 'SUCCESS' ? '成功' : currentBuild.result == 'FAILURE' ? '失败' : '取消'
+    resolveResult()
     env.description = currentBuild.description
     env.durationString = currentBuild.durationString.minus(' and counting')
     dingtalk(
@@ -418,8 +439,7 @@ def sendResult2DingTalk_PubMinigame() {
     if (params.HG_QUIET) {
         return
     }
-    env.result_color = currentBuild.result == 'SUCCESS' ? '#52c41a' : currentBuild.result == 'FAILURE' ? '#f5222d' : '#ff9f00'
-    env.result = currentBuild.result == 'SUCCESS' ? '成功' : currentBuild.result == 'FAILURE' ? '失败' : '取消'
+    resolveResult()
     env.description = currentBuild.description
     env.durationString = currentBuild.durationString.minus(' and counting')
     dingtalk(
@@ -458,8 +478,7 @@ def sendCommonResult2DingTalk() {
     if (params.HG_QUIET) {
         return
     }
-    env.result_color = currentBuild.result == 'SUCCESS' ? '#52c41a' : currentBuild.result == 'FAILURE' ? '#f5222d' : '#ff9f00'
-    env.result = currentBuild.result == 'SUCCESS' ? '成功' : currentBuild.result == 'FAILURE' ? '失败' : '取消'
+    resolveResult()
     env.durationString = currentBuild.durationString.minus(' and counting')
     dingtalk(
         robot: getDingTalkRobot(),
@@ -551,8 +570,7 @@ def sendResult2Emailext () {
         return
     }
 
-    env.result_color = currentBuild.result == 'SUCCESS' ? '#52c41a' : currentBuild.result == 'FAILURE' ? '#f5222d' : '#ff9f00'
-    env.result = currentBuild.result == 'SUCCESS' ? '成功' : currentBuild.result == 'FAILURE' ? '失败' : '取消'
+    resolveResult()
     env.description = currentBuild.description
     env.durationString = currentBuild.durationString.minus(' and counting')
     emailext (
