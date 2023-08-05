@@ -521,7 +521,7 @@ def retrieveTranslationAPI() {
         }
         dir('convert2src') {
             retry(1) {
-                bat 'node %WORKSPACE%/automator/main.js %WORKSPACE%/automator/cfg/dldl/conversion_retrieve@api.yml --FULL_AUTOMATIC 1 --projectFolder %WORKSPACE%/project --gitFolder %WORKSPACE%/i18n_cp_seirei --conversionWorkspaceFolder %WORKSPACE%/conversion --translationFolder %WORKSPACE%/translation --zipUrl "%ZIP_URL%"'
+                bat '%WORKSPACE%/automator/automator %WORKSPACE%/automator/cfg/dldl/conversion_retrieve@api.yml --FULL_AUTOMATIC 1 --projectFolder %WORKSPACE%/project --gitFolder %WORKSPACE%/i18n_cp_seirei --conversionWorkspaceFolder %WORKSPACE%/conversion --translationFolder %WORKSPACE%/translation --zipUrl "%ZIP_URL%"'
             }
         }
     }
@@ -549,7 +549,7 @@ def generateTranslationKV_API() {
     .*/resource/js/common\\.js''', locations: [[cancelProcessOnExternalsFail: true, credentialsId: getCredentialsId(), depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: "$SCM_URL/resource/js"]], quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']])
         }
         dir('convert2src') {
-            bat 'node %WORKSPACE%/automator/main.js %WORKSPACE%/automator/cfg/dldl/conversion_to_src@api.yml --FULL_AUTOMATIC 1 --projectFolder %WORKSPACE%/project --conversionWorkspaceFolder %WORKSPACE%/conversion --translationFolder %WORKSPACE%/translation'
+            bat '%WORKSPACE%/automator/automator %WORKSPACE%/automator/cfg/dldl/conversion_to_src@api.yml --FULL_AUTOMATIC 1 --projectFolder %WORKSPACE%/project --conversionWorkspaceFolder %WORKSPACE%/conversion --translationFolder %WORKSPACE%/translation'
         }
     }
 }
@@ -559,7 +559,7 @@ def mergeSVN() {
     dir('project') {
         checkoutSVN(params.HG_REPOSITORY_SRC)
     }
-    bat 'node %WORKSPACE%/automator/main.js %WORKSPACE%/automator/cfg/dldl/svn_merge.yml --FULL_AUTOMATIC 1 --dst %WORKSPACE%/project --src %MREGE_SRC% --revisions "%MERGE_REVISIONS%"'
+    bat '%WORKSPACE%/automator/automator %WORKSPACE%/automator/cfg/dldl/svn_merge.yml --FULL_AUTOMATIC 1 --dst %WORKSPACE%/project --src %MREGE_SRC% --revisions "%MERGE_REVISIONS%"'
     if (params.BUILD_NEXT_JOB && params.NEXT_JOB) {
         build wait: false, job: params.NEXT_JOB
     }
@@ -664,7 +664,7 @@ def ftpUploadSource() {
     }
     checkoutAutomator()
     dir('ftp') {
-        bat "node %WORKSPACE%/automator/main.js %WORKSPACE%/automator/cfg/dldl/ftp_upload.yml --FULL_AUTOMATIC 1 --remote_file %REMOTE_FILE% --local_file ${ params.LOCAL_FILE.tokenize(',').collect { env.WORKSPACE + '/source/' + it }.join(',')}"
+        bat "%WORKSPACE%/automator/automator %WORKSPACE%/automator/cfg/dldl/ftp_upload.yml --FULL_AUTOMATIC 1 --remote_file %REMOTE_FILE% --local_file ${ params.LOCAL_FILE.tokenize(',').collect { env.WORKSPACE + '/source/' + it }.join(',')}"
     }
 }
 
@@ -762,13 +762,13 @@ def pub200AutomaticIntegrated() {
 
 
         if (params.HG_MONITOR_SKIN_ID) {
-            bat([label: '皮肤控件ID检测', returnStdout: false, script: "node %WORKSPACE%/automator/main.js %WORKSPACE%/automator/cfg/dldl/monitor_resource_modification.yml --FULL_AUTOMATIC --workspaceFolder %WORKSPACE%/project --revisions \"${getRevisions()}\" --jenkins ${JENKINS_URL} --webhook https://oapi.dingtalk.com/robot/send?access_token=d49fdc03b05ac8d52da7ad4167b94823a2c77225bb93d943440a0340db5dd313"])
+            bat([label: '皮肤控件ID检测', returnStdout: false, script: "%WORKSPACE%/automator/automator %WORKSPACE%/automator/cfg/dldl/monitor_resource_modification.yml --FULL_AUTOMATIC --workspaceFolder %WORKSPACE%/project --revisions \"${getRevisions()}\" --jenkins ${JENKINS_URL} --webhook https://oapi.dingtalk.com/robot/send?access_token=d49fdc03b05ac8d52da7ad4167b94823a2c77225bb93d943440a0340db5dd313"])
         }
         if (params.HG_MONITOR_SKIN_GROUPNAME) {
-            bat([label: '皮肤组名检测', returnStdout: false, script: "node %WORKSPACE%/automator/main.js %WORKSPACE%/automator/cfg/dldl/check_skin_notify.yml --FULL_AUTOMATIC --workspaceFolder %WORKSPACE%/project --webhook https://oapi.dingtalk.com/robot/send?access_token=d49fdc03b05ac8d52da7ad4167b94823a2c77225bb93d943440a0340db5dd313"])
+            bat([label: '皮肤组名检测', returnStdout: false, script: "%WORKSPACE%/automator/automator %WORKSPACE%/automator/cfg/dldl/check_skin_notify.yml --FULL_AUTOMATIC --workspaceFolder %WORKSPACE%/project --webhook https://oapi.dingtalk.com/robot/send?access_token=d49fdc03b05ac8d52da7ad4167b94823a2c77225bb93d943440a0340db5dd313"])
         }
         if (params.HG_MONITOR_IMAGE) {
-            bat([label: '图片资源检测', returnStdout: false, script: "node %WORKSPACE%/automator/main.js %WORKSPACE%/automator/cfg/dldl/check_image_notify.yml --FULL_AUTOMATIC --workspaceFolder %WORKSPACE%/project --webhook https://oapi.dingtalk.com/robot/send?access_token=d49fdc03b05ac8d52da7ad4167b94823a2c77225bb93d943440a0340db5dd313"])
+            bat([label: '图片资源检测', returnStdout: false, script: "%WORKSPACE%/automator/automator %WORKSPACE%/automator/cfg/dldl/check_image_notify.yml --FULL_AUTOMATIC --workspaceFolder %WORKSPACE%/project --webhook https://oapi.dingtalk.com/robot/send?access_token=d49fdc03b05ac8d52da7ad4167b94823a2c77225bb93d943440a0340db5dd313"])
         }
         // addBuildDescripion ("${new Date().format('yyyy-MM-dd(E)HH:mm:ss', TimeZone.getTimeZone('Asia/Shanghai')) - '星期'}")
         // if (env.SVN_LAST_CHANGED_REV) {
@@ -792,7 +792,7 @@ def pub200AutomaticIntegrated() {
                 }
             }
             if (pub_200_out_bat) {// 执行manifest排序
-                bat([label: '更新manifest', returnStdout: false, script: 'node %WORKSPACE%/automator/main.js %WORKSPACE%/automator/cfg/dldl/generate_sorted_ts.yml --FULL_AUTOMATIC --workspaceFolder %WORKSPACE%/project'])
+                bat([label: '更新manifest', returnStdout: false, script: '%WORKSPACE%/automator/automator %WORKSPACE%/automator/cfg/dldl/generate_sorted_ts.yml --FULL_AUTOMATIC --workspaceFolder %WORKSPACE%/project'])
                 bat([label: '编译代码', returnStdout: false, script: pub_200_out_bat])
                 // 获取凭证
                 withCredentials([usernamePassword(credentialsId: getCredentialsId(), passwordVariable: 'HG_CREDENTIAL_PASSWORD', usernameVariable: 'HG_CREDENTIAL_USERNAME')]) {
@@ -888,8 +888,7 @@ def getDingTalkRobot() {
 def checkoutAutomator() {
     dir('automator') {
         try {
-            checkoutGit("http://192.168.1.205:3000/yzp/automator.git")
-            bat 'npm i'
+            checkoutGit("http://192.168.1.205:3000/yzp/automator_artifact.git")
         } catch (Exception e) {
             print(e)
             currentBuild.result = 'UNSTABLE'
@@ -956,7 +955,7 @@ def generateSendTranslationKV_API() {
             retry(1) {
                 env.REVISIONS = env.REVISIONS ? env.REVISIONS : getRevisions()
                 print 'env.REVISIONS ' + env.REVISIONS
-                bat 'node %WORKSPACE%/automator/main.js %WORKSPACE%/automator/cfg/dldl/conversion_to_send@api.yml --FULL_AUTOMATIC 1 --projectFolder %WORKSPACE%/project --projectName %PROJECT_NAME% --conversionWorkspaceFolder %WORKSPACE%/conversion --translationFolder %WORKSPACE%/translation --revisions "%REVISIONS%" --revision_beg "%REVISION_BEG%" --revision_end "%REVISION_END%"'
+                bat '%WORKSPACE%/automator/automator %WORKSPACE%/automator/cfg/dldl/conversion_to_send@api.yml --FULL_AUTOMATIC 1 --projectFolder %WORKSPACE%/project --projectName %PROJECT_NAME% --conversionWorkspaceFolder %WORKSPACE%/conversion --translationFolder %WORKSPACE%/translation --revisions "%REVISIONS%" --revision_beg "%REVISION_BEG%" --revision_end "%REVISION_END%"'
             }
         }
 }
