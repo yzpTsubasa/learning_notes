@@ -746,10 +746,10 @@ def checkoutGit(url, branch = "master") {
     // print git_branch == branch
     def changed = git_remote_url != url || git_branch != branch
     if (changed) {
-        git changelog: false, poll: false, url: url, branch: branch
+        checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: branch]], extensions: [[$class: 'SubmoduleOption', disableSubmodules: false, parentCredentials: false, recursiveSubmodules: true, reference: '', trackingSubmodules: false]], userRemoteConfigs: [[url: url]]]
     } else {
         bat "git checkout -- *" // 先还原
-        bat "git pull ${git_remote} ${git_branch}"
+        bat "git pull ${git_remote} ${git_branch} --recurse-submodules"
     }
 }
 
