@@ -747,10 +747,11 @@ def checkoutGit(url, branch = "master") {
     def changed = git_remote_url != url || git_branch != branch
     if (changed) {
         print("prev=${git_remote_url} - ${git_branch} curr=${url} - ${branch}")
-        git changelog: false, poll: false, url: url, branch: branch
+        checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: branch]], extensions: [[$class: 'SubmoduleOption', disableSubmodules: false, parentCredentials: false, recursiveSubmodules: true, reference: '', trackingSubmodules: false]], userRemoteConfigs: [[url: url]]]
     }
     bat "git checkout -- *" // 先还原
-    bat "git pull ${git_remote} ${git_branch} --recurse-submodules"
+    bat "git pull ${git_remote} ${branch} --recurse-submodules"
+    bat "git submodule update"
 }
 
 def pub200AutomaticIntegrated() {
