@@ -731,11 +731,11 @@ def checkoutComplexSVN(scm) {
 }
 
 def checkoutGit(url, branch = "master") {
-    def git_remote = "origin"
+    def git_remote = ""
     def git_remote_url = ""
     def git_branch = ""
     if (fileExists('.git')) {
-        // git_remote = bat([returnStdout: true, script: '@echo off && git remote']).trim()
+        git_remote = bat([returnStdout: true, script: '@echo off && git remote']).trim()
         git_remote_url = bat([returnStdout: true, script: "@echo off && git remote get-url ${git_remote}"]).trim()
         git_branch = bat([returnStdout: true, script: "@echo off && git branch --show-current"]).trim()
     }
@@ -747,11 +747,11 @@ def checkoutGit(url, branch = "master") {
     def changed = git_remote_url != url || git_branch != branch
     if (changed) {
         print("prev=${git_remote_url} - ${git_branch} curr=${url} - ${branch}")
-        checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: branch]], extensions: [[$class: 'SubmoduleOption', disableSubmodules: false, parentCredentials: false, recursiveSubmodules: true, reference: '', trackingSubmodules: false]], userRemoteConfigs: [[url: url]]]
+        git changelog: false, poll: false, url: url, branch: branch
     }
     bat "git checkout -- *" // 先还原
-    bat "git pull ${git_remote} ${branch} --recurse-submodules"
-    bat "git submodule update"
+    bat "git pull ${git_remote} ${branch}"
+    bat "git submodule update --init --recursive"
 }
 
 def pub200AutomaticIntegrated() {
