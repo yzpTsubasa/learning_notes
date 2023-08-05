@@ -14,7 +14,7 @@ pipeline {
                 script {
                     build.checkoutAutomator()
                     print "${JENKINS_HOME}"
-                    bat 'node %WORKSPACE%/automator/main.js %WORKSPACE%/automator/cfg/dldl/clean_expired.yml --FULL_AUTOMATIC 1 --workspaceFolder %JENKINS_HOME%/workspace --relative_path */project/bin-release/web/v*'
+                    bat '%WORKSPACE%/automator/automator %WORKSPACE%/automator/cfg/dldl/clean_expired.yml --FULL_AUTOMATIC 1 --workspaceFolder %JENKINS_HOME%/workspace --relative_path */project/bin-release/web/v*'
                 }
             }
         }

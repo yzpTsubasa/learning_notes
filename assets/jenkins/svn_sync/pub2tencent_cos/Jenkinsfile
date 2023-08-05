@@ -20,10 +20,10 @@ pipeline {
                     }
                     build.checkoutAutomator()
                     lock(resource: "pub2web") {
-                        env.pub_ver = bat returnStdout: true, script: '@echo off && node %WORKSPACE%/automator/main.js %WORKSPACE%/automator/cfg/dldl/pubver_upgrade.yml --FULL_AUTOMATIC 1 --LOG_LEVEL 99'
+                        env.pub_ver = bat returnStdout: true, script: '@echo off && %WORKSPACE%/automator/automator %WORKSPACE%/automator/cfg/dldl/pubver_upgrade.yml --FULL_AUTOMATIC 1 --LOG_LEVEL 99'
                         print env.pub_ver
                     }
-                    bat 'node %WORKSPACE%/automator/main.js %WORKSPACE%/automator/cfg/dldl/pub2cdn.with_pubver.yml --FULL_AUTOMATIC 1 --workspaceFolder %WORKSPACE%/project'
+                    bat '%WORKSPACE%/automator/automator %WORKSPACE%/automator/cfg/dldl/pub2cdn.with_pubver.yml --FULL_AUTOMATIC 1 --workspaceFolder %WORKSPACE%/project'
                 }
             }
         }

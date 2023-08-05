@@ -37,12 +37,12 @@ pipeline {
             steps{
                 script {
                     lock(resource: "pub2web") {
-                        env.PUB_VER = bat returnStdout: true, script: '@echo off && node %WORKSPACE%/automator/main.js %WORKSPACE%/automator/cfg/release/web/web_upgrade_pub_ver.yml --FULL_AUTOMATIC 1 --LOG_LEVEL 99'
+                        env.PUB_VER = bat returnStdout: true, script: '@echo off && %WORKSPACE%/automator/automator %WORKSPACE%/automator/cfg/release/web/web_upgrade_pub_ver.yml --FULL_AUTOMATIC 1 --LOG_LEVEL 99'
                         print env.PUB_VER
                     }
-                    bat 'node %WORKSPACE%/automator/main.js %WORKSPACE%/automator/cfg/release/web/web_pub2tencent_cos.yml --FULL_AUTOMATIC 1'
+                    bat '%WORKSPACE%/automator/automator %WORKSPACE%/automator/cfg/release/web/web_pub2tencent_cos.yml --FULL_AUTOMATIC 1'
                     lock(resource: "pub2web") {
-                        bat 'node %WORKSPACE%/automator/main.js %WORKSPACE%/automator/cfg/release/web/web_save_hg_ver_cfg.yml --FULL_AUTOMATIC 1'
+                        bat '%WORKSPACE%/automator/automator %WORKSPACE%/automator/cfg/release/web/web_save_hg_ver_cfg.yml --FULL_AUTOMATIC 1'
                     }
                 }
             }
@@ -52,7 +52,7 @@ pipeline {
             steps {
                 script {
                     lock(resource: "pub2web") {
-                        bat 'node %WORKSPACE%/automator/main.js %WORKSPACE%/automator/cfg/release/mini/mini_upgrade_pub_ver.yml --FULL_AUTOMATIC 1'
+                        bat '%WORKSPACE%/automator/automator %WORKSPACE%/automator/cfg/release/mini/mini_upgrade_pub_ver.yml --FULL_AUTOMATIC 1'
                     }
                 }
             }
@@ -60,7 +60,7 @@ pipeline {
         stage('minigame_upload') {
             steps {
                 script {
-                    bat 'node %WORKSPACE%/automator/main.js %WORKSPACE%/automator/cfg/release/mini/mini_upload.yml --FULL_AUTOMATIC 1'
+                    bat '%WORKSPACE%/automator/automator %WORKSPACE%/automator/cfg/release/mini/mini_upload.yml --FULL_AUTOMATIC 1'
                 }
             }
             options {

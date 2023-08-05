@@ -22,7 +22,7 @@ pipeline {
             steps {
                 script {
                     lock(resource: "pub2web") {
-                        bat 'node %WORKSPACE%/automator/main.js %WORKSPACE%/automator/cfg/release/mini/mini_toggle.yml --FULL_AUTOMATIC 1'
+                        bat '%WORKSPACE%/automator/automator %WORKSPACE%/automator/cfg/release/mini/mini_toggle.yml --FULL_AUTOMATIC 1'
                     }
                 }
             }
