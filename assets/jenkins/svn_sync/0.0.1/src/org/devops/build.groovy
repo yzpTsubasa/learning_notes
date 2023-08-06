@@ -731,11 +731,11 @@ def checkoutComplexSVN(scm) {
 }
 
 def checkoutGit(url, branch = "master") {
-    def git_remote = ""
+    def git_remote = "origin"
     def git_remote_url = ""
     def git_branch = ""
     if (fileExists('.git')) {
-        git_remote = bat([returnStdout: true, script: '@echo off && git remote']).trim()
+        // git_remote = bat([returnStdout: true, script: '@echo off && git remote']).trim()
         git_remote_url = bat([returnStdout: true, script: "@echo off && git remote get-url ${git_remote}"]).trim()
         git_branch = bat([returnStdout: true, script: "@echo off && git branch --show-current"]).trim()
     }
