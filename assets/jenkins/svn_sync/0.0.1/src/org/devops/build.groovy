@@ -889,7 +889,7 @@ def getDingTalkRobot() {
 def checkoutAutomator() {
     dir('automator') {
         try {
-            checkoutGit("http://192.168.1.205:3000/yzp/automator_artifact.git")
+            checkoutGit("https://gitee.com/TsubasaYeung/automator_artifact.git")
         } catch (Exception e) {
             print(e)
             currentBuild.result = 'UNSTABLE'
