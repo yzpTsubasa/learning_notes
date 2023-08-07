@@ -730,7 +730,7 @@ def checkoutComplexSVN(scm) {
     getSVNInfo()
 }
 
-def checkoutGit(url, branch = "master") {
+def checkoutGit(url, branch = "master", remote_submodule = false) {
     def git_remote = "origin"
     def git_remote_url = ""
     def git_branch = ""
@@ -753,7 +753,11 @@ def checkoutGit(url, branch = "master") {
     }
     bat "git checkout -- *" // 先还原
     bat "git pull ${git_remote} ${branch}"
-    bat "git submodule update --init --recursive"
+    if (remote_submodule) {
+        bat "git submodule update --init --recursive --remote"
+    } else {
+        bat "git submodule update --init --recursive"
+    }
 }
 
 def pub200AutomaticIntegrated() {
@@ -888,10 +892,10 @@ def getDingTalkRobot() {
     return env.HG_DINGTALK_ROBOT ? env.HG_DINGTALK_ROBOT : "automator"
 }
 
-def checkoutAutomator() {
+def checkoutAutomator(remote_submodule = false) {
     dir('automator') {
         try {
-            checkoutGit("https://gitee.com/TsubasaYeung/automator_artifact.git")
+            checkoutGit("https://gitee.com/TsubasaYeung/automator_artifact.git", "master", remote_submodule)
         } catch (Exception e) {
             print(e)
             currentBuild.result = 'UNSTABLE'
