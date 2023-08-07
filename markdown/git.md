@@ -69,6 +69,9 @@ git submodule update
 git clone <remote>
 git submodule update --init --recursive
 
+# 使用最新的子模块内容
+git submodule update --init --recursive --remote
+
 # 删除远程分支
 git push <remote> --delete <branch>
 
