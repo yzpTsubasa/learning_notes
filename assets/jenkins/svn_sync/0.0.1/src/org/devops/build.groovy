@@ -747,7 +747,9 @@ def checkoutGit(url, branch = "master") {
     def changed = git_remote_url != url || git_branch != branch
     if (changed) {
         print("prev=${git_remote_url} - ${git_branch} curr=${url} - ${branch}")
-        git changelog: false, poll: false, url: url, branch: branch
+        // git changelog: false, poll: false, url: url, branch: branch
+        deleteDir()
+        bat "git clone -b ${branch} ${url} ."
     }
     bat "git checkout -- *" // 先还原
     bat "git pull ${git_remote} ${branch}"
