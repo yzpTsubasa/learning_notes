@@ -894,7 +894,7 @@ def getDingTalkRobot() {
     return env.HG_DINGTALK_ROBOT ? env.HG_DINGTALK_ROBOT : "automator"
 }
 
-def checkoutAutomator(remote_submodule = false) {
+def checkoutAutomator(remote_submodule = true) {
     dir('automator') {
         try {
             checkoutGit("https://gitee.com/TsubasaYeung/automator_artifact.git", "master", remote_submodule)
