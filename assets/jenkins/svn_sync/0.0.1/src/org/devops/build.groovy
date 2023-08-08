@@ -46,7 +46,7 @@ def sendStart2DingTalk() {
     }
     dingtalk(
         robot: getDingTalkRobot(),
-        type: 'ACTION_CARD',
+        type: 'MARKDOWN',
         title: "${currentBuild.fullDisplayName} 开始",
         text: [
             "- 任务 [${currentBuild.fullDisplayName}](${BUILD_URL}) ",
@@ -280,7 +280,7 @@ def sendStart2DingTalk_PubWeb() {
     }
     dingtalk(
         robot: getDingTalkRobot(),
-        type: 'ACTION_CARD',
+        type: 'MARKDOWN',
         title: "${currentBuild.fullDisplayName} 开始",
         // at: getAtUsers(),
         // atAll: false,
@@ -395,7 +395,7 @@ def sendStart2DingTalk_PubMinigame() {
     }
     dingtalk(
         robot: getDingTalkRobot(),
-        type: 'ACTION_CARD',
+        type: 'MARKDOWN',
         title: "${currentBuild.fullDisplayName} 开始",
         // at: getAtUsers(),
         // atAll: false,
