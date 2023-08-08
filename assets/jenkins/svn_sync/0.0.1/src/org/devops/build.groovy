@@ -493,6 +493,8 @@ def sendCommonResult2DingTalk() {
             "- 时刻 ${new Date().format('yyyy-MM-dd(E)HH:mm:ss', TimeZone.getTimeZone('Asia/Shanghai')) - '星期'}",
             "- 用时 ${durationString}",
         ] + (
+            env.EXTRA_DINGTALK_NOTIFICATIONS ? env.EXTRA_DINGTALK_NOTIFICATIONS : []
+        ) + (
             currentBuild.result == 'FAILURE' ? [
                 '***',
                 "- <font color=${result_color}>失败日志</font>",
