@@ -205,6 +205,7 @@ def pubToWebIntegrated() {
     dir('project') {
         // 检出
         checkoutSVN(params.HG_REPOSITORY_SRC)
+        getSVNInfo()
         // 发送通知
         sendStart2DingTalk_PubWeb()
         // 设置环境变量 prg_dir 给 hgbuild 使用
@@ -231,6 +232,7 @@ def pubToWebIntegratedCommonOld() {
     dir('project') {
         // 检出
         checkoutSVN(params.HG_REPOSITORY_SRC)
+        getSVNInfo()
         // 发送通知
         sendStart2DingTalk_PubWeb()
     }
@@ -255,6 +257,7 @@ def pubToWebIntegratedCommon() {
     dir('project') {
         // 检出
         checkoutSVN(params.HG_REPOSITORY_SRC)
+        getSVNInfo()
         // 发送通知
         sendStart2DingTalk_PubWeb()
     }
@@ -560,6 +563,7 @@ def mergeSVN() {
     checkoutAutomator()
     dir('project') {
         checkoutSVN(params.HG_REPOSITORY_SRC)
+        getSVNInfo()
     }
     bat '%WORKSPACE%/automator/automator %WORKSPACE%/automator/cfg/dldl/svn_merge.yml --FULL_AUTOMATIC 1 --dst %WORKSPACE%/project --src %MREGE_SRC% --revisions "%MERGE_REVISIONS%"'
     if (params.BUILD_NEXT_JOB && params.NEXT_JOB) {
@@ -702,7 +706,6 @@ def checkoutSVN(scmUrl, poll = true, changelog = true, quiet = true, local = "."
     }
     // pollSCM
     checkout changelog: changelog, poll: poll, scm: [$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '', excludedRegions: excludedRegions, excludedRevprop: '', excludedUsers: '', filterChangelog: true, ignoreDirPropChanges: false, includedRegions: includedRegions, locations: [[cancelProcessOnExternalsFail: true, credentialsId: getCredentialsId(), depthOption: 'infinity', ignoreExternalsOption: true, local: local, remote: "${scmUrl}"]], quietOperation: quiet, workspaceUpdater: [$class: 'UpdateUpdater']]
-    getSVNInfo()
 }
 
 // 使用本地环境的 svn 检出, 不需要 svn upgrade
@@ -729,7 +732,6 @@ def checkoutComplexSVN(scm) {
 }
     // pollSCM
     checkout(scm)
-    getSVNInfo()
 }
 
 def checkoutGit(url, branch = "master", remote_submodule = false) {
@@ -768,6 +770,7 @@ def pub200AutomaticIntegrated() {
         // 检出代码
         // checkoutSVN(params.HG_REPOSITORY_SRC)
         checkoutComplexSVN(changelog: true, poll: true, scm: [$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '', excludedRegions: '''.*/out/.*''', excludedRevprop: '', excludedUsers: '', filterChangelog: true, ignoreDirPropChanges: false, includedRegions: '', locations: [[cancelProcessOnExternalsFail: true, credentialsId: getCredentialsId(), depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: "$HG_REPOSITORY_SRC"]], quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']])
+        getSVNInfo()
 
 
         if (params.HG_MONITOR_SKIN_ID) {
@@ -836,6 +839,7 @@ def validateDev() {
     dir('project') {
         // 检出代码
         checkoutComplexSVN(changelog: true, poll: true, scm: [$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '', excludedRegions: '', excludedRevprop: '', excludedUsers: '', filterChangelog: true, ignoreDirPropChanges: false, includedRegions: '''.*/src/.*\\w+\\.ts''', locations: [[cancelProcessOnExternalsFail: true, credentialsId: getCredentialsId(), depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: "$HG_REPOSITORY_SRC"]], quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']])
+        getSVNInfo()
         // addBuildDescripion ("${new Date().format('yyyy-MM-dd(E)HH:mm:ss', TimeZone.getTimeZone('Asia/Shanghai')) - '星期'}")
         // if (env.SVN_LAST_CHANGED_REV) {
         //     addBuildDescripion ("r" + env.SVN_LAST_CHANGED_REV)
