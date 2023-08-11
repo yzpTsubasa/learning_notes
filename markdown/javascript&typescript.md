@@ -83,6 +83,15 @@ npm i nexe -g
 # 生成可执行文件
 nexe --resource "./node_modules/**/*" main.js
 ```
+
+## 使用 pkg 生成 nodejs 可执行文件
+```sh
+npm i -g pkg
+# 打包过程中需要下载包，速度太慢，可以提前下载好放到指定目录，并且修改成命令行中的文件名，如 fetched-v16.16.0-win-x64
+# 下载地址：https://github.com/vercel/pkg-fetch/releases
+# 指定目录：~\.pkg-cache
+pkg . -t node16-win-x64 --out-path=dist/
+```
 > 当前支持到 [nodejs 14.15.3](https://oss.npmmirror.com/dist/node/v14.15.3/node-v14.15.3-x64.msi)
 ## 版本号比较
 ``` javascript
