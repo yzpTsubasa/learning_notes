@@ -120,7 +120,7 @@ def sendResult2DingTalk() {
     if (params.HG_QUIET) {
         return
     }
-    generatePatchFile()
+    // generatePatchFile()
     resolveResult()
     env.description = currentBuild.description
     env.durationString = currentBuild.durationString.minus(' and counting')
@@ -138,7 +138,8 @@ def sendResult2DingTalk() {
             "- 发起 ${getRootBuildTriggerDesc()}",
             "- 时刻 ${new Date().format('yyyy-MM-dd(E)HH:mm:ss', TimeZone.getTimeZone('Asia/Shanghai')) - '星期'}",
             "- 用时 ${durationString}",
-            "- [记录](${env.HG_PATCH_FILE})",
+            // "- [记录](${env.HG_PATCH_FILE})",
+            "- 记录",
             '***',
         ] + getChangeString() + (
             currentBuild.result == 'FAILURE' ? [
