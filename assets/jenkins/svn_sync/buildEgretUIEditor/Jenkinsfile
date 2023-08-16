@@ -1,8 +1,8 @@
 import groovy.json.JsonSlurperClassic
 
-@Library("jenkins_library") _
+@Library("jenkins_shared_library") _
 
-def build = new org.devops.build()
+def build_lib = new com.tsubasayeung.build()
 
 pipeline {
     agent any
@@ -50,7 +50,7 @@ copy /y \".\\artifacts\\out\\Egret UI Editor_${packageData.version}.exe\" \".\\a
 mklink /j "artifacts/out/build" "build"
 )
 '''
-                    fileOperations([fileCreateOperation(fileContent: build.getChangeString(true, false).join("\n"), fileName: "artifacts/out/changelog.txt")])
+                    fileOperations([fileCreateOperation(fileContent: build_lib.getChangeString(true, false).join("\n"), fileName: "artifacts/out/changelog.txt")])
                   }
                 }
             }
