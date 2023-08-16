@@ -938,7 +938,9 @@ npm i -D eslint eslint-plugin-prettier
         "editor.defaultFormatter": "dbaeumer.vscode-eslint"
     },
     "editor.codeActionsOnSave": {
-        "source.fixAll": true
+        // "source.fixAll": true,
+        // 仅对eslint生效
+        "source.fixAll.eslint": true
     },
     "editor.detectIndentation": false,
     "editor.tabSize": 4,
