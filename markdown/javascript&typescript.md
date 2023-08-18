@@ -983,9 +983,9 @@ sendToMain('todo:add', document.querySelector('input').value);
  * @param fn
  * @param limit 每次执行最大数量
  * @param trigger 触发函数
- * @returns {[T, Function]} 队列化后的函数 queued, 取消函数 cancel
+ * @returns 队列化后的函数 queued
  */
-export function queue<T extends Function>(fn: T, limit: number, trigger: (callback: Function) => void): [T, Function] {
+export function queue<T extends Function>(fn: T, limit: number, trigger: (callback: Function) => void): T {
     const argQueues: any[] = [];
     let context: any = null;
     let availableCount = limit;
@@ -1018,15 +1018,55 @@ export function queue<T extends Function>(fn: T, limit: number, trigger: (callba
         context = this;
         runQueue();
     };
-    const cancel = function () {
-        argQueues.length = 0;
-    };
-    return [queued, cancel];
+    return queued;
 }
 
 export function queueWithTimeout<T extends Function>(fn: T, limit: number, delay: number) {
     return queue(fn, limit, (callback) => {
         setTimeout(() => {
+            callback();
+        }, delay);
+    });
+}
+```
+```js
+function queue(fn, limit, trigger) {
+    var argQueues = [];
+    var context = null;
+    var availableCount = limit;
+    var isWaiting = false;
+    function runQueue() {
+        if (!argQueues.length)
+            return;
+        if (availableCount > 0) {
+            var runNum = Math.min(availableCount, argQueues.length);
+            var argsToRun = argQueues.splice(0, runNum);
+            argsToRun.forEach(function (item) {
+                fn.apply(context, item);
+            });
+            availableCount -= runNum;
+        }
+        if (!isWaiting) {
+            isWaiting = true;
+            trigger(reset);
+        }
+    }
+    function reset() {
+        isWaiting = false;
+        availableCount = limit;
+        runQueue();
+    }
+    var queued = function () {
+        var args = arguments;
+        argQueues.push(args);
+        context = this;
+        runQueue();
+    };
+    return queued;
+}
+function queueWithTimeout(fn, limit, delay) {
+    return queue(fn, limit, function (callback) {
+        hg.setTimeout(function () {
             callback();
         }, delay);
     });
