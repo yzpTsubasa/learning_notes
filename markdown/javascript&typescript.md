@@ -1064,11 +1064,32 @@ function queue(fn, limit, trigger) {
     };
     return queued;
 }
+
 function queueWithTimeout(fn, limit, delay) {
     return queue(fn, limit, function (callback) {
         hg.setTimeout(function () {
             callback();
         }, delay);
+    });
+}
+
+function queueWithKeydown(fn, limit, key = " ") {
+    return queue(fn, limit, function (callback) {
+        document.body.addEventListener("keydown", function (event) {
+            if (event.key == key) {
+                document.body.removeEventListener("keydown", arguments.callee);
+                callback();
+            }
+        });
+    });
+}
+
+function queueWithClick(fn, limit) {
+    return queue(fn, limit, function (callback) {
+        document.body.addEventListener("click", function (event) {
+            document.body.removeEventListener("click", arguments.callee);
+            callback();
+        });
     });
 }
 ```
