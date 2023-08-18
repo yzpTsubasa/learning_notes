@@ -975,3 +975,60 @@ sendToMain('todo:add', document.querySelector('input').value);
 发送消息需要创建很多 ArrayBuffer，导致此错误。
 
 发送消息时，先将消息放入队列，然后等待一帧后发送，如果一帧内没有发送完，则等待下一帧再发送
+
+## 队列
+```ts
+/**
+ *
+ * @param fn
+ * @param limit 每次执行最大数量
+ * @param trigger 触发函数
+ * @returns {[T, Function]} 队列化后的函数 queued, 取消函数 cancel
+ */
+export function queue<T extends Function>(fn: T, limit: number, trigger: (callback: Function) => void): [T, Function] {
+    const argQueues: any[] = [];
+    let context: any = null;
+    let availableCount = limit;
+    /** 等待触发中 */
+    let isWaiting = false;
+    /** 按队列执行 */
+    function runQueue() {
+        if (!argQueues.length) return;
+        if (availableCount > 0) {
+            const runNum = Math.min(availableCount, argQueues.length);
+            const argsToRun = argQueues.splice(0, runNum);
+            argsToRun.forEach((item) => {
+                fn.apply(context, item);
+            });
+            availableCount -= runNum;
+        }
+        if (!isWaiting) {
+            isWaiting = true;
+            trigger(reset);
+        }
+    }
+    function reset(): void {
+        isWaiting = false;
+        availableCount = limit;
+        runQueue();
+    }
+    const queued: any = function (this: any) {
+        const args = arguments;
+        argQueues.push(args);
+        context = this;
+        runQueue();
+    };
+    const cancel = function () {
+        argQueues.length = 0;
+    };
+    return [queued, cancel];
+}
+
+export function queueWithTimeout<T extends Function>(fn: T, limit: number, delay: number) {
+    return queue(fn, limit, (callback) => {
+        setTimeout(() => {
+            callback();
+        }, delay);
+    });
+}
+```
