@@ -573,7 +573,12 @@ def mergeSVN() {
 }
 
 def sendResult2Emailext () {
-    if (params.HG_QUIET && currentBuild.result == 'SUCCESS') {
+
+    if(!params.MAIL_TO){
+        return;
+    }
+
+    if (params.ALERT_MAIL_ONLY && currentBuild.result == 'SUCCESS') {
         return
     }
 
@@ -595,7 +600,7 @@ def sendResult2Emailext () {
                   <td>
                     <ul>
                       <li>项目名称&nbsp;：&nbsp;${currentBuild.fullDisplayName}</li>
-                      <li>发起人&nbsp;：&nbsp;${currentBuild.getBuildCauses()[0].userName ? currentBuild.getBuildCauses()[0].userName : currentBuild.getBuildCauses()[0].shortDescription.minus('Started by ').replace('timer', '定时器').replace('an SCM change', 'SCM轮询')}</li>
+                      <li>发起人&nbsp;：&nbsp;${getRootBuildTriggerDesc()}</li>
                       <li>状态&nbsp;：&nbsp;<font color=${result_color}>${result}</font></li>
                       <li>备注&nbsp;：&nbsp;${env.HG_BUILD_DESC ? env.HG_BUILD_DESC : '无'}</li>
                       <li>用时&nbsp;：&nbsp;${durationString}</li>

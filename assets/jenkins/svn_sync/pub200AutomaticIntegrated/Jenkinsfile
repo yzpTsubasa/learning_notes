@@ -27,9 +27,7 @@ pipeline {
                 print 'Done'
                 if (build.needCompile()) {
                     build.sendResult2DingTalk()
-                    if (params.MAIL_TO) {
-                        build.sendResult2Emailext()
-                    }
+                    build.sendResult2Emailext()
                 }
             }
         }
