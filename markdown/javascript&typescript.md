@@ -1093,3 +1093,5 @@ function queueWithClick(fn, limit) {
     });
 }
 ```
+#  Could not resolve dependency: npm ERR! peerOptional 解决方案
+`npm install --legacy-peer-deps`
