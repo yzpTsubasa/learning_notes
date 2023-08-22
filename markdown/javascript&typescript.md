@@ -1095,3 +1095,5 @@ function queueWithClick(fn, limit) {
 ```
 #  Could not resolve dependency: npm ERR! peerOptional 解决方案
 `npm install --legacy-peer-deps`
+
+也可以修改全局配置 `npm config set legacy-peer-deps=true`，这个修改等同于在`~/.npmrc` 文件中添加 `legacy-peer-deps=true`。
