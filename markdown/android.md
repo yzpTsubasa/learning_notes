@@ -75,3 +75,10 @@ applicationVariants.all { variant ->
     }
 }
 ```
+
+## 安卓Unsupported Modules Detected问题解决方法
+### 关闭工程及AS。
+- 打开工程文件夹。
+- 删除.idea文件夹
+- 搜索*.iml文件，全删除。
+- 重新打开AS，完成建立后问题解决。（嗯我是这么解决的）
