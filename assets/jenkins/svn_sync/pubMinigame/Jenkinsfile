@@ -15,8 +15,6 @@ pipeline {
                     build.cleanupHGPubToolsDist()
                     dir("project") {
                         build.checkoutSVN(params.HG_REPOSITORY_SRC)
-                        // Send Notify
-                        build.sendStart2DingTalk_PubMinigame()
                     }
                     build.checkoutAutomator()
                     // Environment Variables
@@ -29,6 +27,8 @@ pipeline {
                     }
                     // Environment Variables
                     env.MINIGAME_PROJECT = "${WORKSPACE}/${minigame_folder}"
+                    // Send Notify
+                    build.sendStart2DingTalk_PubMinigame()
                 }
             }
         }
