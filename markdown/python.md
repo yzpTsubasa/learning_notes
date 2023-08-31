@@ -50,3 +50,8 @@ pip install Pillow==6.2.2 -i https://pypi.doubanio.com/simple
 ``` bat
 set PYTHONIOENCODING=UTF-8
 ```
+
+## 打包单个模块到某个路径(下载离线包给其他机器用)
+``` bash
+pip download pyimg4 -d . > ./download.log
+```
