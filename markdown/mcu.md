@@ -8,3 +8,28 @@
 - 断开电源
 - 点击下载
 - 重新上电
+
+## keil报错syntax error near 'int', expected '__asm'解决方案
+c不支持中途定义，把变量定义放到函数中的最前面
+```diff
++unsigned char num2;
++unsigned char num1;
+ void main()
+ {
+     UART_Init();
+     UART_SendByte(0x28);
+     while (1) {
+-        unsigned char num2 = Key();
++        num2 = Key();
+         if (num2) {
+             UART_SendByte(num2);
+         }
+ 
+-        unsigned char num1 = MatrixKey();
++        num1 = MatrixKey();
+         if (num1) {
+             UART_SendByte(num1);
+         }
+     }
+ }
+```
