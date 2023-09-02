@@ -59,8 +59,8 @@ def sendStart2DingTalk() {
     )
 }
 
-def resolveResult() {   
-    switch(currentBuild.result) {
+def resolveResult() {
+    switch (currentBuild.result) {
         case "SUCCESS":
             env.result_color = '#52c41a';
             env.result = '成功';
@@ -211,10 +211,14 @@ def pubToWebIntegrated() {
         sendStart2DingTalk_PubWeb()
         // 设置环境变量 prg_dir 给 hgbuild 使用
         env.prg_dir = pwd()
+        // 设置环境变量 prg_dir 给 automator 使用
+        env.WORKSPACE_FOLDER = pwd()
     }
     checkoutPublish()
     cleanupHGPubToolsDist()
+    checkoutAutomator()
     lock(resource: 'pub2web') {
+        webUpgradeSdkInfo()
         dir('publish') {
             // 发布
             bat([label: '发布', returnStdout: false, script: """
@@ -224,6 +228,7 @@ npx hgbuild walk ${HG_PUB_RES} ${HG_PUB_TYPE} --noUserOp --noProjectUpdate --chk
 npx hgbuild walk ${HG_PUB_RES} ${HG_PUB_TYPE} --noUserOp --noProjectUpdate
 )"""])
         }
+        webSyncIndex()
     }
     }
 
@@ -236,10 +241,14 @@ def pubToWebIntegratedCommonOld() {
         getSVNInfo()
         // 发送通知
         sendStart2DingTalk_PubWeb()
+        // 设置环境变量 prg_dir 给 automator 使用
+        env.WORKSPACE_FOLDER = pwd()
     }
     checkoutPublish()
     cleanupHGPubToolsDist()
+    checkoutAutomator()
     lock(resource: 'pub2web') {
+        webUpgradeSdkInfo()
         // 发布
         dir('publish') {
             bat([label: '发布', returnStdout: false, script: """
@@ -249,6 +258,7 @@ if "%chkdst%" == "true" (
     hgbuild run _11_common_old --prg_dir ${WORKSPACE}/project --upload_filter ${params.upload_filter} --toolTag ${params.toolTag} --cfg_dir ${params.cfg_dir} --hgVerTag ${params.hgVerTag ? params.hgVerTag : "hgvc_ver"} --noUserOp --noProjectUpdate
 )"""])
         }
+        webSyncIndex()
     }
     }
 
@@ -261,11 +271,15 @@ def pubToWebIntegratedCommon() {
         getSVNInfo()
         // 发送通知
         sendStart2DingTalk_PubWeb()
+        // 设置环境变量 prg_dir 给 automator 使用
+        env.WORKSPACE_FOLDER = pwd()
     }
     // 发布
     checkoutPublish()
     cleanupHGPubToolsDist()
+    checkoutAutomator()
     lock(resource: 'pub2web') {
+        webUpgradeSdkInfo()
         dir('publish') {
             bat([label: '发布', returnStdout: false, script: """
 if "%chkdst%" == "true" (
@@ -274,6 +288,7 @@ if "%chkdst%" == "true" (
     hgbuild run _10_common --prg_dir ${WORKSPACE}/project --upload_filter ${params.upload_filter} --toolTag ${params.toolTag} --cfg_dir ${params.cfg_dir}  --hgVerTag ${params.hgVerTag ? params.hgVerTag : "hgvc_ver"} --noUserOp --noProjectUpdate
 )"""])
         }
+        webSyncIndex()
     }
     }
 
@@ -473,7 +488,7 @@ def sendResult2DingTalk_PubMinigame() {
                 "- <font color=${result_color}>失败日志</font>",
                 getTailLogString(),
             ] : []
-        )).findAll{ it }
+        )).findAll { it }
     )
 }
 
@@ -701,8 +716,8 @@ def checkoutSVN(scmUrl, poll = true, changelog = true, quiet = true, local = "."
         } else {
             print 'Workspace is not locked'
     }
-    // 还原
-    bat returnStdout: true, script: '@echo off && svn revert -R .'
+        // 还原
+        bat returnStdout: true, script: '@echo off && svn revert -R .'
     } else {
         // 获取凭证
         withCredentials([usernamePassword(credentialsId: getCredentialsId(), passwordVariable: 'HG_CREDENTIAL_PASSWORD', usernameVariable: 'HG_CREDENTIAL_USERNAME')]) {
@@ -809,7 +824,7 @@ def pub200AutomaticIntegrated() {
                     break
                 }
             }
-            if (pub_200_out_bat) {// 执行manifest排序
+            if (pub_200_out_bat) { // 执行manifest排序
                 bat([label: '更新manifest', returnStdout: false, script: '%WORKSPACE%/automator/automator %WORKSPACE%/automator/cfg/dldl/generate_sorted_ts.yml --FULL_AUTOMATIC --workspaceFolder %WORKSPACE%/project'])
                 bat([label: '编译代码', returnStdout: false, script: pub_200_out_bat])
                 // 获取凭证
@@ -860,19 +875,19 @@ def validateDev() {
             compileLog = bat([label: '校验', returnStdout: true, script: params.HG_VALIDATE_SCRIPT])
             print compileLog
             if (params.HG_VALIDATE_SUCCESS_KEYWORD) {
-                if(!(compileLog =~ /${params.HG_VALIDATE_SUCCESS_KEYWORD}/).find()) {
+                if (!(compileLog =~ /${params.HG_VALIDATE_SUCCESS_KEYWORD}/).find()) {
                     print "success keyword \"${HG_VALIDATE_SUCCESS_KEYWORD}\" not found"
                     error "validateDev failed"
-                }
-            }
-            if (params.HG_VALIDATE_FAILURE_KEYWORD) {
-                if((compileLog =~ /${params.HG_VALIDATE_FAILURE_KEYWORD}/).find()) {
-                    print "failure keyword \"${HG_VALIDATE_FAILURE_KEYWORD}\" found"
-                    error "validateDev failed"
-                }   
             }
         }
+            if (params.HG_VALIDATE_FAILURE_KEYWORD) {
+                if ((compileLog =~ /${params.HG_VALIDATE_FAILURE_KEYWORD}/).find()) {
+                    print "failure keyword \"${HG_VALIDATE_FAILURE_KEYWORD}\" found"
+                    error "validateDev failed"
+            }
     }
+}
+}
 }
 
 // 获取末尾的几条日志
@@ -938,9 +953,9 @@ def cleanupHGPubToolsDist() {
             bat 'svn cleanup %DLDL_PUB_TOOLS_DIR%'
         } else {
             print 'HGPubToolsDist is not locked'
-        }
-        bat 'svn up %DLDL_PUB_TOOLS_DIR%'
     }
+        bat 'svn up %DLDL_PUB_TOOLS_DIR%'
+}
 }
 
 // 发送翻译KV表_API
@@ -1055,23 +1070,23 @@ def getDateByStep(step = 3e5) {
     return takeEffectTime;
 }
 
+// 判断是有需要提升大版本（手动勾选或者LOGO更新）
+def needUpgradeIndexVersion() {
+    return params.PUB_CFG && (params.ENABLE_UPGRADE_INDEX_VERSION || hasLogo2Refresh())
+}
 
-// 提升大版本号
+// 提升大版本号，需要额外配置参数如： PUB_CFG={ "root": "md2", "cdn_root": "md2", "cdn_local": "cdn/local/moli", "cdn_sync": "cdn/start_cos_sync.bat", "version": "1000", "index_tag": "6497" }
 def webUpgradeSdkInfo() {
-    env.WORKSPACE_FOLDER = "${WORKSPACE}/project"
-    checkoutAutomator()
-    cleanupHGPubToolsDist();
-    lock(resource: 'pub2web') {
-        bat '%WORKSPACE%/automator/automator %WORKSPACE%/automator/cfg/release/web/web_upgrade_sdk_info.yml --FULL_AUTOMATIC 1'
+    if (!needUpgradeIndexVersion()) {
+        return
     }
+    bat '%WORKSPACE%/automator/automator %WORKSPACE%/automator/cfg/release/web/web_upgrade_sdk_info.yml --FULL_AUTOMATIC 1'
 }
 
 // 同步大版本 index 文件
 def webSyncIndex() {
-    env.WORKSPACE_FOLDER = "${WORKSPACE}/project"
-    checkoutAutomator()
-    cleanupHGPubToolsDist();
-    lock(resource: 'pub2web') {
-        bat '%WORKSPACE%/automator/automator %WORKSPACE%/automator/cfg/release/web/web_sync_index.yml --FULL_AUTOMATIC 1'
+    if (!needUpgradeIndexVersion()) {
+        return
     }
+    bat '%WORKSPACE%/automator/automator %WORKSPACE%/automator/cfg/release/web/web_sync_index.yml --FULL_AUTOMATIC 1'
 }

@@ -17,13 +17,19 @@ pipeline {
                         build.checkoutSVN(params.HG_REPOSITORY_SRC)
                         // 发送通知
                         build.sendStart2DingTalk_PubWeb()
+                        // 设置环境变量 prg_dir 给 automator 使用
+                        env.WORKSPACE_FOLDER = pwd()
                     }
                     build.checkoutAutomator()
                     lock(resource: "pub2web") {
                         env.pub_ver = bat returnStdout: true, script: '@echo off && %WORKSPACE%/automator/automator %WORKSPACE%/automator/cfg/dldl/pubver_upgrade.yml --FULL_AUTOMATIC 1 --LOG_LEVEL 99'
                         print env.pub_ver
+                        build.webUpgradeSdkInfo()
                     }
                     bat '%WORKSPACE%/automator/automator %WORKSPACE%/automator/cfg/dldl/pub2cdn.with_pubver.yml --FULL_AUTOMATIC 1 --workspaceFolder %WORKSPACE%/project'
+                    lock(resource: 'pub2web') {
+                        build.webSyncIndex()
+                    }
                 }
             }
         }
