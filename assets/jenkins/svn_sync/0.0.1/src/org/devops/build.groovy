@@ -303,18 +303,21 @@ def sendStart2DingTalk_PubWeb() {
         title: "${currentBuild.fullDisplayName} 开始",
         // at: getAtUsers(),
         // atAll: false,
-        text: [
-            "# **[${currentBuild.fullDisplayName}](${BUILD_URL})**",
-            '***',
-            '- 状态 开始',
-            "- 发起 ${getRootBuildTriggerDesc()}",
-            "- 时刻 ${new Date().format('yyyy-MM-dd(E)HH:mm:ss', TimeZone.getTimeZone('Asia/Shanghai')) - '星期'}",
-            '- 仓库',
-            params.HG_REPOSITORY_SRC ? (params.HG_REPOSITORY_SRC - ~/.*\//) : 'Unknown',
-            '- logo ' + (hasLogo2Refresh() ? '<font color=#ff9f00>已修改</font>' : '未修改'),
-            '- 记录',
-            '***',
-        ] + getChangeString()
+        text: (
+            [
+                "# **[${currentBuild.fullDisplayName}](${BUILD_URL})**",
+                '***',
+                '- 状态 开始',
+                "- 发起 ${getRootBuildTriggerDesc()}",
+                "- 时刻 ${new Date().format('yyyy-MM-dd(E)HH:mm:ss', TimeZone.getTimeZone('Asia/Shanghai')) - '星期'}",
+                '- 仓库',
+                params.HG_REPOSITORY_SRC ? (params.HG_REPOSITORY_SRC - ~/.*\//) : 'Unknown',
+                (hasLogo2Refresh() ? '- logo <font color=#ff9f00>已修改</font>' : ''),
+                (hasIndexJS2Refresh() ? '- index <font color=#ff9f00>已修改</font>' : ''),
+                '- 记录',
+                '***',
+            ] + getChangeString()
+        ).findAll { it }
     )
 }
 
@@ -385,26 +388,25 @@ def sendResult2DingTalk_PubWeb() {
         title: "${currentBuild.fullDisplayName} ${result}",
         at: getAtUsers(),
         atAll: false,
-        text: [
-            "# **[${currentBuild.fullDisplayName}](${BUILD_URL})**",
-            '***',
-            "- 状态 <font color=${result_color}>${result}</font>",
-            "- 资源版本 <font color=${result_color}>${pubWebVersion ? pubWebVersion : 'Unknown'}</font>",
-            "- 发起 ${getRootBuildTriggerDesc()}",
-            "- 时刻 ${new Date().format('yyyy-MM-dd(E)HH:mm:ss', TimeZone.getTimeZone('Asia/Shanghai')) - '星期'}",
-            "- 用时 ${durationString}",
-            '- 仓库',
-            params.HG_REPOSITORY_SRC ? (params.HG_REPOSITORY_SRC - ~/.*\//) : 'Unknown',
-            '- logo ' + (hasLogo2Refresh() ? '<font color=#ff9f00>已修改</font>' : '未修改'),
-            '- 记录',
-            '***',
-        ] + getChangeString() + (
-            currentBuild.result == 'FAILURE' ? [
+        text: (
+            [
+                "# **[${currentBuild.fullDisplayName}](${BUILD_URL})**",
                 '***',
-                "- <font color=${result_color}>失败日志</font>",
-                getTailLogString(),
-            ] : []
-        )
+                "- 状态 <font color=${result_color}>${result}</font>",
+                "- 资源版本 <font color=${result_color}>${pubWebVersion ? pubWebVersion : 'Unknown'}</font>",
+                "- 发起 ${getRootBuildTriggerDesc()}",
+                "- 时刻 ${new Date().format('yyyy-MM-dd(E)HH:mm:ss', TimeZone.getTimeZone('Asia/Shanghai')) - '星期'}",
+                "- 用时 ${durationString}",
+                '- 仓库',
+                params.HG_REPOSITORY_SRC ? (params.HG_REPOSITORY_SRC - ~/.*\//) : 'Unknown',
+                (hasLogo2Refresh() ? '- logo <font color=#ff9f00>已修改</font>' : ''),
+                (hasIndexJS2Refresh() ? '- index <font color=#ff9f00>已修改</font>' : ''),
+                '- 记录',
+                '***',
+            ] 
+            + getChangeString() 
+            + ( currentBuild.result == 'FAILURE' ? [ '***', "- <font color=${result_color}>失败日志</font>", getTailLogString(), ] : [])
+        ).findAll { it }
     )
 }
 
