@@ -1054,3 +1054,24 @@ def getDateByStep(step = 3e5) {
     takeEffectTime.setTime(takeEffectTimestamp)
     return takeEffectTime;
 }
+
+
+// 提升大版本号
+def webUpgradeSdkInfo() {
+    env.WORKSPACE_FOLDER = "${WORKSPACE}/project"
+    checkoutAutomator()
+    cleanupHGPubToolsDist();
+    lock(resource: 'pub2web') {
+        bat '%WORKSPACE%/automator/automator %WORKSPACE%/automator/cfg/release/web/web_upgrade_sdk_info.yml --FULL_AUTOMATIC 1'
+    }
+}
+
+// 同步大版本 index 文件
+def webSyncIndex() {
+    env.WORKSPACE_FOLDER = "${WORKSPACE}/project"
+    checkoutAutomator()
+    cleanupHGPubToolsDist();
+    lock(resource: 'pub2web') {
+        bat '%WORKSPACE%/automator/automator %WORKSPACE%/automator/cfg/release/web/web_sync_index.yml --FULL_AUTOMATIC 1'
+    }
+}

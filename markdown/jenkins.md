@@ -292,3 +292,9 @@ println(hudson.model.WorkspaceCleanupThread.disabled)
 ## 版本升级
 - 2.303.1
 - 2.346.3 Require Java 11 or newer
+
+## env 和 params 的差别
+- env.XXX 获取的都是字符串，比如 "true", "false"
+- params.XXX 获取的都是对象，比如 "true" 转成 boolean 类型为 true
+> 所以在作为条件判断时，应该使用 params.XXX
+
