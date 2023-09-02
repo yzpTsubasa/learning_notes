@@ -1026,6 +1026,18 @@ def hasLogo2Refresh() {
         }
     }
 }
+// 判断是否有index.js/base.js需要刷新
+def hasIndexJS2Refresh() {
+    return currentBuild.changeSets.any {
+        return it.items.any {
+            return it.getAffectedFiles().any {
+                def path = it.getPath()
+                // print path
+                return (path =~ /([\\\/]|^)resource[\\\/]js[\\\/]index[\\\/](index|base)\.js$/).find()
+            }
+        }
+    }
+}
 
 // 获取最上游构建的发起描述
 def getRootBuildTriggerDesc() {
@@ -1070,9 +1082,9 @@ def getDateByStep(step = 3e5) {
     return takeEffectTime;
 }
 
-// 判断是有需要提升大版本（手动勾选或者LOGO更新）
+// 判断是有需要提升大版本（手动勾选或者index相关的内容更新）
 def needUpgradeIndexVersion() {
-    return params.PUB_CFG && (params.ENABLE_UPGRADE_INDEX_VERSION || hasLogo2Refresh())
+    return params.PUB_CFG && (params.ENABLE_UPGRADE_INDEX_VERSION || hasLogo2Refresh() || hasIndexJS2Refresh())
 }
 
 // 提升大版本号，需要额外配置参数如： PUB_CFG={ "root": "md2", "cdn_root": "md2", "cdn_local": "cdn/local/moli", "cdn_sync": "cdn/start_cos_sync.bat", "version": "1000", "index_tag": "6497" }
