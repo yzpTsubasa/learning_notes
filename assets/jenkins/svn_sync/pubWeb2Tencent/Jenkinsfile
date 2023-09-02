@@ -12,20 +12,23 @@ pipeline {
         stage('build') {
             steps {
                 script {
+                    build.cleanupHGPubToolsDist()
                     dir("project") {
                         build.checkoutSVN(params.HG_REPOSITORY_SRC)
                         // Send Notify
                         build.sendStart2DingTalk_PubWeb()
+                        // 设置环境变量 prg_dir 给 automator 使用
+                        env.WORKSPACE_FOLDER = pwd()
                     }
                     build.checkoutAutomator()
-                    // Environment Variables
-                    env.WORKSPACE_FOLDER = "${env.WORKSPACE}/project"
                     lock(resource: "pub2web") {
                         env.PUB_VER = bat returnStdout: true, script: '@echo off && %WORKSPACE%/automator/automator %WORKSPACE%/automator/cfg/release/web/web_upgrade_pub_ver.yml --FULL_AUTOMATIC 1 --LOG_LEVEL 99'
                         print env.PUB_VER
+                        build.webUpgradeSdkInfo()
                     }
                     bat '%WORKSPACE%/automator/automator %WORKSPACE%/automator/cfg/release/web/web_pub2tencent_cos.yml --FULL_AUTOMATIC 1'
                     lock(resource: "pub2web") {
+                        build.webSyncIndex()
                         bat '%WORKSPACE%/automator/automator %WORKSPACE%/automator/cfg/release/web/web_save_hg_ver_cfg.yml --FULL_AUTOMATIC 1'
                     }
                 }
