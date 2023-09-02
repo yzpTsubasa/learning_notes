@@ -1,0 +1,24 @@
+{
+    "extends": "recommended-jenkinsfile",
+    "rules": {
+        "CouldBeElvis": "off",
+        "CouldBeSwitchStatement": "off",
+        "VariableName": {
+            "regex": "[a-z_][a-zA-Z0-9_]*",
+            "severity": "info"
+        },
+        "ParameterCount": {
+            "maxParameters": 10
+        },
+        "ParameterName": {
+            "regex": "[a-z_][a-zA-Z0-9_]*"
+        },
+        "LineLength": {
+            "length": 600
+        },
+        "UnnecessaryGString": "off",
+        "DuplicateStringLiteral": "off",
+        "DuplicateMapLiteral": "off",
+        "CatchException": "off"
+    }
+}
