@@ -136,6 +136,10 @@ new Date().format("yyyy-MM-dd'T'HH:mm:ss.SSS", TimeZone.getTimeZone('Asia/Shangh
 
 ## 执行 sql 文件
 ``` groovy
+@Library("jenkinsci-unstashParam-library")
+
+// ...
+
 def sqlfile = unstashParam "SQL_FILE"
 fileOperations([folderCreateOperation('achieve')])
 def dstFile = "achieve/" + new Date().format("yyyy-MM-dd HH-mm-ss") + ".sql"
