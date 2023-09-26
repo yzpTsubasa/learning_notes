@@ -67,18 +67,6 @@ pipeline {
                 timeout(5)
             }
         }
-        stage('finish') {
-            steps {
-                script {
-                    // 重新检出一次小程序工程，同步刚创建的提交到本次 changelog
-                    def parts = params.HG_MINIGAME_REPOSITORY_SRC.split("/")
-                    def minigame_folder = parts[parts.size() - 1]
-                    dir(minigame_folder) {
-                        build.checkoutSVN(params.HG_MINIGAME_REPOSITORY_SRC)
-                    }
-                }
-            }
-        }
     }
 
 
