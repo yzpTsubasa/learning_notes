@@ -1,0 +1,40 @@
+@Library("jenkinsci-unstashParam-library")
+@Library("jenkins_library")
+
+def build = new org.devops.build()
+
+pipeline {
+    agent any
+    stages {
+        stage('Hello') {
+            steps {
+                script {
+                    def dstFile = "uploaded\\tmp." + new Date().format("yyyy-MM-dd HH-mm-ss") + ".js"
+                    def inputfile = unstashParam("HG_INPUTFILE", dstFile)
+                    print(inputfile)
+                    
+                    
+                    def parts = params.HG_REPOSITORY_SRC.split("/")
+                    def repository_basename = parts[parts.size() - 1]
+                    dir(repository_basename) {
+                        build.checkoutSVN(params.HG_REPOSITORY_SRC)
+                    }
+                    
+                    fileOperations([fileCopyOperation(excludes: '', flattenFiles: false, includes: dstFile, renameFiles: true, sourceCaptureExpression: '', targetLocation: '', targetNameExpression: "${repository_basename}/sdk/hg_allsdk_85.js")])
+                    
+                    bat """
+rem 修改编码为 utf-8
+chcp 65001 > nul
+copy /y \".\\${dstFile}\" \".\\${repository_basename}\\${FILE_PATH}\"
+"""
+                    bat "svn status ./${repository_basename}/${FILE_PATH}"
+                    bat "svn commit -m \"${COMMIT_MSG}\" ./${repository_basename}/${FILE_PATH}"
+                    
+                    if (params.BUILD_NEXT_JOB && params.NEXT_JOB) {
+                        build wait: false, job: params.NEXT_JOB
+                    }
+                }
+            }
+        }
+    }
+}
