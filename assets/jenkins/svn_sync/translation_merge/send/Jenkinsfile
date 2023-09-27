@@ -1,0 +1,63 @@
+@Library("jenkins_library") _
+
+def build = new org.devops.build()
+
+pipeline {
+    agent any
+    triggers {
+        pollSCM 'H/2 * * * *'
+    }
+    options {
+        disableConcurrentBuilds()
+    }
+
+    stages {
+        stage('generate_translation') {
+            steps {
+                script {
+                    lock(resource: 'conversion_api') {
+                        build.checkoutAutomator()
+                        dir('project/resource/assets/cfgjson') {
+                            build.checkoutComplexSVN(changelog: false, poll: false, scm: [$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '', excludedRegions: '', excludedRevprop: '', excludedUsers: '', filterChangelog: true, ignoreDirPropChanges: false, includedRegions: '''.*/resource/assets/cfgjson/\\w+\\.json
+                    .*/resource/assets/cfgjson/base/\\w+\\.json
+                    .*/resource/js/common\\.js''', locations: [[cancelProcessOnExternalsFail: true, credentialsId: build.getCredentialsId(), depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: "$SCM_URL/resource/assets/cfgjson"]], quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']])
+                        }
+                        dir('project/resource/js') {
+                            build.checkoutComplexSVN(changelog: false, poll: false, scm: [$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '', excludedRegions: '', excludedRevprop: '', excludedUsers: '', filterChangelog: true, ignoreDirPropChanges: false, includedRegions: '''.*/resource/assets/cfgjson/\\w+\\.json
+                    .*/resource/assets/cfgjson/base/\\w+\\.json
+                    .*/resource/js/common\\.js''', locations: [[cancelProcessOnExternalsFail: true, credentialsId: build.getCredentialsId(), depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: "$SCM_URL/resource/js"]], quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']])
+                        }
+                        // .*/${PROJECT_NAME}/${PROJECT_VER}/cn/.*
+                        def common_js = readFile encoding: 'utf-8', file: 'project/resource/js/common.js'
+                        def localeCfg = ((common_js =~ /HG_GLOBAL\.LOCALIZATION_CFG \= ([\s\S]*?\});/)[0][1])
+                        // print localeCfg
+                        def projectName = ((localeCfg =~ /projectName\: "(.*?)"/)[0][1])
+                        print projectName
+                        def projectVer = ((localeCfg =~ /projectVer\: "(.*?)"/)[0][1])
+                        print projectVer
+                        def dst_locale = ((localeCfg =~ /dst_locale\: "(.*?)"/)[0][1])
+                        print dst_locale
+                        dir('translation') {
+                            build.checkoutComplexSVN([$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '', excludedRegions: '', excludedRevprop: '', excludedUsers: '', filterChangelog: false, ignoreDirPropChanges: false, includedRegions: ".*/${projectName}/${projectVer}${env.PROJECT_VER_SUFFIX ? env.PROJECT_VER_SUFFIX : ""}/${dst_locale}/.*", locations: [[cancelProcessOnExternalsFail: true, credentialsId: build.getCredentialsId(), depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: 'https://svn100.hotgamehl.com/svn/Html5/trunk/dldl_WX/translation_keyvalue']], quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']])
+                        }
+                        dir('convert2src') {
+                            retry(1) {
+                                env.REVISIONS = env.REVISIONS ? env.REVISIONS : build.getRevisions()
+                                print 'env.REVISIONS ' + env.REVISIONS
+                                bat '%WORKSPACE%/automator/automator %WORKSPACE%/automator/cfg/conversion/conversion_to_send@api.yml --FULL_AUTOMATIC 1 --projectFolder %WORKSPACE%/project --projectName %PROJECT_NAME% --conversionWorkspaceFolder %WORKSPACE%/conversion --translationFolder %WORKSPACE%/translation --revisions "%REVISIONS%" --revision_beg "%REVISION_BEG%" --revision_end "%REVISION_END%" --projectVerSuffix "%PROJECT_VER_SUFFIX%"'
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    post { 
+        changed { 
+            script {
+                build.sendCommonResult2DingTalk()
+            }
+        }
+    }
+}

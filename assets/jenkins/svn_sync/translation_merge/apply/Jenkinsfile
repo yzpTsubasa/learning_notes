@@ -1,0 +1,52 @@
+@Library("jenkins_library")
+
+def build = new org.devops.build()
+
+pipeline {
+    agent any
+    options {
+        disableConcurrentBuilds()
+    }
+    stages {
+        stage('retrieve_translation') {
+            steps {
+                script {
+                    // httpRequest responseHandle: 'NONE', url: "${ZIP_URL}", wrapAsMultipart: false
+                    lock(resource: 'conversion_api') {
+                        build.checkoutAutomator()
+                        dir('project/resource/assets/cfgjson') {
+                            build.checkoutComplexSVN([scm: [$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '', excludedRegions: '', excludedRevprop: '', excludedUsers: '', filterChangelog: true, ignoreDirPropChanges: false, includedRegions: '''.*/resource/assets/cfgjson/\\w+\\.json
+                    .*/resource/assets/cfgjson/base/\\w+\\.json
+                    .*/resource/js/common\\.js''', locations: [[cancelProcessOnExternalsFail: true, credentialsId: build.getCredentialsId(), depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: "$SCM_URL/resource/assets/cfgjson"]], quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']]])
+                        }
+                        dir('project/resource/js') {
+                            build.checkoutComplexSVN([scm: [$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '', excludedRegions: '', excludedRevprop: '', excludedUsers: '', filterChangelog: true, ignoreDirPropChanges: false, includedRegions: '''.*/resource/assets/cfgjson/\\w+\\.json
+                    .*/resource/assets/cfgjson/base/\\w+\\.json
+                    .*/resource/js/common\\.js''', locations: [[cancelProcessOnExternalsFail: true, credentialsId: build.getCredentialsId(), depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: "$SCM_URL/resource/js"]], quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']]])
+                        }
+                        dir('translation') {
+                            build.checkoutComplexSVN changelog: false, poll: false, scm: [$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '', excludedRegions: '', excludedRevprop: '', excludedUsers: '', filterChangelog: false, ignoreDirPropChanges: false, includedRegions: '', locations: [[cancelProcessOnExternalsFail: true, credentialsId: build.getCredentialsId(), depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: 'https://svn100.hotgamehl.com/svn/Html5/trunk/dldl_WX/translation_keyvalue']], quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']]
+                        }
+                        dir('convert2src') {
+                            retry(1) {
+                                bat '%WORKSPACE%/automator/automator %WORKSPACE%/automator/cfg/conversion/conversion_retrieve@api.yml --FULL_AUTOMATIC 1 --projectFolder %WORKSPACE%/project --gitFolder %WORKSPACE%/i18n_cp_seirei --conversionWorkspaceFolder %WORKSPACE%/conversion --translationFolder %WORKSPACE%/translation --zipUrl "%ZIP_URL%" --projectVerSuffix "%PROJECT_VER_SUFFIX%"'
+                            }
+                        }
+                    }
+                    // 自动构建发布任务
+                    if (params.BUILD_NEXT_JOB && params.NEXT_JOB) {
+                        build wait: false, job: params.NEXT_JOB, parameters: [extendedChoice(name: 'HG_REPOSITORY_SRC', value: params.SCM_URL)]
+                    }
+                }
+            }
+        }
+    }
+    
+    post { 
+        changed { 
+            script {
+                build.sendCommonResult2DingTalk()
+            }
+        }
+    }
+}
