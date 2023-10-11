@@ -54,7 +54,7 @@ pipeline {
     }
     
     post { 
-        changed { 
+        always { 
             script {
                 buildLib.sendCommonResult2DingTalk()
             }
