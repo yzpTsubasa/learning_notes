@@ -37,8 +37,12 @@ pipeline {
                         print projectVer
                         def dst_locale = ((localeCfg =~ /dst_locale\: "(.*?)"/)[0][1])
                         print dst_locale
+                        env.realProjectVer = "${projectVer}${env.PROJECT_VER_SUFFIX ? env.PROJECT_VER_SUFFIX : ""}"
+                        if (env.SPECIFIED_PRJECT_VER) {
+                            env.realProjectVer = env.SPECIFIED_PRODUCT_VER
+                        }
                         dir('translation') {
-                            buildLib.checkoutComplexSVN([$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '', excludedRegions: '', excludedRevprop: '', excludedUsers: '', filterChangelog: false, ignoreDirPropChanges: false, includedRegions: ".*/${projectName}/${projectVer}${env.PROJECT_VER_SUFFIX ? env.PROJECT_VER_SUFFIX : ""}/cn/.*", locations: [[cancelProcessOnExternalsFail: true, credentialsId: buildLib.getCredentialsId(), depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: 'https://svn100.hotgamehl.com/svn/Html5/trunk/dldl_WX/translation_keyvalue']], quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']])
+                            buildLib.checkoutComplexSVN([$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '', excludedRegions: '', excludedRevprop: '', excludedUsers: '', filterChangelog: false, ignoreDirPropChanges: false, includedRegions: ".*/${projectName}/${realProjectVer}/cn/.*", locations: [[cancelProcessOnExternalsFail: true, credentialsId: buildLib.getCredentialsId(), depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: 'https://svn100.hotgamehl.com/svn/Html5/trunk/dldl_WX/translation_keyvalue']], quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']])
                         }
                         dir('convert2src') {
                             retry(1) {
