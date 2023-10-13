@@ -22,6 +22,7 @@ pipeline {
                         }
                         dir('project/resource/assets/cfgjson') {
                             buildLib.checkoutComplexSVN([$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '', excludedRegions: '', excludedRevprop: '', excludedUsers: '', filterChangelog: true, ignoreDirPropChanges: false, includedRegions: '''.*/resource/assets/cfgjson/\\w+\\.json
+                    .*/resource/assets/cfgjson/cn/\\w+\\.json
                     .*/resource/assets/cfgjson/base/\\w+\\.json
                     .*/resource/js/common\\.js''', locations: [[cancelProcessOnExternalsFail: true, credentialsId: buildLib.getCredentialsId(), depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: "$SCM_URL/resource/assets/cfgjson"]], quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']])
                         }
