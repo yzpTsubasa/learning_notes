@@ -1097,3 +1097,59 @@ function queueWithClick(fn, limit) {
 `npm install --legacy-peer-deps`
 
 也可以修改全局配置 `npm config set legacy-peer-deps=true`，这个修改等同于在`~/.npmrc` 文件中添加 `legacy-peer-deps=true`。
+
+# 精度相关计算
+```js
+function multiply() {
+    var result = 1;
+    var totalDot = 0;
+    for(let i = 0, len = arguments.length; i < len; i++) {
+        var num = arguments[i];
+        if (num < 0) {
+            result *= -1;
+            num *= -1;
+        }
+        var str = num.toString();
+        var dotIdx = str.indexOf('.');
+        if (dotIdx != -1) {
+            totalDot += str.length - dotIdx - 1;
+            str = str.substr(0, dotIdx) + str.substr(dotIdx + 1);
+        }
+        result *= +str;
+    }
+    if (totalDot > 0) {
+        var resultStr = result.toString();
+        resultStr = resultStr.substr(0, resultStr.length - totalDot) + '.' + resultStr.substr(resultStr.length - totalDot);
+        result = +resultStr;
+    }
+    return result;
+}
+
+function add() {
+    var result = 0;
+    var totalDot = 0;
+    for(let i = 0, len = arguments.length; i < len; i++) {
+        var num = arguments[i];
+        var isNegative = num < 0;
+        if (isNegative) {
+            num *= -1;
+        }
+        var num_str = num.toString();
+        var dotIdx = num_str.indexOf('.');
+        var dotLen = num_str.length - dotIdx - 1;
+        if (dotLen > totalDot) {
+            result *= Math.pow(10, dotLen - totalDot);
+            totalDot = dotLen;
+        }
+        num_str = (num_str.substr(0, dotIdx) + num_str.substr(dotIdx + 1)).replace(/^0+/, "");
+        num = +num_str * (isNegative ? -1 : 1);
+        result += num;
+    }
+    if (totalDot > 0) {
+        var resultStr = result.toString();
+        resultStr = resultStr.substr(0, resultStr.length - totalDot) + '.' + resultStr.substr(resultStr.length - totalDot);
+        result = +resultStr;
+    }
+    return result;
+}
+```
