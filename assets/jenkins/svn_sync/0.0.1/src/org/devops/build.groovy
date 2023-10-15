@@ -59,8 +59,8 @@ def sendStart2DingTalk() {
     )
 }
 
-def resolveResult() {   
-    switch(currentBuild.result) {
+def resolveResult() {
+    switch (currentBuild.result) {
         case "SUCCESS":
             env.result_color = '#52c41a';
             env.result = '成功';
@@ -211,10 +211,14 @@ def pubToWebIntegrated() {
         sendStart2DingTalk_PubWeb()
         // 设置环境变量 prg_dir 给 hgbuild 使用
         env.prg_dir = pwd()
+        // 设置环境变量 prg_dir 给 automator 使用
+        env.WORKSPACE_FOLDER = pwd()
     }
     checkoutPublish()
     cleanupHGPubToolsDist()
+    checkoutAutomator()
     lock(resource: 'pub2web') {
+        webUpgradeSdkInfo()
         dir('publish') {
             // 发布
             bat([label: '发布', returnStdout: false, script: """
@@ -224,6 +228,7 @@ npx hgbuild walk ${HG_PUB_RES} ${HG_PUB_TYPE} --noUserOp --noProjectUpdate --chk
 npx hgbuild walk ${HG_PUB_RES} ${HG_PUB_TYPE} --noUserOp --noProjectUpdate
 )"""])
         }
+        webSyncIndex()
     }
     }
 
@@ -236,10 +241,14 @@ def pubToWebIntegratedCommonOld() {
         getSVNInfo()
         // 发送通知
         sendStart2DingTalk_PubWeb()
+        // 设置环境变量 prg_dir 给 automator 使用
+        env.WORKSPACE_FOLDER = pwd()
     }
     checkoutPublish()
     cleanupHGPubToolsDist()
+    checkoutAutomator()
     lock(resource: 'pub2web') {
+        webUpgradeSdkInfo()
         // 发布
         dir('publish') {
             bat([label: '发布', returnStdout: false, script: """
@@ -249,6 +258,7 @@ if "%chkdst%" == "true" (
     hgbuild run _11_common_old --prg_dir ${WORKSPACE}/project --upload_filter ${params.upload_filter} --toolTag ${params.toolTag} --cfg_dir ${params.cfg_dir} --hgVerTag ${params.hgVerTag ? params.hgVerTag : "hgvc_ver"} --noUserOp --noProjectUpdate
 )"""])
         }
+        webSyncIndex()
     }
     }
 
@@ -261,11 +271,15 @@ def pubToWebIntegratedCommon() {
         getSVNInfo()
         // 发送通知
         sendStart2DingTalk_PubWeb()
+        // 设置环境变量 prg_dir 给 automator 使用
+        env.WORKSPACE_FOLDER = pwd()
     }
     // 发布
     checkoutPublish()
     cleanupHGPubToolsDist()
+    checkoutAutomator()
     lock(resource: 'pub2web') {
+        webUpgradeSdkInfo()
         dir('publish') {
             bat([label: '发布', returnStdout: false, script: """
 if "%chkdst%" == "true" (
@@ -274,6 +288,7 @@ if "%chkdst%" == "true" (
     hgbuild run _10_common --prg_dir ${WORKSPACE}/project --upload_filter ${params.upload_filter} --toolTag ${params.toolTag} --cfg_dir ${params.cfg_dir}  --hgVerTag ${params.hgVerTag ? params.hgVerTag : "hgvc_ver"} --noUserOp --noProjectUpdate
 )"""])
         }
+        webSyncIndex()
     }
     }
 
@@ -288,18 +303,21 @@ def sendStart2DingTalk_PubWeb() {
         title: "${currentBuild.fullDisplayName} 开始",
         // at: getAtUsers(),
         // atAll: false,
-        text: [
-            "# **[${currentBuild.fullDisplayName}](${BUILD_URL})**",
-            '***',
-            '- 状态 开始',
-            "- 发起 ${getRootBuildTriggerDesc()}",
-            "- 时刻 ${new Date().format('yyyy-MM-dd(E)HH:mm:ss', TimeZone.getTimeZone('Asia/Shanghai')) - '星期'}",
-            '- 仓库',
-            params.HG_REPOSITORY_SRC ? (params.HG_REPOSITORY_SRC - ~/.*\//) : 'Unknown',
-            '- logo ' + (hasLogo2Refresh() ? '<font color=#ff9f00>已修改</font>' : '未修改'),
-            '- 记录',
-            '***',
-        ] + getChangeString()
+        text: (
+            [
+                "# **[${currentBuild.fullDisplayName}](${BUILD_URL})**",
+                '***',
+                '- 状态 开始',
+                "- 发起 ${getRootBuildTriggerDesc()}",
+                "- 时刻 ${new Date().format('yyyy-MM-dd(E)HH:mm:ss', TimeZone.getTimeZone('Asia/Shanghai')) - '星期'}",
+                '- 仓库',
+                params.HG_REPOSITORY_SRC ? (params.HG_REPOSITORY_SRC - ~/.*\//) : 'Unknown',
+                (hasLogo2Refresh() ? '- logo <font color=#ff9f00>已修改</font>' : ''),
+                (hasIndexJS2Refresh() ? '- index <font color=#ff9f00>已修改</font>' : ''),
+                '- 记录',
+                '***',
+            ] + getChangeString()
+        ).findAll { it }
     )
 }
 
@@ -370,26 +388,25 @@ def sendResult2DingTalk_PubWeb() {
         title: "${currentBuild.fullDisplayName} ${result}",
         at: getAtUsers(),
         atAll: false,
-        text: [
-            "# **[${currentBuild.fullDisplayName}](${BUILD_URL})**",
-            '***',
-            "- 状态 <font color=${result_color}>${result}</font>",
-            "- 资源版本 <font color=${result_color}>${pubWebVersion ? pubWebVersion : 'Unknown'}</font>",
-            "- 发起 ${getRootBuildTriggerDesc()}",
-            "- 时刻 ${new Date().format('yyyy-MM-dd(E)HH:mm:ss', TimeZone.getTimeZone('Asia/Shanghai')) - '星期'}",
-            "- 用时 ${durationString}",
-            '- 仓库',
-            params.HG_REPOSITORY_SRC ? (params.HG_REPOSITORY_SRC - ~/.*\//) : 'Unknown',
-            '- logo ' + (hasLogo2Refresh() ? '<font color=#ff9f00>已修改</font>' : '未修改'),
-            '- 记录',
-            '***',
-        ] + getChangeString() + (
-            currentBuild.result == 'FAILURE' ? [
+        text: (
+            [
+                "# **[${currentBuild.fullDisplayName}](${BUILD_URL})**",
                 '***',
-                "- <font color=${result_color}>失败日志</font>",
-                getTailLogString(),
-            ] : []
-        )
+                "- 状态 <font color=${result_color}>${result}</font>",
+                "- 资源版本 <font color=${result_color}>${pubWebVersion ? pubWebVersion : 'Unknown'}</font>",
+                "- 发起 ${getRootBuildTriggerDesc()}",
+                "- 时刻 ${new Date().format('yyyy-MM-dd(E)HH:mm:ss', TimeZone.getTimeZone('Asia/Shanghai')) - '星期'}",
+                "- 用时 ${durationString}",
+                '- 仓库',
+                params.HG_REPOSITORY_SRC ? (params.HG_REPOSITORY_SRC - ~/.*\//) : 'Unknown',
+                (hasLogo2Refresh() ? '- logo <font color=#ff9f00>已修改</font>' : ''),
+                (hasIndexJS2Refresh() ? '- index <font color=#ff9f00>已修改</font>' : ''),
+                '- 记录',
+                '***',
+            ] 
+            + getChangeString() 
+            + ( currentBuild.result == 'FAILURE' ? [ '***', "- <font color=${result_color}>失败日志</font>", getTailLogString(), ] : [])
+        ).findAll { it }
     )
 }
 
@@ -473,7 +490,7 @@ def sendResult2DingTalk_PubMinigame() {
                 "- <font color=${result_color}>失败日志</font>",
                 getTailLogString(),
             ] : []
-        )).findAll{ it }
+        )).findAll { it }
     )
 }
 
@@ -546,6 +563,7 @@ def generateTranslationKV_API() {
         }
         dir('project/resource/assets/cfgjson') {
             checkoutComplexSVN([$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '', excludedRegions: '', excludedRevprop: '', excludedUsers: '', filterChangelog: true, ignoreDirPropChanges: false, includedRegions: '''.*/resource/assets/cfgjson/\\w+\\.json
+    .*/resource/assets/cfgjson/cn/\\w+\\.json
     .*/resource/assets/cfgjson/base/\\w+\\.json
     .*/resource/js/common\\.js''', locations: [[cancelProcessOnExternalsFail: true, credentialsId: getCredentialsId(), depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: "$SCM_URL/resource/assets/cfgjson"]], quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']])
         }
@@ -701,8 +719,8 @@ def checkoutSVN(scmUrl, poll = true, changelog = true, quiet = true, local = "."
         } else {
             print 'Workspace is not locked'
     }
-    // 还原
-    bat returnStdout: true, script: '@echo off && svn revert -R .'
+        // 还原
+        bat returnStdout: true, script: '@echo off && svn revert -R .'
     } else {
         // 获取凭证
         withCredentials([usernamePassword(credentialsId: getCredentialsId(), passwordVariable: 'HG_CREDENTIAL_PASSWORD', usernameVariable: 'HG_CREDENTIAL_USERNAME')]) {
@@ -809,7 +827,7 @@ def pub200AutomaticIntegrated() {
                     break
                 }
             }
-            if (pub_200_out_bat) {// 执行manifest排序
+            if (pub_200_out_bat) { // 执行manifest排序
                 bat([label: '更新manifest', returnStdout: false, script: '%WORKSPACE%/automator/automator %WORKSPACE%/automator/cfg/dldl/generate_sorted_ts.yml --FULL_AUTOMATIC --workspaceFolder %WORKSPACE%/project'])
                 bat([label: '编译代码', returnStdout: false, script: pub_200_out_bat])
                 // 获取凭证
@@ -860,19 +878,19 @@ def validateDev() {
             compileLog = bat([label: '校验', returnStdout: true, script: params.HG_VALIDATE_SCRIPT])
             print compileLog
             if (params.HG_VALIDATE_SUCCESS_KEYWORD) {
-                if(!(compileLog =~ /${params.HG_VALIDATE_SUCCESS_KEYWORD}/).find()) {
+                if (!(compileLog =~ /${params.HG_VALIDATE_SUCCESS_KEYWORD}/).find()) {
                     print "success keyword \"${HG_VALIDATE_SUCCESS_KEYWORD}\" not found"
                     error "validateDev failed"
-                }
-            }
-            if (params.HG_VALIDATE_FAILURE_KEYWORD) {
-                if((compileLog =~ /${params.HG_VALIDATE_FAILURE_KEYWORD}/).find()) {
-                    print "failure keyword \"${HG_VALIDATE_FAILURE_KEYWORD}\" found"
-                    error "validateDev failed"
-                }   
             }
         }
+            if (params.HG_VALIDATE_FAILURE_KEYWORD) {
+                if ((compileLog =~ /${params.HG_VALIDATE_FAILURE_KEYWORD}/).find()) {
+                    print "failure keyword \"${HG_VALIDATE_FAILURE_KEYWORD}\" found"
+                    error "validateDev failed"
+            }
     }
+}
+}
 }
 
 // 获取末尾的几条日志
@@ -938,9 +956,9 @@ def cleanupHGPubToolsDist() {
             bat 'svn cleanup %DLDL_PUB_TOOLS_DIR%'
         } else {
             print 'HGPubToolsDist is not locked'
-        }
-        bat 'svn up %DLDL_PUB_TOOLS_DIR%'
     }
+        bat 'svn up %DLDL_PUB_TOOLS_DIR%'
+}
 }
 
 // 发送翻译KV表_API
@@ -1011,6 +1029,18 @@ def hasLogo2Refresh() {
         }
     }
 }
+// 判断是否有index.js/base.js需要刷新
+def hasIndexJS2Refresh() {
+    return currentBuild.changeSets.any {
+        return it.items.any {
+            return it.getAffectedFiles().any {
+                def path = it.getPath()
+                // print path
+                return (path =~ /([\\\/]|^)resource[\\\/]js[\\\/]index[\\\/](index|base)\.js$/).find()
+            }
+        }
+    }
+}
 
 // 获取最上游构建的发起描述
 def getRootBuildTriggerDesc() {
@@ -1053,4 +1083,25 @@ def getDateByStep(step = 3e5) {
     def takeEffectTime = new Date()
     takeEffectTime.setTime(takeEffectTimestamp)
     return takeEffectTime;
+}
+
+// 判断是有需要提升大版本（手动勾选或者index相关的内容更新）
+def needUpgradeIndexVersion() {
+    return params.PUB_CFG && (params.ENABLE_UPGRADE_INDEX_VERSION || hasLogo2Refresh() || hasIndexJS2Refresh())
+}
+
+// 提升大版本号，需要额外配置参数如： PUB_CFG={ "root": "md2", "cdn_root": "md2", "cdn_local": "cdn/local/moli", "cdn_sync": "cdn/start_cos_sync.bat", "version": "1000", "index_tag": "6497" }
+def webUpgradeSdkInfo() {
+    if (!needUpgradeIndexVersion()) {
+        return
+    }
+    bat '%WORKSPACE%/automator/automator %WORKSPACE%/automator/cfg/release/web/web_upgrade_sdk_info.yml --FULL_AUTOMATIC 1'
+}
+
+// 同步大版本 index 文件
+def webSyncIndex() {
+    if (!needUpgradeIndexVersion()) {
+        return
+    }
+    bat '%WORKSPACE%/automator/automator %WORKSPACE%/automator/cfg/release/web/web_sync_index.yml --FULL_AUTOMATIC 1'
 }

@@ -50,3 +50,32 @@ pip install Pillow==6.2.2 -i https://pypi.doubanio.com/simple
 ``` bat
 set PYTHONIOENCODING=UTF-8
 ```
+
+## 打包单个模块到某个路径(下载离线包给其他机器用)
+``` bash
+pip download pyimg4 -d . > ./download.log
+```
+
+## svg 转换
+需要安装 [gtk2-runtime-2.24.33-2021-01-30-ts-win64.exe](https://github.com/tschoonj/GTK-for-Windows-Runtime-Environment-Installer/releases/download/2021-01-30/gtk2-runtime-2.24.33-2021-01-30-ts-win64.exe)
+```py
+import os
+import cairosvg
+
+folders = ["E:/projects/egret-ui-editor-opensource/src", "E:\projects\egret-ui-editor-opensource/resources"]
+
+# 查找folders中所有的 .svg 文件
+def find_svg_files(folders):
+    svg_files = []
+    for folder in folders:
+        for root, dirs, files in os.walk(folder):
+            for file in files:
+                if file.endswith(".svg"):
+                    svg_files.append(os.path.join(root, file))
+                    # 转换 svg 为 png
+                    cairosvg.svg2png(url=os.path.join(root, file), write_to=os.path.join(root, file.replace(".svg", ".png")))
+    return svg_files
+svg_files = find_svg_files(folders)
+print(len(svg_files))
+
+```

@@ -60,7 +60,7 @@ pipeline {
     }
 
     post { 
-        changed { 
+        always { 
             script {
                 build.sendCommonResult2DingTalk()
             }

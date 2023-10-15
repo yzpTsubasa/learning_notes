@@ -1,0 +1,36 @@
+@Library("jenkins_library")
+
+def build = new org.devops.build()
+
+pipeline {
+    agent any
+    stages {
+        stage('build') {
+            steps {
+                script {
+                    build.checkoutAutomator(true)
+                    dir("project/resource") {
+                        build.checkoutSVN("${HG_REPOSITORY_SRC}/resource", false, false)
+                    }
+                    env.WORKSPACE_FOLDER = "${WORKSPACE}/project"
+                    def out_dir = "out"
+                    dir(out_dir) {
+                        env.OUTPUT_FOLDER = "${WORKSPACE}/${out_dir}"
+                    }
+                    bat "%WORKSPACE%/automator/automator %WORKSPACE%/automator/cfg/grab_resource/item_img.yml --FULL_AUTOMATIC 1"
+                    def downloadUrl = "${JOB_URL.replaceAll("\\:\\d+/job", ":8686")}${out_dir}/${ZIP_NAME}"
+                    print("点击链接下载 ${downloadUrl}")
+                    env.EXTRA_DINGTALK_NOTIFICATIONS = "- 仓库 ${params.HG_REPOSITORY_SRC ? (params.HG_REPOSITORY_SRC - ~/.*\//) : 'Unknown'},- [下载图标](${downloadUrl})"
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            script {
+                build.sendCommonResult2DingTalk()
+            }
+        }
+    }
+}
