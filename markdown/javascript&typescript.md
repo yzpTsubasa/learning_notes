@@ -1119,11 +1119,7 @@ function multiply() {
         }
         result *= +str;
     }
-    if (totalDot > 0) {
-        var resultStr = result.toString();
-        resultStr = resultStr.substring(0, resultStr.length - totalDot) + '.' + resultStr.substring(resultStr.length - totalDot);
-        result = +resultStr;
-    }
+    result /= Math.pow(10, totalDot);
     return result;
 }
 
@@ -1149,11 +1145,7 @@ function add() {
         num = +num_str * (isNegative ? -1 : 1);
         result += num;
     }
-    if (totalDot > 0) {
-        var resultStr = result.toString();
-        resultStr = resultStr.substring(0, resultStr.length - totalDot) + '.' + resultStr.substring(resultStr.length - totalDot);
-        result = +resultStr;
-    }
+    result /= Math.pow(10, totalDot);
     return result;
 }
 ```
