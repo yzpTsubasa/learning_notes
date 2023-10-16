@@ -1115,7 +1115,7 @@ function multiply() {
         var dotIdx = str.indexOf('.');
         if (dotIdx != -1) {
             totalDot += str.length - dotIdx - 1;
-            str = str.substring(0, dotIdx) + str.substring(dotIdx + 1);
+            str = (str.substring(0, dotIdx) + str.substring(dotIdx + 1)).replace(/^0+/, "");
         }
         result *= +str;
     }
