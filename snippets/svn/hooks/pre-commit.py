@@ -49,7 +49,7 @@ def main(argv):
          "valid_handler": lambda filename, content: is_valid_json(content)},
     ]
     min_chars = 1
-    message = message.encode("gb2312")
+    # message = message.encode("gb2312")
     num_chars = len(message)
     if num_chars < min_chars:
         sys.stderr.write("日志信息最少 {} 个字; 当前为 {} 个".format(min_chars, num_chars))
