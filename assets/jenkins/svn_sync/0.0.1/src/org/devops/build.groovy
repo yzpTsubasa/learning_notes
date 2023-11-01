@@ -508,7 +508,8 @@ def sendCommonResult2DingTalk() {
         at: getAtUsers(),
         atAll: false,
         text: [
-            "- 任务 [${currentBuild.fullDisplayName}](${BUILD_URL}) ",
+            "# **[${currentBuild.fullDisplayName}](${BUILD_URL})**",
+            '***',
             "- 状态 <font color=${result_color}>${result}</font>",
             "- 时刻 ${new Date().format('yyyy-MM-dd(E)HH:mm:ss', TimeZone.getTimeZone('Asia/Shanghai')) - '星期'}",
             "- 用时 ${durationString}",
