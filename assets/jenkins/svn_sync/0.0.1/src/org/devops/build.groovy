@@ -94,7 +94,7 @@ def sendResult2DingTalkTest() {
     def atUsers = getAtUsers()
     dingtalk(
         robot: getDingTalkRobot(),
-        type: 'ACTION_CARD',
+        type: 'MARKDOWN',
         title: "${currentBuild.fullDisplayName} ${result}",
         at: atUsers,
         atAll: false,
@@ -128,7 +128,7 @@ def sendResult2DingTalk() {
     def atUsers = getAtUsers(currentBuild.result == 'FAILURE')
     dingtalk(
         robot: getDingTalkRobot(),
-        type: 'ACTION_CARD',
+        type: 'MARKDOWN',
         title: "${currentBuild.fullDisplayName} ${result}",
         at: atUsers,
         atAll: false,
@@ -162,7 +162,7 @@ def sendResult2DingTalkSimple() {
     def atUsers = getAtUsers(currentBuild.result == 'FAILURE')
     dingtalk(
         robot: getDingTalkRobot(),
-        type: 'ACTION_CARD',
+        type: 'MARKDOWN',
         title: "${currentBuild.fullDisplayName} ${result}",
         at: atUsers,
         atAll: false,
@@ -384,7 +384,7 @@ def sendResult2DingTalk_PubWeb() {
     env.durationString = currentBuild.durationString.minus(' and counting')
     dingtalk(
         robot: getDingTalkRobot(),
-        type: 'ACTION_CARD',
+        type: 'MARKDOWN',
         title: "${currentBuild.fullDisplayName} ${result}",
         at: getAtUsers(),
         atAll: false,
@@ -465,7 +465,7 @@ def sendResult2DingTalk_PubMinigame() {
     env.durationString = currentBuild.durationString.minus(' and counting')
     dingtalk(
         robot: getDingTalkRobot(),
-        type: 'ACTION_CARD',
+        type: 'MARKDOWN',
         title: "${currentBuild.fullDisplayName} ${result}",
         at: getAtUsers(),
         atAll: false,
@@ -503,7 +503,7 @@ def sendCommonResult2DingTalk() {
     env.durationString = currentBuild.durationString.minus(' and counting')
     dingtalk(
         robot: getDingTalkRobot(),
-        type: 'ACTION_CARD',
+        type: 'MARKDOWN',
         title: "${currentBuild.fullDisplayName} ${result}",
         at: getAtUsers(),
         atAll: false,
