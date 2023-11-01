@@ -51,7 +51,7 @@ pipeline {
                 script {
                     lock(resource: 'translation') {
                         dir('conversion') {
-                            bat '%WORKSPACE%/automator/automator %WORKSPACE%/automator/cfg/translation_split/send.yml'
+                            env.EXTRA_DINGTALK_NOTIFICATIONS = bat returnStdout: true, script: '@echo off && %WORKSPACE%/automator/automator %WORKSPACE%/automator/cfg/translation_split/send.yml --LOG_LEVEL 99'
                         }
                     }
                 }
