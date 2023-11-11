@@ -28,7 +28,7 @@ chcp 65001 > nul
 copy /y \".\\${dstFile}\" \".\\${repository_basename}\\${FILE_PATH}\"
 """
                     bat "svn status ./${repository_basename}/${FILE_PATH}"
-                    bat "svn commit -m \"${COMMIT_MSG}\" ./${repository_basename}/${FILE_PATH}"
+                    bat "svn commit -m \"%COMMIT_MSG%\" ./${repository_basename}/${FILE_PATH}"
                     
                     if (params.BUILD_NEXT_JOB && params.NEXT_JOB) {
                         build wait: false, job: params.NEXT_JOB

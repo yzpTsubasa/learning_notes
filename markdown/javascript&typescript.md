@@ -1098,8 +1098,10 @@ function queueWithClick(fn, limit) {
 
 也可以修改全局配置 `npm config set legacy-peer-deps=true`，这个修改等同于在`~/.npmrc` 文件中添加 `legacy-peer-deps=true`。
 
-# 精度相关计算
+# 精度相关运算
 ```js
+/** 用于精度敏感的乘法运算 */
+function multiply(...arg: number[]): number;
 function multiply() {
     var result = 1;
     var totalDot = 0;
@@ -1113,18 +1115,16 @@ function multiply() {
         var dotIdx = str.indexOf('.');
         if (dotIdx != -1) {
             totalDot += str.length - dotIdx - 1;
-            str = str.substr(0, dotIdx) + str.substr(dotIdx + 1);
+            str = (str.substring(0, dotIdx) + str.substring(dotIdx + 1)).replace(/^0+/, "");
         }
         result *= +str;
     }
-    if (totalDot > 0) {
-        var resultStr = result.toString();
-        resultStr = resultStr.substr(0, resultStr.length - totalDot) + '.' + resultStr.substr(resultStr.length - totalDot);
-        result = +resultStr;
-    }
+    result /= Math.pow(10, totalDot);
     return result;
 }
 
+/** 用于精度敏感的加法运算 */
+function add(...arg: number[]): number;
 function add() {
     var result = 0;
     var totalDot = 0;
@@ -1141,15 +1141,11 @@ function add() {
             result *= Math.pow(10, dotLen - totalDot);
             totalDot = dotLen;
         }
-        num_str = (num_str.substr(0, dotIdx) + num_str.substr(dotIdx + 1)).replace(/^0+/, "");
+        num_str = (num_str.substring(0, dotIdx) + num_str.substring(dotIdx + 1)).replace(/^0+/, "");
         num = +num_str * (isNegative ? -1 : 1);
         result += num;
     }
-    if (totalDot > 0) {
-        var resultStr = result.toString();
-        resultStr = resultStr.substr(0, resultStr.length - totalDot) + '.' + resultStr.substr(resultStr.length - totalDot);
-        result = +resultStr;
-    }
+    result /= Math.pow(10, totalDot);
     return result;
 }
 ```
