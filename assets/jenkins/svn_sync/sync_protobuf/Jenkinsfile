@@ -46,7 +46,7 @@ pipeline {
                 fileOperations([fileCopyOperation(excludes: '', flattenFiles: true, includes: 'protobuf/*.proto', renameFiles: false, sourceCaptureExpression: '', targetLocation: "project/${env.HG_PROTOBUF_PATH}", targetNameExpression: '')])
                 dir("project/${env.HG_PROTOBUF_PATH}") {
                     bat 'svn add . --no-ignore --force'
-                    bat "svn commit . -m \"[0] ${getChangeString(false).join(",")}\""
+                    bat "svn commit . -m \"[0] ${build.getChangeString(false).join(",")}\""
                 }
             }
         }
