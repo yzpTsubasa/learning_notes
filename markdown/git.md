@@ -156,3 +156,10 @@ graph LR;
   Settings-->Develop_settings-->Personal_access_tokens-->Tokens_classic
 ```
 > 推送地址: https://[token]@github.com/yzpTsubasa/[repository].git
+
+
+## 相关错误
+- 没有推送权限
+> error: RPC failed; HTTP 403 curl 22 The requested URL returned error: 403
+> send-pack: unexpteced disconnect while reading sideband packet
+   
