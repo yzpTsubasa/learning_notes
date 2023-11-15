@@ -329,4 +329,4 @@ set NODE_ENV=
 
 ## 远程桌面连接 RDPWrap
 - [RDPWrap](https://github.com/stascorp/rdpwrap/releases)
-- [rdpwrap.ini](https://raw.githubusercontent.com/saurav-biswas/rdpwrap-1/master/res/rdpwrap.ini)
+- [rdpwrap.ini](https://raw.githubusercontent.com/sebaxakerhtc/rdpwrap.ini/master/rdpwrap.ini)
