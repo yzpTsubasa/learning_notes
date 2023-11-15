@@ -326,3 +326,7 @@ set NODE_ENV=development
 #删除环境变量         
 set NODE_ENV=
 ```
+
+## 远程桌面连接 RDPWrap
+- [RDPWrap](https://github.com/stascorp/rdpwrap/releases)
+- [rdpwrap.ini](https://raw.githubusercontent.com/saurav-biswas/rdpwrap-1/master/res/rdpwrap.ini)
