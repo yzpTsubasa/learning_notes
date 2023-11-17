@@ -31,6 +31,7 @@ pipeline {
                         def includedRegions = ".*/${localization_obj.appId}/${localization_obj.from_language}/.*"
                         print(includedRegions)
                         build.checkoutSVN(HG_TRANSLATIONS_REPOSITORY_SRC, true, true, true, ".", includedRegions)
+                        env.APPID = localization_obj.appId
                     }
                     env.WORKSPACE_FOLDER = "${WORKSPACE}/project"
                     env.TRANSLATION_FOLDER = "${WORKSPACE}/translation"
@@ -52,6 +53,8 @@ pipeline {
                     lock(resource: 'translation') {
                         dir('conversion') {
                             env.EXTRA_DINGTALK_NOTIFICATIONS = bat returnStdout: true, script: '@echo off && %WORKSPACE%/automator/automator %WORKSPACE%/automator/cfg/translation_split/send.yml --LOG_LEVEL 99'
+                            // 请求任务
+                            bat '@echo off && %WORKSPACE%/automator/automator %WORKSPACE%/automator/cfg/translation_split/tasks.yml'
                         }
                     }
                 }
