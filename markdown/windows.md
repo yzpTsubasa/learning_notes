@@ -330,3 +330,9 @@ set NODE_ENV=
 ## 远程桌面连接 RDPWrap
 - [RDPWrap](https://github.com/stascorp/rdpwrap/releases)
 - [rdpwrap.ini](https://raw.githubusercontent.com/sebaxakerhtc/rdpwrap.ini/master/rdpwrap.ini)
+
+## 关闭进程
+```sh
+# 指定名称关闭
+taskkill /f /im node.exe
+```
