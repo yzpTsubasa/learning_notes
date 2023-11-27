@@ -54,7 +54,7 @@ pipeline {
                         dir('conversion') {
                             env.EXTRA_DINGTALK_NOTIFICATIONS = bat returnStdout: true, script: '@echo off && %WORKSPACE%/automator/automator %WORKSPACE%/automator/cfg/translation_split/send.yml --LOG_LEVEL 99'
                             // 请求任务
-                            bat '@echo off && %WORKSPACE%/automator/automator %WORKSPACE%/automator/cfg/translation_split/tasks.yml'
+                            bat '@echo off && %WORKSPACE%/automator/automator %WORKSPACE%/automator/cfg/translation_split/tasks.yml --FULL_AUTOMATIC 1'
                         }
                     }
                 }

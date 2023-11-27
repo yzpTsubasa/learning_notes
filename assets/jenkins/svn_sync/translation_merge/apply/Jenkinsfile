@@ -38,16 +38,21 @@ pipeline {
                         def dst_locale = ((localeCfg =~ /dst_locale\: "(.*?)"/)[0][1])
                         print dst_locale
                         env.realProjectVer = "${projectVer}${env.PROJECT_VER_SUFFIX ? env.PROJECT_VER_SUFFIX : ""}"
+                        if (env.SPECIFIED_PRJECT_VER) {
+                            env.realProjectVer = env.SPECIFIED_PRJECT_VER
+                        }
                         env.APPID = projectName
                         env.TRANSLATION_FOLDER = "${WORKSPACE}/translation"
-                        env.TRANSLATION_TARGET = "<<APPID>>/${realProjectVer}/<<lang>>"
+                        if (!env.TRANSLATION_TARGET) {
+                            env.TRANSLATION_TARGET = "<<APPID>>/${realProjectVer}/<<lang>>"
+                        }
                         // 获取凭证
                         withCredentials([usernamePassword(credentialsId: buildLib.getCredentialsId(), passwordVariable: 'HG_CREDENTIAL_PASSWORD', usernameVariable: 'HG_CREDENTIAL_USERNAME')]) {
                             env.SVN_CREDENTIAL = "--username ${HG_CREDENTIAL_USERNAME} --password ${HG_CREDENTIAL_PASSWORD}"
                         }
                         dir('convert2src') {
                             retry(1) {
-                                bat '%WORKSPACE%/automator/automator %WORKSPACE%/automator/cfg/translation_split/downloads.yml'
+                                bat '%WORKSPACE%/automator/automator %WORKSPACE%/automator/cfg/translation_split/downloads.yml --FULL_AUTOMATIC 1'
                                 bat '%WORKSPACE%/automator/automator %WORKSPACE%/automator/cfg/conversion/conversion_to_src@api.yml --FULL_AUTOMATIC 1 --projectFolder %WORKSPACE%/project --conversionWorkspaceFolder %WORKSPACE%/conversion --translationFolder %WORKSPACE%/translation --projectVerSuffix "%PROJECT_VER_SUFFIX%"'
                             }
                         }

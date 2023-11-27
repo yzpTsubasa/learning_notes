@@ -42,8 +42,8 @@ pipeline {
                 script {
                     lock(resource: 'translation') {
                         dir('conversion') {
-                            bat '%WORKSPACE%/automator/automator %WORKSPACE%/automator/cfg/translation_split/downloads.yml'
-                            bat '%WORKSPACE%/automator/automator %WORKSPACE%/automator/cfg/translation_split/apply.yml'
+                            bat '%WORKSPACE%/automator/automator %WORKSPACE%/automator/cfg/translation_split/downloads.yml --FULL_AUTOMATIC 1'
+                            bat '%WORKSPACE%/automator/automator %WORKSPACE%/automator/cfg/translation_split/apply.yml --FULL_AUTOMATIC 1'
                         }
                     }
                 }
