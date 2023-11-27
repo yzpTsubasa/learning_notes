@@ -163,3 +163,13 @@ graph LR;
 > error: RPC failed; HTTP 403 curl 22 The requested URL returned error: 403
 > send-pack: unexpteced disconnect while reading sideband packet
    
+
+## 本地创建分支并推送到远程
+```sh
+git init
+git checkout -b [branch_name]
+git add .
+git commit -m "init"
+git remote add origin [url]
+git push -u origin [branch_name]
+```
