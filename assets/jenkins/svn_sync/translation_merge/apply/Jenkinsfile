@@ -27,9 +27,28 @@ pipeline {
                         dir('translation') {
                             buildLib.checkoutComplexSVN changelog: false, poll: false, scm: [$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '', excludedRegions: '', excludedRevprop: '', excludedUsers: '', filterChangelog: false, ignoreDirPropChanges: false, includedRegions: '', locations: [[cancelProcessOnExternalsFail: true, credentialsId: buildLib.getCredentialsId(), depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: 'https://svn100.hotgamehl.com/svn/Html5/trunk/dldl_WX/translation_keyvalue']], quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']]
                         }
+                        // .*/${PROJECT_NAME}/${PROJECT_VER}/cn/.*
+                        def common_js = readFile encoding: 'utf-8', file: 'project/resource/js/common.js'
+                        def localeCfg = ((common_js =~ /HG_GLOBAL\.LOCALIZATION_CFG \= ([\s\S]*?\});/)[0][1])
+                        // print localeCfg
+                        def projectName = ((localeCfg =~ /projectName\: "(.*?)"/)[0][1])
+                        print projectName
+                        def projectVer = ((localeCfg =~ /projectVer\: "(.*?)"/)[0][1])
+                        print projectVer
+                        def dst_locale = ((localeCfg =~ /dst_locale\: "(.*?)"/)[0][1])
+                        print dst_locale
+                        env.realProjectVer = "${projectVer}${env.PROJECT_VER_SUFFIX ? env.PROJECT_VER_SUFFIX : ""}"
+                        env.APPID = projectName
+                        env.TRANSLATION_FOLDER = "${WORKSPACE}/translation"
+                        env.TRANSLATION_TARGET = "<<APPID>>/${realProjectVer}/<<lang>>"
+                        // 获取凭证
+                        withCredentials([usernamePassword(credentialsId: buildLib.getCredentialsId(), passwordVariable: 'HG_CREDENTIAL_PASSWORD', usernameVariable: 'HG_CREDENTIAL_USERNAME')]) {
+                            env.SVN_CREDENTIAL = "--username ${HG_CREDENTIAL_USERNAME} --password ${HG_CREDENTIAL_PASSWORD}"
+                        }
                         dir('convert2src') {
                             retry(1) {
-                                bat '%WORKSPACE%/automator/automator %WORKSPACE%/automator/cfg/conversion/conversion_retrieve@api.yml --FULL_AUTOMATIC 1 --projectFolder %WORKSPACE%/project --gitFolder %WORKSPACE%/i18n_cp_seirei --conversionWorkspaceFolder %WORKSPACE%/conversion --translationFolder %WORKSPACE%/translation --zipUrl "%ZIP_URL%" --projectVerSuffix "%PROJECT_VER_SUFFIX%"'
+                                bat '%WORKSPACE%/automator/automator %WORKSPACE%/automator/cfg/translation_split/downloads.yml'
+                                bat '%WORKSPACE%/automator/automator %WORKSPACE%/automator/cfg/conversion/conversion_to_src@api.yml --FULL_AUTOMATIC 1 --projectFolder %WORKSPACE%/project --conversionWorkspaceFolder %WORKSPACE%/conversion --translationFolder %WORKSPACE%/translation --projectVerSuffix "%PROJECT_VER_SUFFIX%"'
                             }
                         }
                     }
