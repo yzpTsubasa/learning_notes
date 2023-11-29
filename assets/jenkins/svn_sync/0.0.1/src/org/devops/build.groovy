@@ -1030,14 +1030,14 @@ def hasLogo2Refresh() {
         }
     }
 }
-// 判断是否有index.js/base.js需要刷新
+// 判断是否有index.js/base.js/seasundclogger_2.0.4.js需要刷新
 def hasIndexJS2Refresh() {
     return currentBuild.changeSets.any {
         return it.items.any {
             return it.getAffectedPaths().any {
                 def path = it
                 // print path
-                return (path =~ /(\/|^)resource\/js\/index\/(index|base)\.js$/).find()
+                return (path =~ /(\/|^)resource\/js\/(index|base|seasundclogger_2.0.4)\.js$/).find()
             }
         }
     }
