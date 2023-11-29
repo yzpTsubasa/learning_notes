@@ -1009,10 +1009,10 @@ def hasCode2Compile() {
     def FILES_TRIGGER_COMPILE = (params.FILES_TRIGGER_COMPILE ? params.FILES_TRIGGER_COMPILE : "").tokenize(",")
     return currentBuild.changeSets.any {
         return it.items.any {
-            return it.getAffectedFiles().any {
-                def path = it.getPath()
+            return it.getAffectedPaths().any {
+                def path = it
                 // print path
-                return ((path =~ /([\\\/]|^)(src|src_base|src_ext|dep_libs|index)[\\\/].*\.(ts|js)$/).find() && path != "src\\base\\WND_ID_CFG.ts") || FILES_TRIGGER_COMPILE.any { path == it }
+                return ((path =~ /(\/|^)(src|src_base|src_ext|dep_libs|index)\/.*\.(ts|js)$/).find() && path != "src/base/WND_ID_CFG.ts") || FILES_TRIGGER_COMPILE.any { path == it }
             }
         }
     }
@@ -1022,10 +1022,10 @@ def hasCode2Compile() {
 def hasLogo2Refresh() {
     return currentBuild.changeSets.any {
         return it.items.any {
-            return it.getAffectedFiles().any {
-                def path = it.getPath()
+            return it.getAffectedPaths().any {
+                def path = it
                 // print path
-                return (path =~ /(\\|^)resource\\loading\\res\\logo.*\.png$/).find()
+                return (path =~ /(\/|^)resource\/loading\/res\/logo.*\.png$/).find()
             }
         }
     }
@@ -1034,10 +1034,10 @@ def hasLogo2Refresh() {
 def hasIndexJS2Refresh() {
     return currentBuild.changeSets.any {
         return it.items.any {
-            return it.getAffectedFiles().any {
-                def path = it.getPath()
+            return it.getAffectedPaths().any {
+                def path = it
                 // print path
-                return (path =~ /([\\\/]|^)resource[\\\/]js[\\\/]index[\\\/](index|base)\.js$/).find()
+                return (path =~ /(\/|^)resource\/js\/index\/(index|base)\.js$/).find()
             }
         }
     }
