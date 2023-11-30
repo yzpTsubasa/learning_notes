@@ -173,3 +173,10 @@ git commit -m "init"
 git remote add origin [url]
 git push -u origin [branch_name]
 ```
+
+## 查看操作记录
+```sh
+# reference log
+git reflog
+```
+
