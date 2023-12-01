@@ -1030,31 +1030,46 @@ export function queueWithTimeout<T extends Function>(fn: T, limit: number, delay
 }
 ```
 ```js
-function queue(fn, limit, trigger) {
+javascript: function queue(fn, limit, trigger, flushTrigger, toggleTrigger) {
     var argQueues = [];
     var context = null;
     var availableCount = limit;
     var isWaiting = false;
+    var permitAll = false;
+
     function runQueue() {
-        if (!argQueues.length)
-            return;
-        if (availableCount > 0) {
-            var runNum = Math.min(availableCount, argQueues.length);
+        if (!argQueues.length) return;
+        if (availableCount > 0 || permitAll) {
+            var runNum = permitAll ? argQueues.length : Math.min(availableCount, argQueues.length);
             var argsToRun = argQueues.splice(0, runNum);
             argsToRun.forEach(function (item) {
                 fn.apply(context, item);
             });
-            availableCount -= runNum;
+            if (!permitAll) {
+                availableCount -= runNum;
+            }
         }
         if (!isWaiting) {
             isWaiting = true;
             trigger(reset);
         }
     }
+
     function reset() {
         isWaiting = false;
         availableCount = limit;
         runQueue();
+    }
+
+    function toggle() {
+        permitAll = !permitAll;
+        runQueue();
+    }
+    function flush() {
+        var argsToRun = argQueues.splice(0, argQueues.length);
+        argsToRun.forEach(function (item) {
+            fn.apply(context, item);
+        });
     }
     var queued = function () {
         var args = arguments;
@@ -1062,6 +1077,19 @@ function queue(fn, limit, trigger) {
         context = this;
         runQueue();
     };
+    flushTrigger && flushTrigger(flush);
+    toggleTrigger && toggleTrigger(toggle);
+    Object.defineProperty(queued, "status", {
+        get: function() {
+            return {
+                queuedCount: argQueues.length,
+                limit: limit,
+                availableCount: availableCount,
+                isWaiting: isWaiting,
+                permitAll: permitAll,
+            }
+        },
+    });
     return queued;
 }
 
@@ -1073,23 +1101,44 @@ function queueWithTimeout(fn, limit, delay) {
     });
 }
 
-function queueWithKeydown(fn, limit, key = " ") {
-    return queue(fn, limit, function (callback) {
-        document.body.addEventListener("keydown", function (event) {
-            if (event.key == key) {
-                document.body.removeEventListener("keydown", arguments.callee);
-                callback();
-            }
-        });
+function queueWithKeydown(fn, limit, onceKey, flushKey, toggleKey) {
+    var onceCallbacks = [];
+    var toggleCallback;
+    var flushCallback;
+    document.body.addEventListener("keydown", function (event) {
+        if (event.key == onceKey) {
+            const onceCallback = onceCallbacks.shift();
+            onceCallback && onceCallback();
+        }
+        if (event.key == flushKey) {
+            flushCallback && flushCallback();
+        }
+        if (event.key == toggleKey) {
+            toggleCallback && toggleCallback();
+        }
     });
+    return queue(fn, limit, function (callback) {
+            onceCallbacks.push(callback);
+        },
+        function (callback) {
+            flushCallback = callback;
+        },
+        function (callback) {
+            toggleCallback = callback;
+        },
+    )
 }
 
 function queueWithClick(fn, limit) {
+    var onceCallbacks = [];
+    document.body.addEventListener("click", function (event) {
+        if (event.key == onceKey) {
+            const onceCallback = onceCallbacks.shift();
+            onceCallback && onceCallback();
+        }
+    });
     return queue(fn, limit, function (callback) {
-        document.body.addEventListener("click", function (event) {
-            document.body.removeEventListener("click", arguments.callee);
-            callback();
-        });
+        onceCallbacks.push(callback);
     });
 }
 ```
