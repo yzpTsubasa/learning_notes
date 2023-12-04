@@ -339,3 +339,9 @@ set NODE_ENV=
 # 指定名称关闭
 taskkill /f /im node.exe
 ```
+
+## 微信多开
+```bat
+cd /d "C:/Program Files (x86)/Tencent/WeChat"
+start WeChat.exe&WeChat.exe
+```
