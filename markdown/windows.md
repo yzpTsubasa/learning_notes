@@ -340,8 +340,15 @@ set NODE_ENV=
 taskkill /f /im node.exe
 ```
 
-## 微信多开
+## 微信多开.bat
 ```bat
 cd /d "C:/Program Files (x86)/Tencent/WeChat"
 start WeChat.exe&WeChat.exe
+```
+
+## 重启QQ小程序开发者工具.bat
+```bat
+taskkill /f /im QQ小程序开发者工具.exe
+cd /d D:\Program Files (x86)\Tencent\QQ小程序开发者工具\
+start QQ小程序开发者工具.exe
 ```
