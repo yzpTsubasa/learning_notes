@@ -19,7 +19,6 @@ pipeline {
         stage('checkout') {
             steps {
                 script {
-                    print(env.TRANSLATION_SYNC_ALL)
                     build.checkoutAutomator()
                     def localization_folder = new File(LOCALIZATION_JSON).parent
                     dir("project/$localization_folder") {
@@ -36,7 +35,12 @@ pipeline {
                     env.WORKSPACE_FOLDER = "${WORKSPACE}/project"
                     env.TRANSLATION_FOLDER = "${WORKSPACE}/translation"
                     if (!env.TRANSLATION_REVISIIONS) {
-                        env.TRANSLATION_REVISIIONS = build.getRevisions()
+                        // 判断是否为手动构建
+                        if (build.isManualTrigger()) {
+                            env.TRANSLATION_SYNC_ALL = true
+                        } else {
+                            env.TRANSLATION_REVISIIONS = build.getRevisions()
+                        }
                     }
                     // 获取凭证
                     withCredentials([usernamePassword(credentialsId: build.getCredentialsId(), passwordVariable: 'HG_CREDENTIAL_PASSWORD', usernameVariable: 'HG_CREDENTIAL_USERNAME')]) {

@@ -48,7 +48,13 @@ pipeline {
                         }
                         dir('convert2src') {
                             retry(1) {
-                                env.REVISIONS = env.REVISIONS ? env.REVISIONS : buildLib.getRevisions()
+                                if (!env.REVISIONS) {
+                                    def hasRange = env.REVISION_BEG && env.REVISION_END
+                                    // 没有选择版本号，并且非手动操作，则选择增量版本号
+                                    if (!hasRange && !buildLib.isManualTrigger()) {
+                                        env.REVISIONS = buildLib.getRevisions()
+                                    }
+                                }
                                 print 'env.REVISIONS ' + env.REVISIONS
                                 env.EXTRA_DINGTALK_NOTIFICATIONS = bat returnStdout: true, script: '@echo off && %WORKSPACE%/automator/automator %WORKSPACE%/automator/cfg/conversion/conversion_to_send@api.yml --FULL_AUTOMATIC 1 --projectFolder %WORKSPACE%/project --projectName %PROJECT_NAME% --conversionWorkspaceFolder %WORKSPACE%/conversion --translationFolder %WORKSPACE%/translation --revisions "%REVISIONS%" --revision_beg "%REVISION_BEG%" --revision_end "%REVISION_END%" --projectVerSuffix "%PROJECT_VER_SUFFIX%" --LOG_LEVEL 99'
                                     // 请求任务

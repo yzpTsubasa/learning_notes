@@ -1059,6 +1059,11 @@ def getRootBuildUserId() {
     return build.getBuildCauses()[0] && build.getBuildCauses()[0].userId
 }
 
+// 判断是否为手动触发
+def isManualTrigger() {
+    return !!getRootBuildUserId();
+}
+
 // 获取最上游构建的发起人手机
 def getRootBuildMobile() {
     def userId = getRootBuildUserId()
