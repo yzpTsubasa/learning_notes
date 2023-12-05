@@ -333,6 +333,11 @@ def getAtUsers(includeCommitUser = false) {
     if (includeCommitUser) {
         AT_USERS += getCommitUserMobiles()
     }
+    // 添加环境变量中配置的 AT_USERS@${JOB_NAME}
+    def JOB_AT_USERS = env["AT_USERS@${JOB_NAME}"]
+    if (JOB_AT_USERS) {
+        AT_USERS += JOB_AT_USERS.tokenize(',')
+    }
     // 去重
     AT_USERS.unique()
     // print AT_USERS
