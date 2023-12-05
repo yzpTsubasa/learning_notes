@@ -340,13 +340,15 @@ set NODE_ENV=
 taskkill /f /im node.exe
 ```
 
-## 微信多开.bat
+## [微信多开.bat](..\snippets\bat\微信多开.bat)
 ```bat
 cd /d "C:/Program Files (x86)/Tencent/WeChat"
 start WeChat.exe&WeChat.exe
 ```
 
-## 重启QQ小程序开发者工具.bat
+## [重启QQ小程序开发者工具.bat](..\snippets\bat\重启QQ小程序开发者工具.bat)
+- 行尾序列要选择CRLF
+- 编码为 GBK（GB2312）
 ```bat
 taskkill /f /im QQ小程序开发者工具.exe
 cd /d D:\Program Files (x86)\Tencent\QQ小程序开发者工具\
