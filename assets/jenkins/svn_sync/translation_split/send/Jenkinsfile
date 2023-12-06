@@ -34,13 +34,15 @@ pipeline {
                     }
                     env.WORKSPACE_FOLDER = "${WORKSPACE}/project"
                     env.TRANSLATION_FOLDER = "${WORKSPACE}/translation"
-                    if (!env.TRANSLATION_REVISIIONS) {
-                        // 判断是否为手动构建
-                        if (build.isManualTrigger()) {
+                    // 手动操作
+                    if (build.isManualTrigger()) {
+                        // 0 表示完整推送
+                        if (env.TRANSLATION_REVISIIONS == "0") {
                             env.TRANSLATION_SYNC_ALL = true
-                        } else {
-                            env.TRANSLATION_REVISIIONS = build.getRevisions()
                         }
+                    } else {
+                        // 自动则使用增量版本
+                        env.TRANSLATION_REVISIIONS = build.getRevisions()
                     }
                     // 获取凭证
                     withCredentials([usernamePassword(credentialsId: build.getCredentialsId(), passwordVariable: 'HG_CREDENTIAL_PASSWORD', usernameVariable: 'HG_CREDENTIAL_USERNAME')]) {
