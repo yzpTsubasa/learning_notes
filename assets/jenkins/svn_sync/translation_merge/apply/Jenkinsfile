@@ -16,13 +16,13 @@ pipeline {
                         buildLib.checkoutAutomator()
                         dir('project/resource/assets/cfgjson') {
                             buildLib.checkoutComplexSVN([scm: [$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '', excludedRegions: '', excludedRevprop: '', excludedUsers: '', filterChangelog: true, ignoreDirPropChanges: false, includedRegions: '''.*/resource/assets/cfgjson/\\w+\\.json
-                    .*/resource/assets/cfgjson/base/\\w+\\.json
-                    .*/resource/js/common\\.js''', locations: [[cancelProcessOnExternalsFail: true, credentialsId: buildLib.getCredentialsId(), depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: "$SCM_URL/resource/assets/cfgjson"]], quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']]])
+.*/resource/assets/cfgjson/base/\\w+\\.json
+.*/resource/js/common\\.js''', locations: [[cancelProcessOnExternalsFail: true, credentialsId: buildLib.getCredentialsId(), depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: "$SCM_URL/resource/assets/cfgjson"]], quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']]])
                         }
                         dir('project/resource/js') {
                             buildLib.checkoutComplexSVN([scm: [$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '', excludedRegions: '', excludedRevprop: '', excludedUsers: '', filterChangelog: true, ignoreDirPropChanges: false, includedRegions: '''.*/resource/assets/cfgjson/\\w+\\.json
-                    .*/resource/assets/cfgjson/base/\\w+\\.json
-                    .*/resource/js/common\\.js''', locations: [[cancelProcessOnExternalsFail: true, credentialsId: buildLib.getCredentialsId(), depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: "$SCM_URL/resource/js"]], quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']]])
+.*/resource/assets/cfgjson/base/\\w+\\.json
+.*/resource/js/common\\.js''', locations: [[cancelProcessOnExternalsFail: true, credentialsId: buildLib.getCredentialsId(), depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: "$SCM_URL/resource/js"]], quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']]])
                         }
                         dir('translation') {
                             buildLib.checkoutComplexSVN changelog: false, poll: false, scm: [$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '', excludedRegions: '', excludedRevprop: '', excludedUsers: '', filterChangelog: false, ignoreDirPropChanges: false, includedRegions: '', locations: [[cancelProcessOnExternalsFail: true, credentialsId: buildLib.getCredentialsId(), depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: 'https://svn100.hotgamehl.com/svn/Html5/trunk/dldl_WX/translation_keyvalue']], quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']]

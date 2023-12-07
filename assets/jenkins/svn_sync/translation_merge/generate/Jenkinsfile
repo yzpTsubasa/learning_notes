@@ -22,14 +22,14 @@ pipeline {
                         }
                         dir('project/resource/assets/cfgjson') {
                             buildLib.checkoutComplexSVN([$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '', excludedRegions: '', excludedRevprop: '', excludedUsers: '', filterChangelog: true, ignoreDirPropChanges: false, includedRegions: '''.*/resource/assets/cfgjson/\\w+\\.json
-                    .*/resource/assets/cfgjson/cn/\\w+\\.json
-                    .*/resource/assets/cfgjson/base/\\w+\\.json
-                    .*/resource/js/common\\.js''', locations: [[cancelProcessOnExternalsFail: true, credentialsId: buildLib.getCredentialsId(), depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: "$SCM_URL/resource/assets/cfgjson"]], quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']])
+.*/resource/assets/cfgjson/cn/\\w+\\.json
+.*/resource/assets/cfgjson/base/\\w+\\.json
+.*/resource/js/common\\.js''', locations: [[cancelProcessOnExternalsFail: true, credentialsId: buildLib.getCredentialsId(), depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: "$SCM_URL/resource/assets/cfgjson"]], quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']])
                         }
                         dir('project/resource/js') {
                             buildLib.checkoutComplexSVN([$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '', excludedRegions: '', excludedRevprop: '', excludedUsers: '', filterChangelog: true, ignoreDirPropChanges: false, includedRegions: '''.*/resource/assets/cfgjson/\\w+\\.json
-                    .*/resource/assets/cfgjson/base/\\w+\\.json
-                    .*/resource/js/common\\.js''', locations: [[cancelProcessOnExternalsFail: true, credentialsId: buildLib.getCredentialsId(), depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: "$SCM_URL/resource/js"]], quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']])
+.*/resource/assets/cfgjson/base/\\w+\\.json
+.*/resource/js/common\\.js''', locations: [[cancelProcessOnExternalsFail: true, credentialsId: buildLib.getCredentialsId(), depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: "$SCM_URL/resource/js"]], quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']])
                         }
                         dir('convert2src') {
                             bat '%WORKSPACE%/automator/automator %WORKSPACE%/automator/cfg/conversion/conversion_to_src@api.yml --FULL_AUTOMATIC 1 --projectFolder %WORKSPACE%/project --conversionWorkspaceFolder %WORKSPACE%/conversion --translationFolder %WORKSPACE%/translation --projectVerSuffix "%PROJECT_VER_SUFFIX%"'

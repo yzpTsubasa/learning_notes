@@ -19,13 +19,13 @@ pipeline {
                         buildLib.checkoutAutomator()
                         dir('project/resource/assets/cfgjson') {
                             buildLib.checkoutComplexSVN(changelog: false, poll: false, scm: [$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '', excludedRegions: '', excludedRevprop: '', excludedUsers: '', filterChangelog: true, ignoreDirPropChanges: false, includedRegions: '''.*/resource/assets/cfgjson/\\w+\\.json
-                    .*/resource/assets/cfgjson/base/\\w+\\.json
-                    .*/resource/js/common\\.js''', locations: [[cancelProcessOnExternalsFail: true, credentialsId: buildLib.getCredentialsId(), depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: "$SCM_URL/resource/assets/cfgjson"]], quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']])
+.*/resource/assets/cfgjson/base/\\w+\\.json
+.*/resource/js/common\\.js''', locations: [[cancelProcessOnExternalsFail: true, credentialsId: buildLib.getCredentialsId(), depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: "$SCM_URL/resource/assets/cfgjson"]], quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']])
                         }
                         dir('project/resource/js') {
                             buildLib.checkoutComplexSVN(changelog: false, poll: false, scm: [$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '', excludedRegions: '', excludedRevprop: '', excludedUsers: '', filterChangelog: true, ignoreDirPropChanges: false, includedRegions: '''.*/resource/assets/cfgjson/\\w+\\.json
-                    .*/resource/assets/cfgjson/base/\\w+\\.json
-                    .*/resource/js/common\\.js''', locations: [[cancelProcessOnExternalsFail: true, credentialsId: buildLib.getCredentialsId(), depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: "$SCM_URL/resource/js"]], quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']])
+.*/resource/assets/cfgjson/base/\\w+\\.json
+.*/resource/js/common\\.js''', locations: [[cancelProcessOnExternalsFail: true, credentialsId: buildLib.getCredentialsId(), depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: "$SCM_URL/resource/js"]], quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']])
                         }
                         // .*/${PROJECT_NAME}/${PROJECT_VER}/cn/.*
                         def common_js = readFile encoding: 'utf-8', file: 'project/resource/js/common.js'
