@@ -47,8 +47,8 @@ setx path "%PATH%;%cd%"
 ```
 ## 设置 HTTP 代理
 ``` sh
-set HTTP_PROXY=http://127.0.0.1:6149
-set HTTPS_PROXY=http://127.0.0.1:6149
+set HTTP_PROXY=http://127.0.0.1:10800
+set HTTPS_PROXY=http://127.0.0.1:10800
 ```
 
 ## 你不能访问此共享文件夹，因为你组织的安全策略阻止未经身份验证的来宾访问
