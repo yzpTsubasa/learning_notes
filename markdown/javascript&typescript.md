@@ -1198,3 +1198,11 @@ function add() {
     return result;
 }
 ```
+
+## npm 发布包
+```sh
+# 登录
+npm login --registry https://registry.npmjs.org
+# 发布
+npm publish --registry https://registry.npmjs.org
+```
