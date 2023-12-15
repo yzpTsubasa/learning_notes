@@ -1,5 +1,11 @@
 ## javascript&typescript
 
+## eslint 忽略部分
+```js
+// 忽略复杂度
+/* eslint-disable complexity */
+```
+
 ## npm install 出错
 ``` sh
 # 报错内容 Cannot read property 'pickAlgorithm' of null
