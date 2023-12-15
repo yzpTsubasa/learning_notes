@@ -1,5 +1,8 @@
 ## jenkins
 
+## 配置标记格式器，用于更好显示描述信息
+> 前往 `Manager Jenkins` -> `Configure Global Security` -> `Markup Formatter`
+
 ## windows 安装 jenkins 过程中启动服务失败
 > 可以下载较新版本如: 2.332.3,并且安装过程中取消`启动服务`的选项.
 > 安装完成后,在`服务`中手动启动
