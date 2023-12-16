@@ -1,5 +1,17 @@
 ## svn
 
+## 使用 git 管理 svn 项目
+> 可以使用TortoiseGit对现有 svn 创建 git 项目
+ 
+> 对已生成的 git 项目，克隆下来后，需要修改 .git/config 文件，添加
+```conf
+[svn-remote "svn"]
+	url = <svn_path>
+	fetch = :refs/remotes/git-svn
+```
+首次需要执行`git svn fetch`
+> 然后可以`git branch -a` 查看到svn关联分支
+
 ## svn报错: E200014: Checksum mismatch
 - 解决方案一
 先把上传失败的文件 xxx.file 进行备份，然后执行
