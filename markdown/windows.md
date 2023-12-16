@@ -1,5 +1,21 @@
 ## windows
 
+## 使用命令行在文件管理器中打开文件夹
+``` sh
+# 注意，如果文件夹或文件名中包含空格，则必须使用双引号。
+
+# 在新窗口中打开
+explorer /n, "<path>"
+# 如: explorer /n, "C:\Program Files\Git\cmd\"
+
+# 打开一个窗口视图，指定的文件夹、文件或程序被选中。
+explore /select, "<path>"
+```
+
+## 复制粘贴
+``` sh
+#
+
 ## 有盘符切换的cd
 ``` sh
 cd /d "X:/YYY/ZZZ"
