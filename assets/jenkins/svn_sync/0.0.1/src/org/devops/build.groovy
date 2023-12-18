@@ -154,7 +154,7 @@ def sendResult2DingTalk() {
     if (currentBuild.result == 'FAILURE' && isPreviousBuildSuccess()) {
         emailext (
             subject: "[jenkins auto Pipeline] ${currentBuild.fullDisplayName} ${result}",
-            to:"${MAIL_TO}",
+            recipientProviders: [developers()],
             body: """
             <body>
                 <table width='95%' cellpadding='0' cellspacing='0'>
