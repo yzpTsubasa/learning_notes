@@ -149,6 +149,53 @@ def sendResult2DingTalk() {
             ] : []
         )
     )
+
+    // 如果失败，并且上次为成功，则要发送邮件给指定用户
+    if (currentBuild.result == 'FAILURE' && isPreviousBuildSuccess()) {
+        emailext (
+            subject: "[jenkins auto Pipeline] ${currentBuild.fullDisplayName} ${result}",
+            to:"${MAIL_TO}",
+            body: """
+            <body>
+                <table width='95%' cellpadding='0' cellspacing='0'>
+                    <tr>
+                        <td>
+                            <h2>构建结果:<span color='#0000FF'>${currentBuild.currentResult}</span></h2>
+                        </td>
+                    </tr>
+                    <tr>
+                    <td>
+                        <ul>
+                        <li>项目名称&nbsp;：&nbsp;${currentBuild.fullDisplayName}</li>
+                        <li>发起人&nbsp;：&nbsp;${getRootBuildTriggerDesc()}</li>
+                        <li>状态&nbsp;：&nbsp;<font color=${result_color}>${result}</font></li>
+                        <li>备注&nbsp;：&nbsp;${env.HG_BUILD_DESC ? env.HG_BUILD_DESC : '无'}</li>
+                        <li>用时&nbsp;：&nbsp;${durationString}</li>
+                        </ul>
+                    </td>
+                    </tr>
+                    <!-- 构建信息 -->
+                    <tr>
+                    <td><br/>
+                        <b>
+                        <font color="#0B610B">构建信息</font>
+                        </b>
+                        <hr size="2" width="100%" align="center" />
+                    </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <ul>
+                                <li>构建日志：&nbsp;<a href="${BUILD_URL}">${BUILD_URL}</a></li>
+                                ${ currentBuild.result == 'FAILURE' ? '<li>构建失败原因：&nbsp;' + getTailLogString() + '</li>' : ''}
+                            </ul>
+                        </td>
+                    </tr>
+                </table>
+            </body>
+            """
+        )
+    }
 }
 
 def sendResult2DingTalkSimple() {
@@ -354,6 +401,29 @@ def getCommitUserMobiles() {
     }).flatten();
     return mobiles ? mobiles : []
 }
+
+// 获取当前提交者的邮箱地址
+def getCommitUserEmails() {
+    def emails = (currentBuild.changeSets.collect {
+        it.items.collect {
+            hudson.model.User.getById(it.author.getId(), false).getProperty(hudson.tasks.Mailer.UserProperty).getAddress()
+        }
+    }).flatten();
+    return emails ? emails : []
+}
+
+// 前一次构建是否成功
+def isPreviousBuildSuccess() {
+    return currentBuild.previousBuild?.result == null || currentBuild.previousBuild.result == 'SUCCESS'
+}
+
+// 如果上一次构建没有成功，则把当前构建状态设置为不稳定
+def setCurrentBuildUnstableIfNecessary() {
+    if (!isPreviousBuildSuccess()) {
+        currentBuild.result = 'UNSTABLE'
+    }
+}
+
 
 // 获取当前提交者的名字
 def getCommitUsernames() {
@@ -797,6 +867,8 @@ def pub200AutomaticIntegrated() {
                     bat([label: 'SVN提交', returnStdout: false, script: "svn commit -m \"out [${getLastChangedRev()}]\" --username %HG_CREDENTIAL_USERNAME% --password %HG_CREDENTIAL_PASSWORD% out manifest.json"])
                 }
             }
+        } else {
+            setCurrentBuildUnstableIfNecessary()
         }
     }
     // 创建out目录resource链接
@@ -987,6 +1059,16 @@ def getRootBuildMobile() {
         return ""
     } else {
         return hudson.model.User.getById(userId, false).getProperty(io.jenkins.plugins.DingTalkUserProperty.class).getMobile()
+    }
+}
+
+// 获取最上游构建的发起人邮箱地址
+def getRootBuildEmail() {
+    def userId = getRootBuildUserId()
+    if (!userId || userId.getClass().name == "net.sf.json.JSONNull") {
+        return ""
+    } else {
+        return hudson.model.User.getById(userId, false).getProperty(hudson.tasks.Mailer.UserProperty).getAddress()
     }
 }
 
