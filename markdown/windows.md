@@ -1,5 +1,13 @@
 ## windows
 
+## The Windows Subsystem for Linux (WSL)
+```sh
+# 运行
+wsl --install
+# 或者
+wsl --install -d Ubuntu
+```
+
 ## 使用命令行在文件管理器中打开文件夹
 ``` sh
 # 注意，如果文件夹或文件名中包含空格，则必须使用双引号。
