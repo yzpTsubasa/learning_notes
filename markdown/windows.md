@@ -1,5 +1,9 @@
 ## windows
 
+## 开启 ssh 功能
+- `设置` -> 搜索 `可选功能` -> `OpenSSH 服务器`
+- `net start sshd`
+
 ## The Windows Subsystem for Linux (WSL)
 ```sh
 # 运行
