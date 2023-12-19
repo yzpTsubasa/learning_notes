@@ -1,5 +1,13 @@
 ## linux
 
+## ubuntu cd进入一些文件夹 提示Permission denied
+表面上看是因为权限不足，因此可以通过对usr文件夹进行授权的方式解决：
+```sh
+sudo chmod -R 777 usr
+# -R 是指级联应用到目录里的所有子目录和文件
+# 777 是所有用户都拥有最高权限
+```
+
 ## vim/vi键盘图
 ![vim/vi键盘图](../assets/linux/vim.png)
 
