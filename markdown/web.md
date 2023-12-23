@@ -1,4 +1,12 @@
 ## web
+
+## 使用 node_http_server 反代理(仅支持 http 协议)
+> 以`https://game.juefeng.com/view/jfGame_wap/H5_game.html?agentId=298&gameId=81430`为例
+- 找一个干净的位置，新建 `proxy` 文件夹,并且在目录中使用参数 `--http_port 18686` 启动 `node_http_server`
+- 切换到 `http` 协议，即 `http://game.juefeng.com/view/jfGame_wap/H5_game.html?agentId=298&gameId=81430`
+- 打开控制台，查看元素,右键根节点 `html`, 选择`编辑为 HTML`, 内容保存到 `<proxy>/jfGame_wap/H5_game.html`。并且根据需要修改内容
+- 浏览器插件`SwitchyOmega`添加自动切换模式项，条件类型 `网址通配符`，条件设置 `http://game.juefeng.com/view/jfGame_wap/H5_game.html?agentId=298&gameId=81430`，情景模式 代理服务器 `localhost:18686`
+
 ## 元素置顶全屏
 ```css
 element.style {
