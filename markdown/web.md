@@ -5,6 +5,8 @@
 - 找一个干净的位置，新建 `proxy` 文件夹,并且在目录中使用参数 `--http_port 18686` 启动 `node_http_server`
 - 切换到 `http` 协议，即 `http://game.juefeng.com/view/jfGame_wap/H5_game.html?agentId=298&gameId=81430`
 - 打开控制台，查看元素,右键根节点 `html`, 选择`编辑为 HTML`, 内容保存到 `<proxy>/jfGame_wap/H5_game.html`。并且根据需要修改内容
+  - 修改 `iframe` 中的 `src` 为本地内容，如 `http://localhost:18686/file/E:/projects/dldl_WX/dldl_bt_qq/index.html?channel=jfgame&amp;gameId=81430&amp;isLogin=false&amp;timestamp=1703473089&amp;sign=71E9EDE68F96AABD12BCA7E943BF8CF3`
+  - `dldl_bt_qq/index.html` 文件的 sdk 部分，替换成线上版本的sdk内容
 - 浏览器插件`SwitchyOmega`添加自动切换模式项，条件类型 `网址通配符`，条件设置 `http://game.juefeng.com/view/jfGame_wap/H5_game.html?agentId=298&gameId=81430`，情景模式 代理服务器 `localhost:18686`
 
 ## 元素置顶全屏
