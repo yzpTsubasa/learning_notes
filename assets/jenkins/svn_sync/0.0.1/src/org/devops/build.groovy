@@ -383,7 +383,14 @@ def getAtUsers(includeCommitUser = false) {
     // 添加环境变量中配置的 AT_USERS@${JOB_NAME}
     def JOB_AT_USERS = env["AT_USERS@${JOB_NAME}"]
     if (JOB_AT_USERS) {
-        AT_USERS += JOB_AT_USERS.tokenize(',')
+        AT_USERS += JOB_AT_USERS.tokenize(',').collect {
+            def user = hudson.model.User.getById(it, false)
+            if (user) {
+                return user.getProperty(io.jenkins.plugins.DingTalkUserProperty.class).getMobile()
+            } else {
+                return ""
+            }
+        }
     }
     // 去重
     AT_USERS.unique()
