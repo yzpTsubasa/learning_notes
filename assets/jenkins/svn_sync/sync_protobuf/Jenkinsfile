@@ -45,6 +45,10 @@ pipeline {
                     dir("protobuf") {
                         checkout([$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '', excludedRegions: '', excludedRevprop: '', excludedUsers: '', filterChangelog: false, ignoreDirPropChanges: false, includedRegions: '', locations: [[cancelProcessOnExternalsFail: true, credentialsId: env.HG_EXTRA_CREDENTIALS_ID, depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: params.HG_REPOSITORY_SRC_PROTOBUF]], quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']])
                     }
+                    // 获取凭证
+                    withCredentials([usernamePassword(credentialsId: build.getCredentialsId(), passwordVariable: 'HG_CREDENTIAL_PASSWORD', usernameVariable: 'HG_CREDENTIAL_USERNAME')]) {
+                        env.SVN_CREDENTIAL = "--username ${HG_CREDENTIAL_USERNAME} --password ${HG_CREDENTIAL_PASSWORD}"
+                    }
                     if (env.HG_REPOSITORY_SRC_MODULE_ERR_CODE) {
                         def MODULE_ERR_CODE_PARENT = getParent(env.HG_REPOSITORY_SRC_MODULE_ERR_CODE)
                         def MODULE_ERR_CODE_NAME = getName(env.HG_REPOSITORY_SRC_MODULE_ERR_CODE)
@@ -53,10 +57,6 @@ pipeline {
                             checkout([$class: 'SubversionSCM', additionalCredentials: [], excludedCommitMessages: '', excludedRegions: '', excludedRevprop: '', excludedUsers: '', filterChangelog: false, ignoreDirPropChanges: false, includedRegions: '', locations: [[cancelProcessOnExternalsFail: true, credentialsId: env.HG_EXTRA_CREDENTIALS_ID, depthOption: 'infinity', ignoreExternalsOption: true, local: '.', remote: MODULE_ERR_CODE_PARENT]], quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']])    
                         }
                         // 同步 module_err_code
-                        // 获取凭证
-                        withCredentials([usernamePassword(credentialsId: build.getCredentialsId(), passwordVariable: 'HG_CREDENTIAL_PASSWORD', usernameVariable: 'HG_CREDENTIAL_USERNAME')]) {
-                            env.SVN_CREDENTIAL = "--username ${HG_CREDENTIAL_USERNAME} --password ${HG_CREDENTIAL_PASSWORD}"
-                        }
                         env.MODULE_ERR_CODE_DST="${WORKSPACE}/project/${env.HG_CFGJSON_PATH}"
                         env.MODULE_ERR_CODE_SRC="${WORKSPACE}/module_err_code/${MODULE_ERR_CODE_NAME}"
                         env.SVN_COMMIT_MSG="[0] ${CFGJSON_NAME} 更新" + build.getChangeString(false).join(",")
