@@ -10,6 +10,10 @@
 wsl --install
 # 或者
 wsl --install -d Ubuntu
+# 查看
+wsl --list
+# 移除
+wsl --unregister Ubuntu
 ```
 
 ## 使用命令行在文件管理器中打开文件夹
