@@ -5,7 +5,7 @@
 # 列表
 netsh wlan show profiles
 # 密码
-netsh wlan show profile name=<wifi名称> key=clear
+netsh wlan show profile name=[wifi名称] key=clear
 ```
 
 ## 开启 ssh 功能
