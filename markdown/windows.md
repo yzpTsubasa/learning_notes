@@ -1,5 +1,13 @@
 ## windows
 
+## 查看无线网络(WIFI)信息
+```sh
+# 列表
+netsh wlan show profiles
+# 密码
+netsh wlan show profile name=<wifi名称> key=clear
+```
+
 ## 开启 ssh 功能
 - `设置` -> 搜索 `可选功能` -> `OpenSSH 服务器`
 - `net start sshd`
