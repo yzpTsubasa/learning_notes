@@ -1,5 +1,11 @@
 ## windows
 
+## 获取并保存命令的返回结果（仅最后一行）
+```sh
+# 示例：使用 `where node` 获取 nodejs 的可执行程序路径，并且保存到变量 NODE_JS 中
+for /f "delims=" %%i in ('where node') do set NODE_JS=%%i
+```
+
 ## 查看无线网络(WIFI)信息
 ```sh
 # 列表
