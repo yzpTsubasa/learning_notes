@@ -264,6 +264,7 @@ shutdown -s -t 43200
 ```
 
 ## 服务相关
+使用自带的 sc
 ``` sh
 # 设置服务依赖关系
 sc config "Jenkins" depend="gogs"
@@ -274,11 +275,18 @@ sc config "Jenkins" depend=/
 # 创建服务(*生效但似乎非正常启动)
 sc create "Atlassian Crucible 4.8.0" binpath= E:\tools\fecru-4.8.0\bin\run.bat
 
-# 使用 [nssm](https://nssm.cc/download) 创建服务
+# 删除服务
+sc delete "Atlassian Crucible 4.8.0"
+
+```
+使用 [nssm](https://nssm.cc/download)
+``` sh
+# 创建服务
 nssm install "Atlassian Crucible 4.8.0" "E:\tools\fecru-4.8.0\bin\run.bat"
 
 # 删除服务
-sc delete "Atlassian Crucible 4.8.0"
+nssm remove "Atlassian Crucible 4.8.0" confirm
+
 ```
 
 ## windows10 激活
