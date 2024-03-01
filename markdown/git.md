@@ -191,3 +191,8 @@ git checkout master
 # 合并分支
 git merge --no-ff xxxxxx-master
 ```
+
+## 仅克隆一个分支
+```sh
+git clone --single-branch --branch [branch_name] [url] [directory]
+```
