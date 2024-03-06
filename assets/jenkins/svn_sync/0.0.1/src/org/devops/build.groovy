@@ -524,6 +524,7 @@ def sendResult2DingTalk_PubMinigame() {
     if (minigameVersion) {
         addBuildDescripion (minigameVersion)
     }
+    def minigameOutputURL = getMinigameOutputURL();
     def minigameToggleOperation = getMiniGameToggleOperation()
     if (minigameToggleOperation) {
         addBuildDescripion (minigameToggleOperation)
@@ -558,6 +559,7 @@ def sendResult2DingTalk_PubMinigame() {
             "- 发起 ${getRootBuildTriggerDesc()}",
             pubWebVersion ? "- 资源版本 <font color=${result_color}>${pubWebVersion}</font>" : "",
             "- 小游戏版本 <font color=${result_color}>${minigameVersion ? minigameVersion : 'Unknown'}</font>",
+            minigameOutputURL ? "- [下载游戏包](${minigameOutputURL})" : "",
             minigameToggleOperation ? "- 小游戏配置 <font color=#1890ff>${minigameToggleOperation}</font>" : "",
             "- 生效时间 <font color=#1890ff>${getDateByStep().format('yyyy-MM-dd(E)HH:mm:ss', TimeZone.getTimeZone('Asia/Shanghai')) - '星期'}</font>",
             "- <font color=${env.ENABLE_PUBLISH_STATIC_RESOURCE == "true" ? "#1890ff" : "#888888"}>静态资源${env.ENABLE_PUBLISH_STATIC_RESOURCE == "true" ? "" : "不"}更新</font>",
@@ -720,6 +722,30 @@ def getMiniGameToggleOperation() {
         return result[0][1]
     }
     return null;
+}
+
+def getMinigameOutput() {
+    def consoleTextUrl = "${JENKINS_HOME}/jobs/${JOB_NAME}/builds/${BUILD_NUMBER}/log"
+    def consoleText = readFile encoding: 'utf8', file:consoleTextUrl
+  	// def consoleText = "\"MiniGameOutput: E:/projects/dldl_WX/dldl_bt_oppogame/oppo_quickgame/dist/com.rsdzz.net.nearme.gamecenter.signed.rpk\""
+    def result = ((consoleText =~ /"MiniGameOutput: (.*)"/))
+    if (result.find()) {
+        return result[0][1]
+    }
+    return null
+}
+
+def getMinigameOutputURL() {
+    def output = getMinigameOutput()
+    if (!output) return null
+    // http://192.168.1.205:8686/public_tool_grab_resource_item_img_seirei_jp/out/%E5%9B%BE%E6%A0%87.zip
+    def root= new File("${JENKINS_HOME}/jobs/${JOB_NAME}")
+    def full= new File(output)
+
+    // Print the relative path of 'full' in relation to 'root'
+    // Notice that the full path is passed as a parameter to the root.
+    def relPath= new File( root.toURI().relativize(full.toURI()).toString() )
+    return "${JOB_URL.replaceAll("\\:\\d+/job", ":8686")}${relPath}"
 }
 
 // 上传资源到FTP上
