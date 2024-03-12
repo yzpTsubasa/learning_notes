@@ -507,8 +507,8 @@ def sendStart2DingTalk_PubMinigame() {
             '***',
             '- 状态 开始',
             "- 发起 ${getRootBuildTriggerDesc()}",
-            "- <font color=${env.ENABLE_PUBLISH_STATIC_RESOURCE == "true" ? "#1890ff" : "#888888"}>静态资源${env.ENABLE_PUBLISH_STATIC_RESOURCE == "true" ? "" : "不"}更新</font>",
-            "- <font color=${env.ENABLE_MINIGAME_UPLOAD == "true" ? "#1890ff" : "#888888"}>游戏包${env.ENABLE_MINIGAME_UPLOAD == "true" ? "" : "不"}更新</font>",
+            "- <font color=${env.ENABLE_PUBLISH_STATIC_RESOURCE == "true" ? "#52c41a" : "#888888"}>静态资源${env.ENABLE_PUBLISH_STATIC_RESOURCE == "true" ? "" : "不"}更新</font>",
+            "- <font color=${env.ENABLE_MINIGAME_UPLOAD == "true" ? "#52c41a" : "#888888"}>游戏包${env.ENABLE_MINIGAME_UPLOAD == "true" ? "" : "不"}更新</font>",
             "- 时刻 ${new Date().format('yyyy-MM-dd(E)HH:mm:ss', TimeZone.getTimeZone('Asia/Shanghai')) - '星期'}",
             '- 仓库',
             params.HG_REPOSITORY_SRC ? (params.HG_REPOSITORY_SRC - ~/.*\//) : 'Unknown',
@@ -560,10 +560,10 @@ def sendResult2DingTalk_PubMinigame() {
             pubWebVersion ? "- 资源版本 <font color=${result_color}>${pubWebVersion}</font>" : "",
             "- 小游戏版本 <font color=${result_color}>${minigameVersion ? minigameVersion : 'Unknown'}</font>",
             minigameOutputURL ? "- [下载游戏包](${minigameOutputURL})" : "",
-            minigameToggleOperation ? "- 小游戏配置 <font color=#1890ff>${minigameToggleOperation}</font>" : "",
-            "- 生效时间 <font color=#1890ff>${getDateByStep().format('yyyy-MM-dd(E)HH:mm:ss', TimeZone.getTimeZone('Asia/Shanghai')) - '星期'}</font>",
-            "- <font color=${env.ENABLE_PUBLISH_STATIC_RESOURCE == "true" ? "#1890ff" : "#888888"}>静态资源${env.ENABLE_PUBLISH_STATIC_RESOURCE == "true" ? "" : "不"}更新</font>",
-            "- <font color=${env.ENABLE_MINIGAME_UPLOAD == "true" ? "#1890ff" : "#888888"}>游戏包${env.ENABLE_MINIGAME_UPLOAD == "true" ? "" : "不"}更新</font>",
+            minigameToggleOperation ? "- 小游戏配置 <font color=#52c41a>${minigameToggleOperation}</font>" : "",
+            "- 生效时间 <font color=#52c41a>${getDateByStep().format('yyyy-MM-dd(E)HH:mm:ss', TimeZone.getTimeZone('Asia/Shanghai')) - '星期'}</font>",
+            "- <font color=${env.ENABLE_PUBLISH_STATIC_RESOURCE == "true" ? "#52c41a" : "#888888"}>静态资源${env.ENABLE_PUBLISH_STATIC_RESOURCE == "true" ? "" : "不"}更新</font>",
+            "- <font color=${env.ENABLE_MINIGAME_UPLOAD == "true" ? "#52c41a" : "#888888"}>游戏包${env.ENABLE_MINIGAME_UPLOAD == "true" ? "" : "不"}更新</font>",
             "- 用时 ${durationString}",
             params.HG_REPOSITORY_SRC ? ('- 仓库 ' + (params.HG_REPOSITORY_SRC - ~/.*\//)) : "",
             '- 记录',
@@ -739,12 +739,12 @@ def getMinigameOutputURL() {
     def output = getMinigameOutput()
     if (!output) return null
     // http://192.168.1.205:8686/public_tool_grab_resource_item_img_seirei_jp/out/%E5%9B%BE%E6%A0%87.zip
-    def root= new File("${JENKINS_HOME}/jobs/${JOB_NAME}")
+    def root= new File("${WORKSPACE}")
     def full= new File(output)
 
     // Print the relative path of 'full' in relation to 'root'
     // Notice that the full path is passed as a parameter to the root.
-    def relPath= new File( root.toURI().relativize(full.toURI()).toString() )
+    def relPath= root.toURI().relativize(full.toURI()).toString()
     return "${JOB_URL.replaceAll("\\:\\d+/job", ":8686")}${relPath}"
 }
 
