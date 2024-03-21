@@ -125,7 +125,7 @@ def sendResult2DingTalk() {
     env.description = currentBuild.description
     env.durationString = currentBuild.durationString.minus(' and counting')
     // 失败时，@提交者
-    def atUsers = getAtUsers(currentBuild.result == 'FAILURE')
+    def atUsers = getAtUsers(currentBuild.result == 'FAILURE', currentBuild.result != 'FAILURE')
     dingtalk(
         robot: getDingTalkRobot(),
         type: 'MARKDOWN',
@@ -369,7 +369,7 @@ def sendStart2DingTalk_PubWeb() {
 }
 
 // 获取要@的用户
-def getAtUsers(includeCommitUser = false) {
+def getAtUsers(includeCommitUser = false, includeLogUser = false) {
     def AT_USERS_STR = params.AT_USERS != null ? params.AT_USERS : ''
     def AT_USERS = AT_USERS_STR.tokenize(',')
     // 添加构建者(需要允许指定的API)
@@ -379,6 +379,9 @@ def getAtUsers(includeCommitUser = false) {
     }
     if (includeCommitUser) {
         AT_USERS += getCommitUserMobiles()
+    }
+    if (includeLogUser) {
+        AT_USERS += getLogUserMobiles()
     }
     // 添加环境变量中配置的 AT_USERS@${JOB_NAME}
     def JOB_AT_USERS = env["AT_USERS@${JOB_NAME}"]
@@ -404,6 +407,24 @@ def getCommitUserMobiles() {
     def mobiles = (currentBuild.changeSets.collect {
         it.items.collect {
             hudson.model.User.getById(it.author.getId(), false).getProperty(io.jenkins.plugins.DingTalkUserProperty.class).getMobile()
+        }
+    }).flatten();
+    return mobiles ? mobiles : []
+}
+
+// 获取日志中@的用户手机号
+def getLogUserMobiles() {
+    def mobiles = (currentBuild.changeSets.collect {
+        it.items.collect {
+            def result = ((it.msg =~ /@(\S*)/))
+            if (result.find()) {
+                def userName = result[0][1]
+                def user = hudson.model.User.get(userName, false)
+                if (user) {
+                    return user.getProperty(io.jenkins.plugins.DingTalkUserProperty.class).getMobile()
+                }
+            }
+            return ""
         }
     }).flatten();
     return mobiles ? mobiles : []
