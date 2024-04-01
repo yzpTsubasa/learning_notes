@@ -125,7 +125,7 @@ def sendResult2DingTalk() {
     env.description = currentBuild.description
     env.durationString = currentBuild.durationString.minus(' and counting')
     // 失败时，@提交者
-    def atUsers = getAtUsers(currentBuild.result == 'FAILURE')
+    def atUsers = getAtUsers(currentBuild.result == 'FAILURE', currentBuild.result != 'FAILURE')
     dingtalk(
         robot: getDingTalkRobot(),
         type: 'MARKDOWN',
@@ -369,7 +369,7 @@ def sendStart2DingTalk_PubWeb() {
 }
 
 // 获取要@的用户
-def getAtUsers(includeCommitUser = false) {
+def getAtUsers(includeCommitUser = false, includeLogUser = false) {
     def AT_USERS_STR = params.AT_USERS != null ? params.AT_USERS : ''
     def AT_USERS = AT_USERS_STR.tokenize(',')
     // 添加构建者(需要允许指定的API)
@@ -379,6 +379,9 @@ def getAtUsers(includeCommitUser = false) {
     }
     if (includeCommitUser) {
         AT_USERS += getCommitUserMobiles()
+    }
+    if (includeLogUser) {
+        AT_USERS += getLogUserMobiles()
     }
     // 添加环境变量中配置的 AT_USERS@${JOB_NAME}
     def JOB_AT_USERS = env["AT_USERS@${JOB_NAME}"]
@@ -404,6 +407,24 @@ def getCommitUserMobiles() {
     def mobiles = (currentBuild.changeSets.collect {
         it.items.collect {
             hudson.model.User.getById(it.author.getId(), false).getProperty(io.jenkins.plugins.DingTalkUserProperty.class).getMobile()
+        }
+    }).flatten();
+    return mobiles ? mobiles : []
+}
+
+// 获取日志中@的用户手机号
+def getLogUserMobiles() {
+    def mobiles = (currentBuild.changeSets.collect {
+        it.items.collect {
+            def result = ((it.msg =~ /@(\S*)/))
+            if (result.find()) {
+                def userName = result[0][1]
+                def user = hudson.model.User.get(userName, false)
+                if (user) {
+                    return user.getProperty(io.jenkins.plugins.DingTalkUserProperty.class).getMobile()
+                }
+            }
+            return ""
         }
     }).flatten();
     return mobiles ? mobiles : []
@@ -507,8 +528,8 @@ def sendStart2DingTalk_PubMinigame() {
             '***',
             '- 状态 开始',
             "- 发起 ${getRootBuildTriggerDesc()}",
-            "- <font color=${env.ENABLE_PUBLISH_STATIC_RESOURCE == "true" ? "#1890ff" : "#888888"}>静态资源${env.ENABLE_PUBLISH_STATIC_RESOURCE == "true" ? "" : "不"}更新</font>",
-            "- <font color=${env.ENABLE_MINIGAME_UPLOAD == "true" ? "#1890ff" : "#888888"}>游戏包${env.ENABLE_MINIGAME_UPLOAD == "true" ? "" : "不"}更新</font>",
+            "- <font color=${env.ENABLE_PUBLISH_STATIC_RESOURCE == "true" ? "#52c41a" : "#888888"}>静态资源${env.ENABLE_PUBLISH_STATIC_RESOURCE == "true" ? "" : "不"}更新</font>",
+            "- <font color=${env.ENABLE_MINIGAME_UPLOAD == "true" ? "#52c41a" : "#888888"}>游戏包${env.ENABLE_MINIGAME_UPLOAD == "true" ? "" : "不"}更新</font>",
             "- 时刻 ${new Date().format('yyyy-MM-dd(E)HH:mm:ss', TimeZone.getTimeZone('Asia/Shanghai')) - '星期'}",
             '- 仓库',
             params.HG_REPOSITORY_SRC ? (params.HG_REPOSITORY_SRC - ~/.*\//) : 'Unknown',
@@ -524,6 +545,7 @@ def sendResult2DingTalk_PubMinigame() {
     if (minigameVersion) {
         addBuildDescripion (minigameVersion)
     }
+    def minigameOutputURL = getMinigameOutputURL();
     def minigameToggleOperation = getMiniGameToggleOperation()
     if (minigameToggleOperation) {
         addBuildDescripion (minigameToggleOperation)
@@ -558,10 +580,11 @@ def sendResult2DingTalk_PubMinigame() {
             "- 发起 ${getRootBuildTriggerDesc()}",
             pubWebVersion ? "- 资源版本 <font color=${result_color}>${pubWebVersion}</font>" : "",
             "- 小游戏版本 <font color=${result_color}>${minigameVersion ? minigameVersion : 'Unknown'}</font>",
-            minigameToggleOperation ? "- 小游戏配置 <font color=#1890ff>${minigameToggleOperation}</font>" : "",
-            "- 生效时间 <font color=#1890ff>${getDateByStep().format('yyyy-MM-dd(E)HH:mm:ss', TimeZone.getTimeZone('Asia/Shanghai')) - '星期'}</font>",
-            "- <font color=${env.ENABLE_PUBLISH_STATIC_RESOURCE == "true" ? "#1890ff" : "#888888"}>静态资源${env.ENABLE_PUBLISH_STATIC_RESOURCE == "true" ? "" : "不"}更新</font>",
-            "- <font color=${env.ENABLE_MINIGAME_UPLOAD == "true" ? "#1890ff" : "#888888"}>游戏包${env.ENABLE_MINIGAME_UPLOAD == "true" ? "" : "不"}更新</font>",
+            minigameOutputURL ? "- [下载游戏包](${minigameOutputURL})" : "",
+            minigameToggleOperation ? "- 小游戏配置 <font color=#52c41a>${minigameToggleOperation}</font>" : "",
+            "- 生效时间 <font color=#52c41a>${getDateByStep().format('yyyy-MM-dd(E)HH:mm:ss', TimeZone.getTimeZone('Asia/Shanghai')) - '星期'}</font>",
+            "- <font color=${env.ENABLE_PUBLISH_STATIC_RESOURCE == "true" ? "#52c41a" : "#888888"}>静态资源${env.ENABLE_PUBLISH_STATIC_RESOURCE == "true" ? "" : "不"}更新</font>",
+            "- <font color=${env.ENABLE_MINIGAME_UPLOAD == "true" ? "#52c41a" : "#888888"}>游戏包${env.ENABLE_MINIGAME_UPLOAD == "true" ? "" : "不"}更新</font>",
             "- 用时 ${durationString}",
             params.HG_REPOSITORY_SRC ? ('- 仓库 ' + (params.HG_REPOSITORY_SRC - ~/.*\//)) : "",
             '- 记录',
@@ -720,6 +743,30 @@ def getMiniGameToggleOperation() {
         return result[0][1]
     }
     return null;
+}
+
+def getMinigameOutput() {
+    def consoleTextUrl = "${JENKINS_HOME}/jobs/${JOB_NAME}/builds/${BUILD_NUMBER}/log"
+    def consoleText = readFile encoding: 'utf8', file:consoleTextUrl
+  	// def consoleText = "\"MiniGameOutput: E:/projects/dldl_WX/dldl_bt_oppogame/oppo_quickgame/dist/com.rsdzz.net.nearme.gamecenter.signed.rpk\""
+    def result = ((consoleText =~ /"MiniGameOutput: (.*)"/))
+    if (result.find()) {
+        return result[0][1]
+    }
+    return null
+}
+
+def getMinigameOutputURL() {
+    def output = getMinigameOutput()
+    if (!output) return null
+    // http://192.168.1.205:8686/public_tool_grab_resource_item_img_seirei_jp/out/%E5%9B%BE%E6%A0%87.zip
+    def root= new File("${WORKSPACE}")
+    def full= new File(output)
+
+    // Print the relative path of 'full' in relation to 'root'
+    // Notice that the full path is passed as a parameter to the root.
+    def relPath= root.toURI().relativize(full.toURI()).toString()
+    return "${JOB_URL.replaceAll("\\:\\d+/job", ":8686")}${relPath}"
 }
 
 // 上传资源到FTP上

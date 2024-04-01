@@ -8,3 +8,12 @@
 	"auto_upgrade": true,
 }
 ```
+
+## SublimeText3中使用terminal终端
+Terminus
+
+```json
+[
+   { "keys": ["ctrl+`"], "command": "toggle_terminus_panel" }
+]
+```

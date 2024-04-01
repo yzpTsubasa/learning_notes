@@ -180,3 +180,19 @@ git push -u origin [branch_name]
 git reflog
 ```
 
+## 合并推送请求
+```sh
+# 切换到临时分支 xxxxxx-master
+git checkout -b xxxxxx-master master
+# 拉取要合并的内容，并解决冲突，提交
+git pull https://github.com/xxxxxx/public_resource.git master
+# 切回换回 master 分支
+git checkout master
+# 合并分支
+git merge --no-ff xxxxxx-master
+```
+
+## 仅克隆一个分支
+```sh
+git clone --single-branch --branch [branch_name] [url] [directory]
+```
