@@ -13,7 +13,7 @@ sudo chmod -R 777 usr
 
 ## Cent OS 7 [CentOS-7-x86_64-DVD-2009.iso]
 
-### 安装 nodejs
+### Cent OS 安装 nodejs
 ``` bash
 # 前往 http://nodejs.cn/download/，选择对应架构的 Linux 二进制文件
 # 如 https://npmmirror.com/mirrors/node/v16.14.2/node-v16.14.2-linux-x64.tar.xz
@@ -35,6 +35,12 @@ wget https://npmmirror.com/mirrors/node/v16.14.2/node-v16.14.2-linux-x64.tar.xz
 tar --strip-components 1 -xvf node-v* -C /usr/local
 # 测试安装是否成功
 node --version
+```
+
+### Ubuntu 安装 nodejs
+```bash
+sudo apt update
+sudo apt install nodejs npm
 ```
 
 ### 网络设置 - 自启动
