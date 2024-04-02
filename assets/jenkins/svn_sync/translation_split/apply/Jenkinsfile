@@ -2,6 +2,8 @@
 
 def build = new org.devops.build()
 
+import groovy.json.JsonSlurperClassic
+
 pipeline {
     agent any
     options {
