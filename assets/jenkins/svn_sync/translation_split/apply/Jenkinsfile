@@ -1,6 +1,6 @@
 @Library("jenkins_library") _
 
-def build = new org.devops.build()
+def buildLib = new org.devops.build()
 
 import groovy.json.JsonSlurperClassic
 
@@ -14,24 +14,24 @@ pipeline {
         stage('checkout') {
             steps {
                 script {
-                    build.checkoutAutomator()
+                    buildLib.checkoutAutomator()
                     dir("project/${CFGJSON_FOLDER}") {
-                        build.checkoutSVN("$HG_REPOSITORY_SRC/${CFGJSON_FOLDER}", false, false)
+                        buildLib.checkoutSVN("$HG_REPOSITORY_SRC/${CFGJSON_FOLDER}", false, false)
                     }
                     def localization_folder = new File(LOCALIZATION_JSON).parent
                     dir("project/$localization_folder") {
-                        build.checkoutSVN("$HG_REPOSITORY_SRC/$localization_folder", false, false)
+                        buildLib.checkoutSVN("$HG_REPOSITORY_SRC/$localization_folder", false, false)
                         def localization_str = readFile encoding: 'utf-8', file: "$WORKSPACE/project/$LOCALIZATION_JSON"
                         def localization_obj = new JsonSlurperClassic().parseText(localization_str)
                         env.APPID = localization_obj.appId
                     }
                     dir('translation') {
-                        build.checkoutSVN(HG_TRANSLATIONS_REPOSITORY_SRC, false, false)
+                        buildLib.checkoutSVN(HG_TRANSLATIONS_REPOSITORY_SRC, false, false)
                     }
                     env.WORKSPACE_FOLDER = "${WORKSPACE}/project"
                     env.TRANSLATION_FOLDER = "${WORKSPACE}/translation"
                     // 获取凭证
-                    withCredentials([usernamePassword(credentialsId: build.getCredentialsId(), passwordVariable: 'HG_CREDENTIAL_PASSWORD', usernameVariable: 'HG_CREDENTIAL_USERNAME')]) {
+                    withCredentials([usernamePassword(credentialsId: buildLib.getCredentialsId(), passwordVariable: 'HG_CREDENTIAL_PASSWORD', usernameVariable: 'HG_CREDENTIAL_USERNAME')]) {
                         env.SVN_CREDENTIAL = "--username ${HG_CREDENTIAL_USERNAME} --password ${HG_CREDENTIAL_PASSWORD}"
                     }
                     
@@ -60,7 +60,7 @@ pipeline {
     post { 
         changed { 
             script {
-                build.sendCommonResult2DingTalk()
+                buildLib.sendCommonResult2DingTalk()
             }
         }
     }
