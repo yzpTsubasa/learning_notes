@@ -48,6 +48,10 @@ pipeline {
                             bat '%WORKSPACE%/automator/automator %WORKSPACE%/automator/cfg/translation_split/apply.yml --FULL_AUTOMATIC 1 --isUpdate 1'
                         }
                     }
+                    // 自动构建发布任务
+                    if (params.BUILD_NEXT_JOB && params.NEXT_JOB) {
+                        build wait: false, job: params.NEXT_JOB, parameters: [extendedChoice(name: 'HG_REPOSITORY_SRC', value: params.HG_REPOSITORY_SRC)]
+                    }
                 }
             }
         }
