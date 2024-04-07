@@ -20,7 +20,7 @@ pipeline {
             steps {
                 script {
                     build.checkoutAutomator()
-                    def localization_folder = new File(LOCALIZATION_JSON).parent
+                    def localization_folder = LOCALIZATION_JSON.substring(0, LOCALIZATION_JSON.lastIndexOf("/"))
                     dir("project/$localization_folder") {
                         build.checkoutSVN("$HG_REPOSITORY_SRC/$localization_folder", false, false)
                     }

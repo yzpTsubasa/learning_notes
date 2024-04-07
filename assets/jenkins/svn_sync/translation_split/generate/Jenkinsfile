@@ -19,7 +19,7 @@ pipeline {
                     dir("project/${CFGJSON_FOLDER}") {
                         build.checkoutSVN("$HG_REPOSITORY_SRC/${CFGJSON_FOLDER}")
                     }
-                    def localization_folder = new File(LOCALIZATION_JSON).parent
+                    def localization_folder = LOCALIZATION_JSON.substring(0, LOCALIZATION_JSON.lastIndexOf("/"))
                     dir("project/$localization_folder") {
                         build.checkoutSVN("$HG_REPOSITORY_SRC/$localization_folder")
                     }

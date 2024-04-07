@@ -18,7 +18,7 @@ pipeline {
                     dir("project/${CFGJSON_FOLDER}") {
                         buildLib.checkoutSVN("$HG_REPOSITORY_SRC/${CFGJSON_FOLDER}", false, false)
                     }
-                    def localization_folder = new File(LOCALIZATION_JSON).parent
+                    def localization_folder = LOCALIZATION_JSON.substring(0, LOCALIZATION_JSON.lastIndexOf("/"))
                     dir("project/$localization_folder") {
                         buildLib.checkoutSVN("$HG_REPOSITORY_SRC/$localization_folder", false, false)
                         def localization_str = readFile encoding: 'utf-8', file: "$WORKSPACE/project/$LOCALIZATION_JSON"
