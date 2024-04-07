@@ -792,15 +792,7 @@ def getSVNInfo() {
 // 使用本地环境的 svn 检出, 不需要 svn upgrade
 def checkoutSVN(scmUrl, poll = true, changelog = true, quiet = true, local = ".", includedRegions = "", excludedRegions = "") {
     if (fileExists('.svn')) {
-        // 检查状态
-        def status = bat returnStdout: true, script: '@echo off && svn status'
-        print status
-        if (status && (status =~ /^.{2}L/).find()) {
-            print 'Workspace is already locked'
-            bat 'svn cleanup'
-        } else {
-            print 'Workspace is not locked'
-    }
+        bat 'svn cleanup'
         // 还原
         bat returnStdout: true, script: '@echo off && svn revert -R .'
     } else {
@@ -817,15 +809,7 @@ def checkoutSVN(scmUrl, poll = true, changelog = true, quiet = true, local = "."
 // 使用本地环境的 svn 检出, 不需要 svn upgrade
 def checkoutComplexSVN(scm) {
     if (fileExists('.svn')) {
-        // 检查状态
-        def status = bat returnStdout: true, script: '@echo off && svn status'
-        print status
-        if (status && (status =~ /^.{2}L/).find()) {
-            print 'Workspace is already locked'
-            bat 'svn cleanup'
-        } else {
-            print 'Workspace is not locked'
-    }
+        bat 'svn cleanup'
         // 还原
         bat returnStdout: true, script: '@echo off && svn revert -R .'
     } else {
