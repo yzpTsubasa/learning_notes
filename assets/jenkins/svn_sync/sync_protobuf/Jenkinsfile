@@ -72,7 +72,7 @@ pipeline {
                     dir("project/${env.HG_PROTOBUF_PATH}") {
                         bat 'svn add . --no-ignore --force'
                         env.HG_TMP = "[0] Protobuf更新" + build.getChangeString(false).join(",")
-                        bat "svn commit . -m \"%HG_TMP%\" ${env.SVN_CREDENTIAL}"
+                        bat "@echo off && svn commit . -m \"%HG_TMP%\" %SVN_CREDENTIAL%"
                     }
                 }
             }
