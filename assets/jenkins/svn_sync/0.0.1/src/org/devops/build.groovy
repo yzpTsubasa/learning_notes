@@ -1111,16 +1111,25 @@ def dowloadFont(url, ver, langs) {
     }
 
     for(lan in langs){
+        def dir = "./$lan/"
+        def folder = new File(dir)
+        if(!folder.exists()){
+            folder.mkdirs()
+        }
         fileOperations([fileDownloadOperation(
         proxyHost: '127.0.0.1'
         , proxyPort: '10811'
         , targetFileName: 'Font.ttf'
-        , targetLocation: "./$lan/"
+        , targetLocation: dir
         , url: "https://${url}/${ver}/g123/i18n/${lan}/fonts/fonts.ttf"
         , password: ''
         , userName: '')]);
     }
 
-    bat([label: 'SVN新增', returnStdout: false, script: "svn add font"])
-    bat([label: 'SVN提交', returnStdout: false, script: "svn commit -m \"[0] 字体更新\" --username %HG_CREDENTIAL_USERNAME% --password %HG_CREDENTIAL_PASSWORD%"])
+    bat([label: 'SVN新增', returnStdout: false, script: "svn add ./ --force"])
+    withCredentials([usernamePassword(credentialsId: getCredentialsId(), passwordVariable: 'HG_CREDENTIAL_PASSWORD', usernameVariable: 'HG_CREDENTIAL_USERNAME')]) {
+        // 提交 SVN
+        bat([label: 'SVN提交', returnStdout: false, script: "svn commit -m \"[0] ttf Update\" --username %HG_CREDENTIAL_USERNAME% --password %HG_CREDENTIAL_PASSWORD%"])
+    }
+   
 }
