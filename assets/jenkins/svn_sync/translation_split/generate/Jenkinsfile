@@ -22,6 +22,9 @@ pipeline {
                     def localization_folder = LOCALIZATION_JSON.substring(0, LOCALIZATION_JSON.lastIndexOf("/"))
                     dir("project/$localization_folder") {
                         build.checkoutSVN("$HG_REPOSITORY_SRC/$localization_folder")
+                        def localization_str = readFile encoding: 'utf-8', file: "$WORKSPACE/project/$LOCALIZATION_JSON"
+                        def localization_obj = new JsonSlurperClassic().parseText(localization_str)
+                        env.APPID = localization_obj.appId
                     }
                     dir('translation') {
                         build.checkoutSVN(HG_TRANSLATIONS_REPOSITORY_SRC, false, false)
@@ -43,6 +46,9 @@ pipeline {
                     lock(resource: 'translation') {
                         dir('conversion') {
                             bat '%WORKSPACE%/automator/automator %WORKSPACE%/automator/cfg/translation_split/generate.yml --FULL_AUTOMATIC 1'
+                            if (params.TRIM_REMOTE) {
+                                bat '%WORKSPACE%/automator/automator %WORKSPACE%/automator/cfg/translation_split/trim_remote.yml --FULL_AUTOMATIC 1'
+                            }
                             bat '%WORKSPACE%/automator/automator %WORKSPACE%/automator/cfg/translation_split/apply.yml --FULL_AUTOMATIC 1'
                         }
                     }

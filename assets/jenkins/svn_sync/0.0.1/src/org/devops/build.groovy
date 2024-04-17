@@ -701,7 +701,7 @@ def getMiniGameToggleOperation() {
 def getMinigameOutput() {
     def consoleTextUrl = "${JENKINS_HOME}/jobs/${JOB_NAME}/builds/${BUILD_NUMBER}/log"
     def consoleText = readFile encoding: 'utf8', file:consoleTextUrl
-  	// def consoleText = "\"MiniGameOutput: E:/projects/dldl_WX/dldl_bt_oppogame/oppo_quickgame/dist/com.rsdzz.net.nearme.gamecenter.signed.rpk\""
+      // def consoleText = "\"MiniGameOutput: E:/projects/dldl_WX/dldl_bt_oppogame/oppo_quickgame/dist/com.rsdzz.net.nearme.gamecenter.signed.rpk\""
     def result = ((consoleText =~ /"MiniGameOutput: (.*)"/))
     if (result.find()) {
         return result[0][1]
@@ -1103,4 +1103,24 @@ def webSyncIndex() {
         return
     }
     bat '%WORKSPACE%/automator/automator %WORKSPACE%/automator/cfg/release/web/web_sync_index.yml --FULL_AUTOMATIC 1'
+}
+
+def dowloadFont(url, ver, langs) {
+    if(!url || !ver){
+        return;
+    }
+
+    for(lan in langs){
+        fileOperations([fileDownloadOperation(
+        proxyHost: '127.0.0.1'
+        , proxyPort: '10811'
+        , targetFileName: 'Font.ttf'
+        , targetLocation: "./$lan/"
+        , url: "https://${url}/${ver}/g123/i18n/${lan}/fonts/fonts.ttf"
+        , password: ''
+        , userName: '')]);
+    }
+
+    bat([label: 'SVN新增', returnStdout: false, script: "svn add font"])
+    bat([label: 'SVN提交', returnStdout: false, script: "svn commit -m \"[0] 字体更新\" --username %HG_CREDENTIAL_USERNAME% --password %HG_CREDENTIAL_PASSWORD%"])
 }
