@@ -1148,12 +1148,12 @@ function queueWithClick(fn, limit) {
     });
 }
 ```
-#  Could not resolve dependency: npm ERR! peerOptional 解决方案
+##  Could not resolve dependency: npm ERR! peerOptional 解决方案
 `npm install --legacy-peer-deps`
 
 也可以修改全局配置 `npm config set legacy-peer-deps=true`，这个修改等同于在`~/.npmrc` 文件中添加 `legacy-peer-deps=true`。
 
-# 精度相关运算
+## 精度相关运算
 ```js
 /** 用于精度敏感的乘法运算 */
 function multiply(...arg: number[]): number;
@@ -1236,4 +1236,56 @@ npm config set prefix "D:\programfiles\nodejs\node_global"
 2. npm缓存位置设置
 ```sh
 npm config set cache "D:\programfiles\nodejs\node_cache"
+```
+
+## 字符串异步替换
+```ts
+/**
+ * 使用给定的模式和替换函数对字符串进行异步替换。
+ * @param value 要进行替换操作的原始字符串。
+ * @param pattern 一个字符串或正则表达式，用于匹配需要替换的部分。
+ * @param replacer 一个函数，接收匹配的子字符串作为参数，返回一个Promise，该Promise解析为替换后的字符串。
+ * @returns 返回一个Promise，该Promise解析为替换操作完成后的字符串。
+ */
+async function replaceAsync(
+  value: string,
+  pattern: string | RegExp,
+  replacer: (substring: string) => Promise<string>
+): Promise<string> {
+  let reg: RegExp;
+  // 根据模式是字符串还是正则表达式创建正则表达式实例
+  if (typeof pattern === "string") {
+    // 对字符串模式进行转义，避免特殊字符影响
+    reg = new RegExp(
+      pattern.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&")
+    );
+  } else {
+    // 如果是正则表达式，确保其具有全局标志
+    if (!pattern.global) {
+      throw new TypeError("RegExp must have global flag");
+    }
+    // 复制正则表达式实例，避免影响原始实例
+    reg = new RegExp(pattern);
+  }
+
+  let result: string[] = []; // 存储替换过程中的分块字符串
+  let lastIndex = 0; // 记录上一次匹配结束的位置
+
+  // 不断查找匹配项并进行替换，直到没有匹配项为止
+  while (true) {
+    let match = reg.exec(value);
+    if (!match) {
+      break;
+    }
+    // 将匹配项之前的文本添加到结果中
+    result.push(value.slice(lastIndex, match.index));
+    // 使用替换函数异步替换匹配项，并添加到结果中
+    result.push(await replacer(match[0]));
+    lastIndex = match.index + match[0].length; // 更新上一次匹配结束的位置
+  }
+  // 将剩余的文本添加到结果中
+  result.push(value.slice(lastIndex));
+  // 将所有分块字符串连接成最终的结果
+  return result.join("");
+}
 ```
