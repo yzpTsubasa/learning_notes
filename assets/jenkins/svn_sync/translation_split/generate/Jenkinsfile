@@ -1,3 +1,5 @@
+import groovy.json.JsonSlurperClassic
+
 @Library("jenkins_library") _
 
 def build = new org.devops.build()
