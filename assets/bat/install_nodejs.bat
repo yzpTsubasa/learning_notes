@@ -16,5 +16,5 @@ if exist "%PROGRAMFILES%\nodejs\node.exe" (
 ) else (
     echo 安装失败，找不到 %PROGRAMFILES%\nodejs\node.exe
 )
-
+pause
 endlocal
