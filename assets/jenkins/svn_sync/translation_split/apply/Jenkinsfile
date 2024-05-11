@@ -48,6 +48,23 @@ pipeline {
                             bat '%WORKSPACE%/automator/automator %WORKSPACE%/automator/cfg/translation_split/apply.yml --FULL_AUTOMATIC 1 --isUpdate 1'
                         }
                     }
+
+                    if(HG_TRANSLATIONS_FONT_URL && HG_TRANSLATIONS_FONT_VER){
+                        def localization_str = readFile encoding: 'utf-8', file: "$WORKSPACE/project/$LOCALIZATION_JSON"
+                        def localization_obj = new JsonSlurperClassic().parseText(localization_str)
+                        def outDir = localization_obj.fontDir 
+                        def to_lang
+                        if(TRANSLATION_DOWNLOAD_LANGUAGES){
+                            to_lang = TRANSLATION_DOWNLOAD_LANGUAGES.split(',')
+                        }else{
+                            to_lang = localization_obj.to_languages
+                        }
+                        dir("project/$outDir") {
+                            buildLib.checkoutSVN("$HG_REPOSITORY_SRC/$outDir", false, false)
+                            buildLib.dowloadFont(HG_TRANSLATIONS_FONT_URL, HG_TRANSLATIONS_FONT_VER, to_lang)
+                        }
+                    }
+                    
                     // 自动构建发布任务
                     if (params.BUILD_NEXT_JOB && params.NEXT_JOB) {
                         build wait: false, job: params.NEXT_JOB, parameters: [extendedChoice(name: 'HG_REPOSITORY_SRC', value: params.HG_REPOSITORY_SRC)]
