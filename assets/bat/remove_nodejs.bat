@@ -1,6 +1,9 @@
 @echo off
 setlocal
 
+@REM 获取管理员权限
+%1 mshta vbscript:CreateObject("Shell.Application").ShellExecute("cmd.exe","/c %~s0 ::","","runas",1)(window.close)&&exit
+
 @REM Node.js 默认安装路径
 set "NODE_PATH=%PROGRAMFILES%\nodejs\"
 
