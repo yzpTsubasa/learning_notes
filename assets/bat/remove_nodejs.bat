@@ -1,21 +1,26 @@
 @echo off
-setlocal
+setlocal enabledelayedexpansion
 
-@REM 获取管理员权限
-%1 mshta vbscript:CreateObject("Shell.Application").ShellExecute("cmd.exe","/c %~s0 ::","","runas",1)(window.close)&&exit
+call admin.bat
 
-@REM Node.js 默认安装路径
-set "NODE_PATH=%PROGRAMFILES%\nodejs\"
-
-@REM 检查 Node.js 是否安装在默认路径
-if not exist "%NODE_PATH%" (
-    echo Node.js 没有在默认路径中找到，请手动删除。
-    exit /b
+for /f "delims=" %%i in ('where node') do (
+    set NODE_EXE_PATH=%%i
 )
 
-@REM 删除 Node.js 安装目录
-rmdir /s /q "%NODE_PATH%"
+if "!NODE_EXE_PATH!"=="" (
+    echo 未找到Node.js
+    pause
+    exit /b 1
+)
+set NODE_DIR_PATH=!NODE_EXE_PATH!
+rem 移除路径中的文件名和尾部的 \，以得到纯净的目录路径
+set NODE_DIR_PATH=!NODE_DIR_PATH:node.exe=!
+set NODE_DIR_PATH=!NODE_DIR_PATH:~0,-1!
+echo 开始卸载...
 
-echo Node.js 卸载完成
+@REM 删除 Node.js 安装目录
+rmdir /s /q "!NODE_DIR_PATH!"
+
+echo 卸载完成!
 pause
 endlocal
