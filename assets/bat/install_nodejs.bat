@@ -39,7 +39,7 @@ echo (2/3) 开始安装
 msiexec /i "%NODE_MSI%" /qn /norestart
 
 @REM 判断是否有 npx 命令
-where npx >nul 2>&1
+where node >nul 2>&1
 if not %ERRORLEVEL% == 0 (
     echo 安装失败，请手动安装Node.js。
 ) else (
