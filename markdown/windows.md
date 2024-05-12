@@ -1,5 +1,21 @@
 ## windows
 
+## 判断管理员权限
+```bat
+REM 检查管理员权限
+net session >nul 2>&1
+if %errorlevel% == 0 (
+    REM 如果没有错误，说明有管理员权限
+    echo 有管理员权限，可以继续执行操作。
+) else (
+    REM 如果有错误，说明没有管理员权限
+    color 0c
+    echo 请重新 "以管理员身份运行" 此脚本
+    pause
+    exit /b 1
+)
+```
+
 ## bat 中请求管理员权限
 ### 方案一(会打开新窗口，可能导致调用其他脚本时无法正常运行)
 ```sh
