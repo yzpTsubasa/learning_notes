@@ -1,12 +1,12 @@
 ## windows
 
 ## bat 中请求管理员权限
-### 方案一
+### 方案一(会打开新窗口，可能导致调用其他脚本时无法正常运行)
 ```sh
 @REM 获取管理员权限
 %1 mshta vbscript:CreateObject("Shell.Application").ShellExecute("cmd.exe","/c %~s0 ::","","runas",1)(window.close)&&exit
 ```
-### 方案二
+### 方案二（不会打开新窗口）
 ```sh
 @echo off
 
