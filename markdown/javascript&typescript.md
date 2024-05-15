@@ -1289,3 +1289,35 @@ async function replaceAsync(
   return result.join("");
 }
 ```
+
+## 二分查找
+```js
+const BinarySearchMode = {
+    EQ: 0,
+    GE: 1,
+    LE: 2,
+};
+function binarySearch(datas, compareFunc, mode = BinarySearchMode.EQ) {
+    let left = 0;
+    let right = datas.length - 1;
+    while (left <= right) {
+        let mid = Math.floor((left + right) / 2);
+        let compareResult = compareFunc(datas[mid], mid);
+        if (compareResult === 0) { // 完全匹配
+            return mid;
+        } 
+        else if (compareResult > 0) { // 偏大
+            right = mid - 1;
+        } 
+        else { // 偏小
+            left = mid + 1;
+        }
+    }
+    if (mode == BinarySearchMode.GE) {
+        return left;
+    } else if (mode == BinarySearchMode.LE) {
+        return right;
+    }
+    return -1
+}
+```
