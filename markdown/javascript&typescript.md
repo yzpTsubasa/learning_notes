@@ -1314,7 +1314,7 @@ function binarySearch(datas, compareFunc, mode = BinarySearchMode.EQ) {
         }
     }
     if (mode == BinarySearchMode.GE) {
-        return left;
+        return left < datas.length ? left : -1;
     } else if (mode == BinarySearchMode.LE) {
         return right;
     }
