@@ -205,7 +205,9 @@ def pubToWebIntegrated() {
     // lock(resource: "${HG_PUB_RES}") {
     dir('project') {
         // 检出
-        checkoutSVN(params.HG_REPOSITORY_SRC)
+        if (!params.USE_LOCAL_REPOSITORY) {
+            checkoutSVN(params.HG_REPOSITORY_SRC)
+        }
         getSVNInfo()
         // 发送通知
         sendStart2DingTalk_PubWeb()
