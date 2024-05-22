@@ -1292,27 +1292,25 @@ async function replaceAsync(
 
 ## 二分查找
 ```js
-const BinarySearchMatchMode = {
-    EQ: 0,
-    GE: 1,
-    LE: 2,
+const BinarySearchMask = {
+    NEARBY_NONE: 0,
+    NEARBY_GREATER: 1,
+    NEARBY_LESS: 2,
+    DUPLICATE_PREFER_NONE: 0,
+    DUPLICATE_PREFER_FIRST: 4,
+    DUPLICATE_PREFER_LAST: 8,
 };
-const BinarySearchRepeatMode = {
-    ANY: 0,
-    FIRST: 1,
-    LAST: 2,
-};
-function binarySearch(datas, compareFunc, matchMode = BinarySearchMatchMode.EQ, repeatMode = BinarySearchRepeatMode.ANY) {
+function binarySearch(datas, compareFunc, mask = BinarySearchMask.NEARBY_NONE | BinarySearchMask.DUPLICATE_PREFER_NONE) {
     let left = 0;
     let right = datas.length - 1;
     while (left <= right) {
         let mid = Math.floor((left + right) / 2);
         let compareResult = compareFunc(datas[mid], mid);
         if (compareResult === 0) { // 完全匹配
-            if (left === right || repeatMode == BinarySearchRepeatMode.ANY) {
+            if (left === right) {
                 return mid;
             }
-            if (repeatMode == BinarySearchRepeatMode.FIRST) {
+            if (mask & BinarySearchMask.DUPLICATE_PREFER_FIRST) {
                 if (right == mid) {
                     if (compareFunc(datas[left], left) === 0) {
                         return left;
@@ -1320,7 +1318,7 @@ function binarySearch(datas, compareFunc, matchMode = BinarySearchMatchMode.EQ, 
                     return right;
                 }
                 right = mid;
-            } else if (repeatMode == BinarySearchRepeatMode.LAST) {
+            } else if (mask & BinarySearchMask.DUPLICATE_PREFER_LAST) {
                 if (left == mid) {
                     if (compareFunc(datas[right], right) === 0) {
                         return right;
@@ -1328,7 +1326,9 @@ function binarySearch(datas, compareFunc, matchMode = BinarySearchMatchMode.EQ, 
                     return left;
                 }
                 left = mid;
-            } 
+            } else {
+                return mid;
+            }
         } 
         else if (compareResult > 0) { // 偏大
             right = mid - 1;
@@ -1337,9 +1337,9 @@ function binarySearch(datas, compareFunc, matchMode = BinarySearchMatchMode.EQ, 
             left = mid + 1;
         }
     }
-    if (matchMode == BinarySearchMatchMode.GE) {
+    if (mask & BinarySearchMask.NEARBY_GREATER) {
         return left < datas.length ? left : -1;
-    } else if (matchMode == BinarySearchMatchMode.LE) {
+    } else if (mask & BinarySearchMask.NEARBY_LESS) {
         return right;
     }
     return -1
