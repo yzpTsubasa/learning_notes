@@ -1292,19 +1292,43 @@ async function replaceAsync(
 
 ## 二分查找
 ```js
-const BinarySearchMode = {
+const BinarySearchMatchMode = {
     EQ: 0,
     GE: 1,
     LE: 2,
 };
-function binarySearch(datas, compareFunc, mode = BinarySearchMode.EQ) {
+const BinarySearchRepeatMode = {
+    ANY: 0,
+    FIRST: 1,
+    LAST: 2,
+};
+function binarySearch(datas, compareFunc, matchMode = BinarySearchMatchMode.EQ, repeatMode = BinarySearchRepeatMode.ANY) {
     let left = 0;
     let right = datas.length - 1;
     while (left <= right) {
         let mid = Math.floor((left + right) / 2);
         let compareResult = compareFunc(datas[mid], mid);
         if (compareResult === 0) { // 完全匹配
-            return mid;
+            if (left === right || repeatMode == BinarySearchRepeatMode.ANY) {
+                return mid;
+            }
+            if (repeatMode == BinarySearchRepeatMode.FIRST) {
+                if (right == mid) {
+                    if (compareFunc(datas[left], left) === 0) {
+                        return left;
+                    }
+                    return right;
+                }
+                right = mid;
+            } else if (repeatMode == BinarySearchRepeatMode.LAST) {
+                if (left == mid) {
+                    if (compareFunc(datas[right], right) === 0) {
+                        return right;
+                    }
+                    return left;
+                }
+                left = mid;
+            } 
         } 
         else if (compareResult > 0) { // 偏大
             right = mid - 1;
@@ -1313,9 +1337,9 @@ function binarySearch(datas, compareFunc, mode = BinarySearchMode.EQ) {
             left = mid + 1;
         }
     }
-    if (mode == BinarySearchMode.GE) {
+    if (matchMode == BinarySearchMatchMode.GE) {
         return left < datas.length ? left : -1;
-    } else if (mode == BinarySearchMode.LE) {
+    } else if (matchMode == BinarySearchMatchMode.LE) {
         return right;
     }
     return -1
