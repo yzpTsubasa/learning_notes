@@ -185,13 +185,17 @@ def generatePatchFile(include = "") {
             revisions.tokenize(",").each {
                 def revision = it
                 def patch = bat returnStdout: true, script: "@echo off && svn diff ${HG_REPOSITORY_SRC} -c${revision} ${include} --username %HG_CREDENTIAL_USERNAME% --password %HG_CREDENTIAL_PASSWORD%"
-                patches += patch + "\n"
+                if (patch) {
+                    patches += patch + "\n"
+                }
             }
         }
-        def filename = "patches/out/r${revisions}.patch";
-        def filepath = "http://192.168.1.205:8686/view/${WORKSPACE.replaceAll('\\\\', '/')}/${filename}"
-        fileOperations([fileCreateOperation(fileContent: patches, fileName: filename)])
-        env.HG_PATCH_FILE = filepath
+        if (patches) {
+            def filename = "patches/out/r${revisions}.patch";
+            def filepath = "http://192.168.1.205:8686/view/${WORKSPACE.replaceAll('\\\\', '/')}/${filename}"
+            fileOperations([fileCreateOperation(fileContent: patches, fileName: filename)])
+            env.HG_PATCH_FILE = filepath
+        }
     }
 }
 
