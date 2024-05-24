@@ -174,17 +174,19 @@ def sendResult2DingTalkSimple() {
     )
 }
 
-def generatePatchFile() {
+def generatePatchFile(include = "") {
     if (!env.HG_REPOSITORY_SRC) {
         return;
     }
     def revisions = getRevisions()
     if (revisions) {
         def patches = ""
-        revisions.tokenize(",").each {
-            def revision = it
-            def patch = bat returnStdout: true, script: "@echo off && svn diff ${HG_REPOSITORY_SRC} -c${revision}"
-            patches += patch + "\n"
+        withCredentials([usernamePassword(credentialsId: getCredentialsId(), passwordVariable: 'HG_CREDENTIAL_PASSWORD', usernameVariable: 'HG_CREDENTIAL_USERNAME')]) {
+            revisions.tokenize(",").each {
+                def revision = it
+                def patch = bat returnStdout: true, script: "@echo off && svn diff ${HG_REPOSITORY_SRC} -c${revision} ${include} --username %HG_CREDENTIAL_USERNAME% --password %HG_CREDENTIAL_PASSWORD%"
+                patches += patch + "\n"
+            }
         }
         def filename = "patches/out/r${revisions}.patch";
         def filepath = "http://192.168.1.205:8686/view/${WORKSPACE.replaceAll('\\\\', '/')}/${filename}"
@@ -442,6 +444,7 @@ def sendResult2DingTalk_PubWeb() {
         return
     }
     resolveResult()
+    generatePatchFile("resource/assets/cfgjson")
     env.description = currentBuild.description
     env.durationString = currentBuild.durationString.minus(' and counting')
     dingtalk(
@@ -464,6 +467,7 @@ def sendResult2DingTalk_PubWeb() {
                 (hasLogo2Refresh() ? '- logo <font color=#ff9f00>已修改</font>' : ''),
                 (hasIndexJS2Refresh() ? '- index <font color=#ff9f00>已修改</font>' : ''),
                 '- 记录',
+                env.HG_PATCH_FILE ? "[点击查看cfgjson修改](${env.HG_PATCH_FILE})" : "",
                 '***',
             ] 
             + getChangeString() 
