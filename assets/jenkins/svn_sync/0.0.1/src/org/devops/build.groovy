@@ -174,17 +174,17 @@ def sendResult2DingTalkSimple() {
     )
 }
 
-def generatePatchFile(include = "") {
-    if (!env.HG_REPOSITORY_SRC) {
+def generatePatchFile(include = "", src = "${WORKSPACE}/project") {
+    if (!src) {
         return;
     }
     def revisions = getRevisions()
     if (revisions) {
         def patches = ""
-        withCredentials([usernamePassword(credentialsId: getCredentialsId(), passwordVariable: 'HG_CREDENTIAL_PASSWORD', usernameVariable: 'HG_CREDENTIAL_USERNAME')]) {
+        dir(src) {
             revisions.tokenize(",").each {
                 def revision = it
-                def patch = bat returnStdout: true, script: "@echo off && svn diff ${HG_REPOSITORY_SRC} -c${revision} ${include} --username %HG_CREDENTIAL_USERNAME% --password %HG_CREDENTIAL_PASSWORD%"
+                def patch = bat returnStdout: true, script: "@echo off && svn diff -c${revision} ${include}"
                 if (patch) {
                     patches += patch + "\n"
                 }
@@ -193,7 +193,7 @@ def generatePatchFile(include = "") {
         if (patches) {
             def filename = "patches/out/r${revisions}.patch";
             def filepath = "http://192.168.1.205:8686/view/${WORKSPACE.replaceAll('\\\\', '/')}/${filename}"
-            fileOperations([fileCreateOperation(fileContent: patches, fileName: filename)])
+            fileOperations([fileCreateOperation(fileContent: patches, fileName: "${WORKSPACE}/${filename}")])
             env.HG_PATCH_FILE = filepath
         }
     }
@@ -585,6 +585,7 @@ def sendCommonResult2DingTalk() {
             "- 状态 <font color=${result_color}>${result}</font>",
             "- 时刻 ${new Date().format('yyyy-MM-dd(E)HH:mm:ss', TimeZone.getTimeZone('Asia/Shanghai')) - '星期'}",
             "- 用时 ${durationString}",
+            env.HG_PATCH_FILE ? "[点击查看修改](${env.HG_PATCH_FILE})" : "",
             '***',
         ] + (
             env.EXTRA_DINGTALK_NOTIFICATIONS ? env.EXTRA_DINGTALK_NOTIFICATIONS.tokenize(",") : []

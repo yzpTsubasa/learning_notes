@@ -57,6 +57,7 @@ pipeline {
                                 } else {
                                     // 自动则使用增量版本
                                     env.REVISIONS = buildLib.getRevisions()
+                                    buildLib.generatePatchFile("", "${WORKSPACE}/translation/${projectName}/${realProjectVer}/cn")
                                 }
                                 print 'env.REVISIONS ' + env.REVISIONS
                                 env.EXTRA_DINGTALK_NOTIFICATIONS = bat returnStdout: true, script: '@echo off && %WORKSPACE%/automator/automator %WORKSPACE%/automator/cfg/conversion/conversion_to_send@api.yml --FULL_AUTOMATIC 1 --projectFolder %WORKSPACE%/project --projectName %PROJECT_NAME% --conversionWorkspaceFolder %WORKSPACE%/conversion --translationFolder %WORKSPACE%/translation --revisions "%REVISIONS%" --revision_beg "%REVISION_BEG%" --revision_end "%REVISION_END%" --projectVerSuffix "%PROJECT_VER_SUFFIX%" --LOG_LEVEL 99'
