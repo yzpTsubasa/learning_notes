@@ -471,7 +471,7 @@ def sendResult2DingTalk_PubWeb() {
                 (hasLogo2Refresh() ? '- logo <font color=#ff9f00>已修改</font>' : ''),
                 (hasIndexJS2Refresh() ? '- index <font color=#ff9f00>已修改</font>' : ''),
                 '- 记录',
-                env.HG_PATCH_FILE ? "[点击查看cfgjson修改](${env.HG_PATCH_FILE})" : "",
+                env.HG_PATCH_FILE ? "- [点击查看cfgjson修改](${env.HG_PATCH_FILE})" : "",
                 '***',
             ] 
             + getChangeString() 
@@ -585,7 +585,7 @@ def sendCommonResult2DingTalk() {
             "- 状态 <font color=${result_color}>${result}</font>",
             "- 时刻 ${new Date().format('yyyy-MM-dd(E)HH:mm:ss', TimeZone.getTimeZone('Asia/Shanghai')) - '星期'}",
             "- 用时 ${durationString}",
-            env.HG_PATCH_FILE ? "[点击查看修改](${env.HG_PATCH_FILE})" : "",
+            env.HG_PATCH_FILE ? "- [点击查看修改](${env.HG_PATCH_FILE})" : "",
             '***',
         ] + (
             env.EXTRA_DINGTALK_NOTIFICATIONS ? env.EXTRA_DINGTALK_NOTIFICATIONS.tokenize(",") : []
