@@ -976,6 +976,11 @@ sendToMain('todo:add', document.querySelector('input').value);
 .\node_modules\.bin\eslint . --fix
 ```
 
+## 使用 eslint 对指定文件检查
+```sh
+.\node_modules\.bin\eslint src/**
+```
+
 ## JNI ERROR (app bug): local reference table overflow (max=512)
 白鹭原生包报错，可能由于一帧内发送过多消息导致。
 发送消息需要创建很多 ArrayBuffer，导致此错误。
