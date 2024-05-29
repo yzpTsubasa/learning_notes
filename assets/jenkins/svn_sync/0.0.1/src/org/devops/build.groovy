@@ -182,7 +182,7 @@ def generatePatchFile(include = "", src = "${WORKSPACE}/project") {
     if (revisions) {
         def patches = ""
         dir(src) {
-            revisions.tokenize(",").each {
+            revisions.tokenize(",").reverse().each {
                 def revision = it
                 def patch = bat returnStdout: true, script: "@echo off && svn diff -c${revision} ${include}"
                 if (patch) {
