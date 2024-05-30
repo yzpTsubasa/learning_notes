@@ -9,7 +9,7 @@ import groovy.json.JsonSlurperClassic
 pipeline {
     agent any
     triggers {
-        pollSCM 'H/2 * * * *'
+        pollSCM 'H 10,14 * * *'
     }
     options {
         disableConcurrentBuilds()
