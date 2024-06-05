@@ -28,7 +28,7 @@ def getChangeString(showIndex = true, showDetail = true) {
             return true
         }.collect {
             return it.collect {
-                (showIndex ? "${i++}. " : "") + "${it.msg.take(MAX_MSG_LEN).replaceAll('[\r\n]+', '')}" + (showDetail ? " by ${it.author.getFullName()} at ${new Date(it.getTimestamp()).format('HH:mm:ss', TimeZone.getTimeZone('Asia/Shanghai'))}(${it.getCommitId()})" : "")
+                (showIndex ? "${i++}. " : "") + "${it.msg.take(MAX_MSG_LEN).replaceAll('[\r\n]+', '')}" + (showDetail ? " by ${it.author.getFullName()} at ${new Date(it.getTimestamp()).format('HH:mm', TimeZone.getTimeZone('Asia/Shanghai'))}(${it.getCommitId()})" : "")
             }.join('\n')
         }.join('\n')
     }
