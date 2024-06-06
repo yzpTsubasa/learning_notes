@@ -191,7 +191,7 @@ def generatePatchFile(include = "", src = "${WORKSPACE}/project") {
             }
         }
         if (patches) {
-            def filename = "patches/out/r${revisions}.patch";
+            def filename = "patches/out/r${revisions.take(20)}.patch";
             def filepath = "http://192.168.1.205:8686/file/${WORKSPACE.replaceAll('\\\\', '/')}/${filename}"
             fileOperations([fileCreateOperation(fileContent: patches, fileName: "${WORKSPACE}/${filename}")])
             env.HG_PATCH_FILE = filepath
