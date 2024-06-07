@@ -175,27 +175,31 @@ def sendResult2DingTalkSimple() {
 }
 
 def generatePatchFile(include = "", src = "${WORKSPACE}/project") {
-    if (!src) {
-        return;
-    }
-    def revisions = getRevisions()
-    if (revisions) {
-        def patches = ""
-        dir(src) {
-            revisions.tokenize(",").reverse().each {
-                def revision = it
-                def patch = bat returnStdout: true, script: "@echo off && svn diff -c${revision} ${include}"
-                if (patch) {
-                    patches += patch + "\n"
+    try {
+        if (!src) {
+            return;
+        }
+        def revisions = getRevisions()
+        if (revisions) {
+            def patches = ""
+            dir(src) {
+                revisions.tokenize(",").reverse().each {
+                    def revision = it
+                    def patch = bat returnStdout: true, script: "@echo off && svn diff -c${revision} ${include}"
+                    if (patch) {
+                        patches += patch + "\n"
+                    }
                 }
             }
+            if (patches) {
+                def filename = "patches/out/r${revisions.take(20)}.patch";
+                def filepath = "http://192.168.1.205:8686/file/${WORKSPACE.replaceAll('\\\\', '/')}/${filename}"
+                fileOperations([fileCreateOperation(fileContent: patches, fileName: "${WORKSPACE}/${filename}")])
+                env.HG_PATCH_FILE = filepath
+            }
         }
-        if (patches) {
-            def filename = "patches/out/r${revisions.take(20)}.patch";
-            def filepath = "http://192.168.1.205:8686/file/${WORKSPACE.replaceAll('\\\\', '/')}/${filename}"
-            fileOperations([fileCreateOperation(fileContent: patches, fileName: "${WORKSPACE}/${filename}")])
-            env.HG_PATCH_FILE = filepath
-        }
+    } catch (Exception e) {
+        print(e)
     }
 }
 
