@@ -72,6 +72,7 @@ netsh wlan show profile name=[wifi名称] key=clear
 
 ## The Windows Subsystem for Linux (WSL)
 > 在 Microsoft Store 应用商店中搜索 Ubuntu，下载安装即可。
+> 如果有网络问题，比如 apt install 失败，可以切换到版本 1 `wsl --set-version Ubuntu 1`
 ```sh
 # 运行
 wsl --install
