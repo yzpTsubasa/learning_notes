@@ -71,6 +71,7 @@ netsh wlan show profile name=[wifi名称] key=clear
 - `net start sshd`
 
 ## The Windows Subsystem for Linux (WSL)
+> 在 Microsoft Store 应用商店中搜索 Ubuntu，下载安装即可。
 ```sh
 # 运行
 wsl --install
