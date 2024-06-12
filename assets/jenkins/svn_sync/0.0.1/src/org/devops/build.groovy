@@ -587,6 +587,7 @@ def sendCommonResult2DingTalk() {
             "# **[${currentBuild.fullDisplayName}](${BUILD_URL})**",
             '***',
             "- 状态 <font color=${result_color}>${result}</font>",
+            "- 发起 ${getRootBuildTriggerDesc()}",
             "- 时刻 ${new Date().format('yyyy-MM-dd(E)HH:mm:ss', TimeZone.getTimeZone('Asia/Shanghai')) - '星期'}",
             "- 用时 ${durationString}",
             env.HG_PATCH_FILE ? "- [点击查看修改](${env.HG_PATCH_FILE})" : "",
@@ -1048,9 +1049,14 @@ def hasIndexJS2Refresh() {
 // 获取最上游构建的发起描述
 def getRootBuildTriggerDesc() {
     def build = getRootBuild(currentBuild)
-    def desc = build.getBuildCauses()[0] && (build.getBuildCauses()[0].userName ? build.getBuildCauses()[0].userName : build.getBuildCauses()[0].shortDescription.minus('Started by ').replace('timer', '定时器').replace('an SCM change', 'SCM轮询'))
-    if (build.getAbsoluteUrl() != currentBuild.getAbsoluteUrl()) {
-        desc += "[${build.getFullDisplayName()}](${build.getAbsoluteUrl()})"
+    def desc = "Unknown";
+    try {
+        build.getBuildCauses()[0] && (build.getBuildCauses()[0].userName ? build.getBuildCauses()[0].userName : build.getBuildCauses()[0].shortDescription.minus('Started by ').replace('timer', '定时器').replace('an SCM change', 'SCM轮询'))
+        if (build.getAbsoluteUrl() != currentBuild.getAbsoluteUrl()) {
+            desc += "[${build.getFullDisplayName()}](${build.getAbsoluteUrl()})"
+        }
+    } catch (Exception e) {
+        print(e)
     }
     return desc
 }
