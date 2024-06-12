@@ -576,6 +576,12 @@ def sendCommonResult2DingTalk() {
         return
     }
     resolveResult()
+    def buildTriggerDesc = "Unknown"
+    try {
+        buildTriggerDesc = getRootBuildTriggerDesc()
+    } catch (Exception e) {
+        print(e)
+    }
     env.durationString = currentBuild.durationString.minus(' and counting')
     dingtalk(
         robot: getDingTalkRobot(),
@@ -587,7 +593,7 @@ def sendCommonResult2DingTalk() {
             "# **[${currentBuild.fullDisplayName}](${BUILD_URL})**",
             '***',
             "- 状态 <font color=${result_color}>${result}</font>",
-            "- 发起 ${getRootBuildTriggerDesc()}",
+            "- 发起 ${buildTriggerDesc}",
             "- 时刻 ${new Date().format('yyyy-MM-dd(E)HH:mm:ss', TimeZone.getTimeZone('Asia/Shanghai')) - '星期'}",
             "- 用时 ${durationString}",
             env.HG_PATCH_FILE ? "- [点击查看修改](${env.HG_PATCH_FILE})" : "",
@@ -1048,17 +1054,12 @@ def hasIndexJS2Refresh() {
 
 // 获取最上游构建的发起描述
 def getRootBuildTriggerDesc() {
-    try {
-        def build = getRootBuild(currentBuild)
-        def desc = build.getBuildCauses()[0] && (build.getBuildCauses()[0].userName ? build.getBuildCauses()[0].userName : build.getBuildCauses()[0].shortDescription.minus('Started by ').replace('timer', '定时器').replace('an SCM change', 'SCM轮询'))
-        if (build.getAbsoluteUrl() != currentBuild.getAbsoluteUrl()) {
-            desc += "[${build.getFullDisplayName()}](${build.getAbsoluteUrl()})"
-        }
-        return desc
-    } catch (Exception e) {
-        print(e)
-        return "Unknown"
+    def build = getRootBuild(currentBuild)
+    def desc = build.getBuildCauses()[0] && (build.getBuildCauses()[0].userName ? build.getBuildCauses()[0].userName : build.getBuildCauses()[0].shortDescription.minus('Started by ').replace('timer', '定时器').replace('an SCM change', 'SCM轮询'))
+    if (build.getAbsoluteUrl() != currentBuild.getAbsoluteUrl()) {
+        desc += "[${build.getFullDisplayName()}](${build.getAbsoluteUrl()})"
     }
+    return desc
 }
 
 // 获取最上游构建的发起人id
