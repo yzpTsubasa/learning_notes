@@ -452,7 +452,7 @@ def sendResult2DingTalk_PubWeb() {
         return
     }
     resolveResult()
-    generatePatchFile("resource/assets/cfgjson")
+    // generatePatchFile("resource/assets/cfgjson")
     env.description = currentBuild.description
     env.durationString = currentBuild.durationString.minus(' and counting')
     dingtalk(
