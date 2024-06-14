@@ -1355,25 +1355,19 @@ function binarySearch(datas, compareFunc, mask = BinarySearchMask.NEARBY_NONE | 
 ```js
 /** 生成树状数组 */
 function GenerateBIT(arr) {
-  var bit = [];
+  var bit = new Array(arr.length);
   arr.forEach((val, index, arr) => {
-    const order = index + 1;
-    const width = -order & order;
-    if (width > 1) {
-      for (let i = 1; i < width; i++) {
-        val += arr[index - i];
-      }
-    }
-    bit.push(val);
+    UpdateBIT(bit, index, val);
   });
   return bit;
 }
+
 /** 更新树状数组 */
 function UpdateBIT(bit, index, offset) {
   var target = index + 1;
   let width;
   do {
-    bit[target - 1] += offset;
+    bit[target - 1] = (bit[target - 1] || 0) + offset;
     width = -target & target;
     target += width;
   } while (target <= bit.length);
