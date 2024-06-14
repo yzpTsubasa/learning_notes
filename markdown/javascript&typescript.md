@@ -1350,3 +1350,53 @@ function binarySearch(datas, compareFunc, mask = BinarySearchMask.NEARBY_NONE | 
     return -1
 }
 ```
+
+## 树状数组
+```js
+/** 生成树状数组 */
+function GenerateBIT(arr) {
+  var bit = [];
+  arr.forEach((val, index, arr) => {
+    const order = index + 1;
+    const width = -order & order;
+    if (width > 1) {
+      for (let i = 1; i < width; i++) {
+        val += arr[index - i];
+      }
+    }
+    bit.push(val);
+  });
+  return bit;
+}
+/** 更新树状数组 */
+function UpdateBIT(bit, index, offset) {
+  var target = index + 1;
+  let width;
+  do {
+    bit[target - 1] += offset;
+    width = -target & target;
+    target += width;
+  } while (target <= bit.length);
+}
+
+/** 获取树状数组区间和 */
+function GetSumByBIT(bit, beg, end) {
+  if (beg >= end) return 0;
+  return getPrevSumByBIT(bit, end) - getPrevSumByBIT(bit, beg);
+}
+
+/** 获取树状数组前缀和 */
+function getPrevSumByBIT(bit, size) {
+  let sum = 0;
+  var target = size;
+  var width = -size & size;
+  var val = bit[size - 1];
+  while(target > 0) {
+    sum += val;
+    target -= width;
+    val = bit[target - 1];
+    width = -target & target;
+  }
+  return sum;
+}
+```
