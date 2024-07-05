@@ -15,6 +15,7 @@ pipeline {
                     build.cleanupHGPubToolsDist()
                     dir("project") {
                         build.checkoutSVN(params.HG_REPOSITORY_SRC)
+                        build.getSVNInfo()
                         // Send Notify
                         build.sendStart2DingTalk_PubWeb()
                         // 设置环境变量 prg_dir 给 automator 使用
