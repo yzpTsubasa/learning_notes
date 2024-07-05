@@ -857,6 +857,7 @@ electron_builder_binaries_mirror=https://npmmirror.com/mirrors/electron-builder-
 ```
 
 ## 为 ts/js 配置 eslint / prettier
+## 使用VSCode插件ESLint命令：Create ESLint Configuration
 ```sh
 # 安装依赖
 npm i -D eslint eslint-plugin-prettier
