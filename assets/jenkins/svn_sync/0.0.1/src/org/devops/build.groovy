@@ -28,7 +28,7 @@ def getChangeString(showIndex = true, showDetail = true) {
             return true
         }.collect {
             return it.collect {
-                (showIndex ? "${i++}. " : "") + "${it.msg.take(MAX_MSG_LEN).replaceAll('[\r\n]+', '')}" + (showDetail ? " by ${it.author.getFullName()} at ${new Date(it.getTimestamp()).format('HH:mm:ss', TimeZone.getTimeZone('Asia/Shanghai'))}" : "")
+                (showIndex ? "${i++}. " : "") + "${it.msg.take(MAX_MSG_LEN).replaceAll('[\r\n]+', '')}" + (showDetail ? " by ${it.author.getFullName()} at ${new Date(it.getTimestamp()).format('HH:mm', TimeZone.getTimeZone('Asia/Shanghai'))}(${it.getCommitId()})" : "")
             }.join('\n')
         }.join('\n')
     }
@@ -169,33 +169,38 @@ def sendResult2DingTalkSimple() {
         text: [
             "- 任务 [${currentBuild.fullDisplayName}](${BUILD_URL}) ",
             "- 状态 <font color=${result_color}>${result}</font>",
+            "- 发起 ${getRootBuildTriggerDesc()}",
             "- 时刻 ${new Date().format('yyyy-MM-dd(E)HH:mm:ss', TimeZone.getTimeZone('Asia/Shanghai')) - '星期'}",
         ]
     )
 }
 
 def generatePatchFile(include = "", src = "${WORKSPACE}/project") {
-    if (!src) {
-        return;
-    }
-    def revisions = getRevisions()
-    if (revisions) {
-        def patches = ""
-        dir(src) {
-            revisions.tokenize(",").reverse().each {
-                def revision = it
-                def patch = bat returnStdout: true, script: "@echo off && svn diff -c${revision} ${include}"
-                if (patch) {
-                    patches += patch + "\n"
+    try {
+        if (!src) {
+            return;
+        }
+        def revisions = getRevisions()
+        if (revisions) {
+            def patches = ""
+            dir(src) {
+                revisions.tokenize(",").reverse().each {
+                    def revision = it
+                    def patch = bat returnStdout: true, script: "@echo off && svn diff -c${revision} ${include}"
+                    if (patch) {
+                        patches += patch + "\n"
+                    }
                 }
             }
+            if (patches) {
+                def filename = "patches/out/r${revisions.take(20)}.patch";
+                def filepath = "http://192.168.1.205:8686/file/${WORKSPACE.replaceAll('\\\\', '/')}/${filename}"
+                fileOperations([fileCreateOperation(fileContent: patches, fileName: "${WORKSPACE}/${filename}")])
+                env.HG_PATCH_FILE = filepath
+            }
         }
-        if (patches) {
-            def filename = "patches/out/r${revisions}.patch";
-            def filepath = "http://192.168.1.205:8686/file/${WORKSPACE.replaceAll('\\\\', '/')}/${filename}"
-            fileOperations([fileCreateOperation(fileContent: patches, fileName: "${WORKSPACE}/${filename}")])
-            env.HG_PATCH_FILE = filepath
-        }
+    } catch (Exception e) {
+        print(e)
     }
 }
 
@@ -448,7 +453,7 @@ def sendResult2DingTalk_PubWeb() {
         return
     }
     resolveResult()
-    generatePatchFile("resource/assets/cfgjson")
+    // generatePatchFile("resource/assets/cfgjson")
     env.description = currentBuild.description
     env.durationString = currentBuild.durationString.minus(' and counting')
     dingtalk(
@@ -583,6 +588,7 @@ def sendCommonResult2DingTalk() {
             "# **[${currentBuild.fullDisplayName}](${BUILD_URL})**",
             '***',
             "- 状态 <font color=${result_color}>${result}</font>",
+            "- 发起 ${getRootBuildTriggerDesc()}",
             "- 时刻 ${new Date().format('yyyy-MM-dd(E)HH:mm:ss', TimeZone.getTimeZone('Asia/Shanghai')) - '星期'}",
             "- 用时 ${durationString}",
             env.HG_PATCH_FILE ? "- [点击查看修改](${env.HG_PATCH_FILE})" : "",
@@ -1043,12 +1049,17 @@ def hasIndexJS2Refresh() {
 
 // 获取最上游构建的发起描述
 def getRootBuildTriggerDesc() {
-    def build = getRootBuild(currentBuild)
-    def desc = build.getBuildCauses()[0] && (build.getBuildCauses()[0].userName ? build.getBuildCauses()[0].userName : build.getBuildCauses()[0].shortDescription.minus('Started by ').replace('timer', '定时器').replace('an SCM change', 'SCM轮询'))
-    if (build.getAbsoluteUrl() != currentBuild.getAbsoluteUrl()) {
-        desc += "[${build.getFullDisplayName()}](${build.getAbsoluteUrl()})"
+    try {
+        def build = getRootBuild(currentBuild)
+        def desc = build.getBuildCauses()[0] && (build.getBuildCauses()[0].userName ? build.getBuildCauses()[0].userName : build.getBuildCauses()[0].shortDescription.minus('Started by ').replace('timer', '定时器').replace('an SCM change', 'SCM轮询'))
+        if (build.getAbsoluteUrl() != currentBuild.getAbsoluteUrl()) {
+            desc += "[${build.getFullDisplayName()}](${build.getAbsoluteUrl()})"
+        }
+        return desc
+    } catch (Exception e) {
+        print(e)
     }
-    return desc
+    return "Unknown"
 }
 
 // 获取最上游构建的发起人id

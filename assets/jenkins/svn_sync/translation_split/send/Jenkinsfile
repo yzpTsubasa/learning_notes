@@ -66,6 +66,9 @@ pipeline {
                     }
                 }
             }
+            options {
+                timeout(5)
+            }
         }
     }
 
