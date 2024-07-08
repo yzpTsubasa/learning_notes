@@ -125,7 +125,7 @@ def sendResult2DingTalk() {
     env.description = currentBuild.description
     env.durationString = currentBuild.durationString.minus(' and counting')
     // 失败时，@提交者
-    def atUsers = getAtUsers(currentBuild.result == 'FAILURE', currentBuild.result != 'FAILURE')
+    def atUsers = getAtUsers(currentBuild.result == 'FAILURE' || params.AT_COMMIT_USER, currentBuild.result != 'FAILURE')
     dingtalk(
         robot: getDingTalkRobot(),
         type: 'MARKDOWN',
