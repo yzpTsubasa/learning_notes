@@ -26,7 +26,7 @@ if '%errorlevel%' NEQ '0' (
     CD /D "%~dp0"
 :--------------------------------------
 
-set NODE_VERSION=20.17.0
+set NODE_VERSION=16.20.0
 @REM set NODE_URL=https://nodejs.org/dist/v%NODE_VERSION%/node-v%NODE_VERSION%-x64.msi
 set NODE_URL=https://registry.npmmirror.com/-/binary/node/v%NODE_VERSION%/node-v%NODE_VERSION%-x64.msi
 set NODE_MSI=%TEMP%\node-v%NODE_VERSION%-x64.msi
