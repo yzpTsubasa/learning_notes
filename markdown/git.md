@@ -196,3 +196,12 @@ git merge --no-ff xxxxxx-master
 ```sh
 git clone --single-branch --branch [branch_name] [url] [directory]
 ```
+
+## 配置core.editor属性
+```sh
+git config --global core.editor "code --wait"
+# 每次都打开一个新窗口，那么就需要加上--new-window。
+git config --global core.editor "code --wait --new-window"
+# 恢复Vim，使用下面命令即可
+git config --global --unset core.editor
+```
