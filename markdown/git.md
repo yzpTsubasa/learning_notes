@@ -208,10 +208,18 @@ git config --global --unset core.editor
 
 ## 不使用 gitignore 来忽略文件
 ```sh
+# --skip-worktree
+git update-index --skip-worktree [file]
+
+# --assume-unchanged
 git update-index --assume-unchanged [file]
 ```
 
 ## 取消忽略文件
 ```sh
+# --skip-worktree
+git update-index --no-skip-worktree [file]
+
+# --assume-unchanged
 git update-index --no-assume-unchanged [file]
 ```
