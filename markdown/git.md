@@ -205,3 +205,13 @@ git config --global core.editor "code --wait --new-window"
 # 恢复Vim，使用下面命令即可
 git config --global --unset core.editor
 ```
+
+## 不使用 gitignore 来忽略文件
+```sh
+git update-index --assume-unchanged [file]
+```
+
+## 取消忽略文件
+```sh
+git update-index --no-assume-unchanged [file]
+```
