@@ -1,5 +1,12 @@
 ## javascript&typescript
 
+## 启用 edge 远程调试
+```sh
+# 目标
+"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe" --remote-debugging-port=9222 --profile-directory=Default
+
+```
+
 ## eslint 忽略部分
 ```js
 // 忽略复杂度
