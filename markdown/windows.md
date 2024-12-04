@@ -147,6 +147,7 @@ setx /M path "%PATH%;<NEW_PATH>"
 setx path "%PATH%;%cd%"
 ```
 ## 设置 HTTP 代理
+![alt text](../assets/v2rayN.png)
 ``` sh
 set HTTP_PROXY=http://127.0.0.1:10800
 set HTTPS_PROXY=http://127.0.0.1:10800
