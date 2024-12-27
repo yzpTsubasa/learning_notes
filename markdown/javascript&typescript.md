@@ -1,5 +1,17 @@
 ## javascript&typescript
 
+## 项目编译报错
+> error: circular references ''
+- 可能是用了新的ts语法,旧的ts编译器不支持。
+- 使用新的 node 版本，比如替换白鹭引擎`C:\Program Files (x86)\Egret\EgretLauncher\resources\app\engine\win\node.exe`
+
+
+> error TS18046: 'chess' is of type 'unknown'.
+> error TS7006: Parameter 'info' implicitly has an 'any' type.
+- 可能是 `@type` 没有正常识别解析导致的。
+- 可以升级 `hgbuild` 版本
+
+
 ## 启用 edge 远程调试
 ```sh
 # 目标
