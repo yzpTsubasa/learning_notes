@@ -307,7 +307,11 @@ if "%chkdst%" == "true" (
         }
         webSyncIndex()
     }
+
+    if (params.BUILD_NEXT_JOB && params.NEXT_JOB) {
+        build wait: false, job: params.NEXT_JOB
     }
+}
 
 // pubToWeb构建开始
 def sendStart2DingTalk_PubWeb() {
