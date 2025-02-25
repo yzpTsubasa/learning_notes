@@ -54,7 +54,6 @@ pipeline {
                     }
                 }
             }
-            when { expression { params.ENABLE_PUBLISH_STATIC_RESOURCE } }
         }
     }
 

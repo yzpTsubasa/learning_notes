@@ -614,7 +614,6 @@ def sendResult2DingTalk_PubMinigame2() {
             minigameOutputURL ? "- [下载游戏包](${minigameOutputURL})" : "",
             minigameToggleOperation ? "- 小游戏配置 <font color=#52c41a>${minigameToggleOperation}</font>" : "",
             "- 生效时间 <font color=#52c41a>${getDateByStep().format('yyyy-MM-dd(E)HH:mm:ss', TimeZone.getTimeZone('Asia/Shanghai')) - '星期'}</font>",
-            "- <font color=${env.ENABLE_PUBLISH_STATIC_RESOURCE == "true" ? "#52c41a" : "#888888"}>静态资源${env.ENABLE_PUBLISH_STATIC_RESOURCE == "true" ? "" : "不"}更新</font>",
             "- <font color=${env.addResVer == "true" ? "#52c41a" : "#888888"}>资源版本号${env.addResVer == "true" ? "" : "不"}提升</font>",
             "- <font color=${env.addCodeVer == "true" ? "#52c41a" : "#888888"}>代码版本号${env.addCodeVer == "true" ? "" : "不"}提升</font>",
             "- 用时 ${durationString}",
