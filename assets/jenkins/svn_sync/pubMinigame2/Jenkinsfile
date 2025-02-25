@@ -5,36 +5,6 @@ def build = new org.devops.build()
 pipeline {
     agent any
 
-    parameters {
-        choice(
-            name: 'HG_REPOSITORY_SRC',
-            choices: [
-                'https://svn100.hotgamehl.com/svn/Html5/trunk/dldl_WX/mengdao2_trunk_rc',
-                'https://svn100.hotgamehl.com/svn/Html5/trunk/dldl_WX/mengdao2_trunk'
-            ],
-            description: '项目地址'
-        )
-        string(
-            name: 'HG_MINIGAME_REPOSITORY_SRC',
-            defaultValue: 'https://svn100.hotgamehl.com/svn/Html5/trunk/dldl_WX/moli_wx_main',
-            description: '小游戏地址'
-        )
-        string(name: 'MINIGAME_TAG', defaultValue: 'mengdao2_wxgame', description: '目录名')
-        booleanParam(name: 'ENABLE_PUBLISH_STATIC_RESOURCE', defaultValue: true, description: '是否发布静态资源')
-
-        string(name: 'upload_filter', defaultValue: 'default')
-        string(name: 'toolTag', defaultValue: 'moli_cfg_tx_cdn')
-        string(name: 'cfg_dir', defaultValue: 'md2')
-        string(name: 'target', defaultValue: 'wx_main')
-        string(name: 'cfgTag', defaultValue: 'wx')
-
-        string(name: 'APP_ID', defaultValue: 'wx561e6eb0ca55e538')
-        string(name: 'PRIVATE_KEY', defaultValue: './key/private.wx561e6eb0ca55e538.key')
-
-        booleanParam(name: 'addResVer', defaultValue: false, description: '提升资源版本号')
-        booleanParam(name: 'addCodeVer', defaultValue: false, description: '提升代码版本号')
-    }
-
     options {
         disableConcurrentBuilds()
     }
@@ -91,7 +61,7 @@ pipeline {
     post {
         always {
             script {
-                build.sendResult2DingTalk_PubMinigame()
+                build.sendResult2DingTalk_PubMinigame2()
                 build.sendResult2Emailext()
             }
         }
