@@ -309,7 +309,7 @@ if "%chkdst%" == "true" (
     }
 
     if (params.BUILD_NEXT_JOB && params.NEXT_JOB) {
-        build wait: false, job: params.NEXT_JOB
+        build wait: false, job: params.NEXT_JOB, parameters: [extendedChoice(name: 'HG_REPOSITORY_SRC', value: params.HG_REPOSITORY_SRC)]
     }
 }
 
