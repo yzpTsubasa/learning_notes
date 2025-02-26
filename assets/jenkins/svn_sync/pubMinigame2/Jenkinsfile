@@ -17,6 +17,7 @@ pipeline {
 
                     dir("project") {
                         build.checkoutSVN(params.HG_REPOSITORY_SRC)
+                        build.getSVNInfo()
                     }
 
                     build.checkoutPublish()
@@ -26,7 +27,7 @@ pipeline {
                     }
 
                     // Send Notify
-                    build.sendStart2DingTalk_PubMinigame()
+                    build.sendStart2DingTalk_PubMinigame2()
                 }
             }
         }

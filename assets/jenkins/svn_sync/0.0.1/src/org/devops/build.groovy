@@ -575,6 +575,33 @@ def sendResult2DingTalk_PubMinigame() {
     )
 }
 
+
+def sendStart2DingTalk_PubMinigame2() {
+    if (params.HG_QUIET) {
+        return
+    }
+    dingtalk(
+        robot: getDingTalkRobot(),
+        type: 'MARKDOWN',
+        title: "${currentBuild.fullDisplayName} 开始",
+        // at: getAtUsers(),
+        // atAll: false,
+        text: [
+            "# **[${currentBuild.fullDisplayName}](${BUILD_URL})**",
+            '***',
+            '- 状态 开始',
+            "- 发起 ${getRootBuildTriggerDesc()}",
+            "- <font color=${env.addResVer == "true" ? "#52c41a" : "#888888"}>资源版本号${env.addResVer == "true" ? "" : "不"}提升</font>",
+            "- <font color=${env.addCodeVer == "true" ? "#52c41a" : "#888888"}>代码版本号${env.addCodeVer == "true" ? "" : "不"}提升</font>",
+            "- 时刻 ${new Date().format('yyyy-MM-dd(E)HH:mm:ss', TimeZone.getTimeZone('Asia/Shanghai')) - '星期'}",
+            '- 仓库',
+            params.HG_REPOSITORY_SRC ? (params.HG_REPOSITORY_SRC - ~/.*\//) : 'Unknown',
+            '- 记录',
+            '***',
+        ] + getChangeString()
+    )
+}
+
 def sendResult2DingTalk_PubMinigame2() {
     def minigameOutputURL = getMinigameOutputURL();
     def minigameToggleOperation = getMiniGameToggleOperation()
@@ -610,7 +637,6 @@ def sendResult2DingTalk_PubMinigame2() {
             "- 状态 <font color=${result_color}>${result}</font>",
             "- 发起 ${getRootBuildTriggerDesc()}",
             pubWebVersion ? "- 资源版本 <font color=${result_color}>${pubWebVersion}</font>" : "",
-            "- 小游戏版本 <font color=${result_color}>${minigameVersion ? minigameVersion : 'Unknown'}</font>",
             minigameOutputURL ? "- [下载游戏包](${minigameOutputURL})" : "",
             minigameToggleOperation ? "- 小游戏配置 <font color=#52c41a>${minigameToggleOperation}</font>" : "",
             "- 生效时间 <font color=#52c41a>${getDateByStep().format('yyyy-MM-dd(E)HH:mm:ss', TimeZone.getTimeZone('Asia/Shanghai')) - '星期'}</font>",
