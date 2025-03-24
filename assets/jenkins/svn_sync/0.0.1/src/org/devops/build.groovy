@@ -279,6 +279,10 @@ if "%chkdst%" == "true" (
 
 // 新的发布流程 - 集成版本
 def pubToWebIntegratedCommon() {
+    env.G123_APP_ID = params.G123_APP_ID
+    env.G123_APP_SECRET = params.G123_APP_SECRET
+    env.G123_DOMAIN = params.G123_DOMAIN
+
     // lock(resource: "${cfg_dir}") {
     dir('project') {
         // 检出
