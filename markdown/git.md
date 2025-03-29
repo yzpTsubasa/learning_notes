@@ -205,3 +205,24 @@ git config --global core.editor "code --wait --new-window"
 # 恢复Vim，使用下面命令即可
 git config --global --unset core.editor
 ```
+
+## 不使用 gitignore 来忽略文件
+### 使用 --skip-worktree 选项(推荐)
+```sh
+# 启用
+git update-index --skip-worktree [file]
+# 取消
+git update-index --no-skip-worktree [file]
+# 查看
+git ls-files -v | findstr "^S"
+
+```
+### 使用 --assume-unchaged
+```sh
+# 启用
+git update-index --assume-unchanged [file]
+# 取消
+git update-index --no-assume-unchanged [file]
+# 查看
+git ls-files -v | findstr "^h"
+```

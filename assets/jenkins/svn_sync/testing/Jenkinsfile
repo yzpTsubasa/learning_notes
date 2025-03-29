@@ -4,24 +4,31 @@ def build = new org.devops.build()
 
 pipeline {
     agent any
+    parameters {
+        string(
+            name: 'PARAM1',
+            defaultValue: 'VALUE1',
+            description: '参数1'
+        )
+    }
+
     options {
         disableConcurrentBuilds()
     }
 
     stages {
-        stage('build') {
+        stage('prepare') {
             steps {
                 script {
-                    print "Test Build 4"
+                    properties([parameters([string(defaultValue: params.PARAM1, name: 'PARAM1')])])
                 }
             }
         }
-    }
-    
-    post { 
-        changed { 
-            script {
-                build.sendCommonResult2DingTalk()
+        stage('build') {
+            steps {
+                script {
+                    print "Test Build env.PARAM1=${env.PARAM1} params.PARAM1=${params.PARAM1}"
+                }
             }
         }
     }

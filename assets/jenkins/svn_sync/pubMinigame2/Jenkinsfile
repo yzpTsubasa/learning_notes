@@ -1,0 +1,69 @@
+@Library("jenkins_library") _
+
+def build = new org.devops.build()
+
+pipeline {
+    agent any
+
+    options {
+        disableConcurrentBuilds()
+    }
+
+    stages {
+        stage('初始化') {
+            steps {
+                script {
+                    build.cleanupHGPubToolsDist()
+
+                    dir("project") {
+                        build.checkoutSVN(params.HG_REPOSITORY_SRC)
+                        build.getSVNInfo()
+                    }
+
+                    build.checkoutPublish()
+
+                    dir(params.MINIGAME_TAG) {
+                        build.checkoutSVN(params.HG_MINIGAME_REPOSITORY_SRC)
+                    }
+
+                    // Send Notify
+                    build.sendStart2DingTalk_PubMinigame2()
+                }
+            }
+        }
+        stage('代码发布') {
+            steps {
+                script {
+                    lock(resource: "pub2web") {
+                        dir('publish') {
+                            bat "npx hgbuild run _12_common_xyx --prg_dir ${WORKSPACE}/project --cfg_dir ${params.cfg_dir} --target ${params.target} --target_dir ${WORKSPACE}/${params.MINIGAME_TAG} --appid ${params.APP_ID} --key ${params.PRIVATE_KEY}" + (params.addResVer ? ' --addResVer' : '') + (params.addCodeVer ? ' --addCodeVer' : '')
+                        }
+                    }
+                }
+            }
+            options {
+                timeout(3)
+            }
+        }
+        stage('资源发布') {
+            steps {
+                script {
+                    lock(resource: "pub2web") {
+                        dir('publish') {
+                            bat "npx hgbuild run _12_common_xyx_res --upload_filter ${params.upload_filter} --toolTag ${params.toolTag} --cfg_dir ${params.cfg_dir} --target ${params.target} --cfgTag ${params.cfgTag} --noUserOp" + (params.addResVer ? ' --addResVer' : '') + (params.addCodeVer ? ' --addCodeVer' : '')
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            script {
+                build.sendResult2DingTalk_PubMinigame2()
+                build.sendResult2Emailext()
+            }
+        }
+    }
+}
