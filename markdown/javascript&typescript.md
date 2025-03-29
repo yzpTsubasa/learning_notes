@@ -1395,3 +1395,46 @@ function getPrevSumByBIT(bit, size) {
   return sum;
 }
 ```
+
+## 分时函数，处理批量任务
+```js
+function runTasksWhenIdle(tasks) {
+    const scheduler = (doTask) => {
+        requestIdleCallback((deadline) => {
+            doTask(() => deadline.timeRemaining() > 0)
+        })
+    }
+    runTasks(tasks, scheduler);
+}
+
+function runTasksInterval(tasks, interval, count) {
+    const scheduler = (chunk) => {
+        let curr = 0;
+        setTimeout(() => {
+            chunk(() => curr++ < count)
+        }, interval)
+    }
+    runTasks(tasks, scheduler);
+}
+
+// 使用分时函数处理批量任务
+function runTasks(tasks, scheduler) {
+    if (tasks.length == 0) return;
+    let i = 0;
+
+    const onProgress = () => {
+        console.log(`${(i / tasks.length * 100).toFixed(0)}% [${i}/${tasks.length}]`);
+    }
+    const run = () => {
+        scheduler(chunk)
+    }
+    const chunk = (isGoOn) => {
+        while (i < tasks.length && isGoOn()) {
+            tasks[i++]();
+        }
+        onProgress();
+        if (i < tasks.length) run();
+    }
+    run();
+}
+```
