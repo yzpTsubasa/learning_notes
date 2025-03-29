@@ -1457,3 +1457,39 @@ function runTasks(tasks, scheduler) {
     run();
 }
 ```
+
+## 并发请求
+```js
+const concurrentRequest = (urls, concurrency) => {
+    if (!urls.length) {
+        return Promise.resolve([]);
+    }
+    return new Promise(resolve => {
+        const results = [];
+        let nextIndex = 0;
+        let reqingNum = 0;
+        let totalDone = 0;
+        let totalNum = urls.length;
+        const _request = async () => {
+            if (reqingNum >= concurrency) return;
+            if (nextIndex >= urls.length) return;
+            const idx = nextIndex++;
+            const url = urls[idx];
+            reqingNum++;
+            const res = await fetch(url);
+            const data = await res.json();
+            results[idx] = data;
+            totalDone++;
+            reqingNum--;
+            if (totalDone >= totalNum) {
+                resolve(results);
+            } else {
+                _request();
+            }
+        }
+        for (let i = 0; i < Math.min(concurrency, totalNum); i++) {
+            _request();
+        }
+    });
+};
+```
