@@ -160,3 +160,4 @@ export HOMEBREW_API_DOMAIN="https://mirrors.ustc.edu.cn/homebrew-bottles/api"
 # hide
 export HOMEBREW_NO_ENV_HINTS="1"
 ```
+> 执行`source ~/.bash_profile`
