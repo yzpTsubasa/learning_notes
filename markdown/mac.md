@@ -135,3 +135,29 @@ codesign -f -s "Apple Development: 865500815@qq.com" libyaml-cpp.0.6.3.dylib
 chmod是权限管理命令change the permissions mode of a file的缩写。
 u代表所有者。x代表执行权限。’+’ 表示增加权限。
 chmod u+x file.sh 就表示对当前目录下的file.sh文件的所有者增加可执行权限。
+
+## 解决 homebrew 更新或者安装太慢的问题
+> `~/.bash_profile` 添加以下内容
+``` bash
+
+#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+export SDKMAN_DIR="$HOME/.sdkman"
+[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
+
+####### brew安装镜像加速
+# 
+# brew安装仓库加速配置 这里可选配置阿里,ustc或者清华的加速地址, 他们的加速地址前缀如下:
+# 阿里: https://mirrors.aliyun.com/homebrew   这个加速地址,结果测试无法git clone 访问,在克隆taps时可能会出现问题
+# tuna: https://mirrors.tuna.tsinghua.edu.cn
+# ustc: https://mirrors.ustc.edu.cn
+# 加速地址的后面部分都是一样的,修改前缀即可
+# 
+export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.ustc.edu.cn/brew.git"
+export HOMEBREW_CORE_GIT_REMOTE="https://mirrors.ustc.edu.cn/homebrew-core.git"
+export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.ustc.edu.cn/homebrew-bottles"
+# brew4.x API加速
+export HOMEBREW_API_DOMAIN="https://mirrors.ustc.edu.cn/homebrew-bottles/api"
+# hide
+export HOMEBREW_NO_ENV_HINTS="1"
+```
+> 执行`source ~/.bash_profile`
