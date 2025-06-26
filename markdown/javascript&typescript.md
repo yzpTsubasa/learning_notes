@@ -1,5 +1,34 @@
 ## javascript&typescript
 
+## jsdoc
+```js
+// Cocos Creator js组件
+/**
+ * 类型声明
+ * @typedef {cc.Component & {
+ *     nodeUserAgreement: cc.Node,
+ *     nodePravicy: cc.Node,
+ *     toggleAgreement: cc.Toggle,
+ *     labelVersion: cc.Label,
+ *     toggleLoginTypeContainer: cc.ToggleContainer,
+ *     inputAccountName: cc.EditBox,
+ *     inputAccountPassword: cc.EditBox,
+ *     inputPhone: cc.EditBox,
+ *     inputVerificationCode: cc.EditBox,
+ *     btnGetVerificationCode: cc.Button,
+ *     labelGetVerificationCode: cc.Label,
+ *     labelGetVerificationCodeCountDown: cc.Label,
+ *     schedule: cc.Scheduler,
+ *     loginType: string,
+ *     ReqUserAccountListByPhone: (phone?: string) => void,
+ *     selectedUserData: UserInfo,
+ *     EnableGetVerificationCode: (enable: boolean) => void,
+ *     SelectUserData: (userData: UserInfo) => void,
+ * }} LoginView2
+ * 
+ */
+```
+
 ## 项目编译报错
 > error: circular references ''
 - 可能是用了新的ts语法,旧的ts编译器不支持。
