@@ -470,5 +470,7 @@ start QQ小程序开发者工具.exe
 - 启动 msys2
 - 执行 `pacman -Syu`, 更新 MSYS2 和所有已安装的包
 - 执行 `pacman -S mingw-w64-x86_64-gcc`,安装 gcc
-- 还可以安装其他工具，比如 cmake, make, gdb, pkg-config, openmp, libpng, zlib 等
+> 有需要可以把指定路径如 `C:\msys64\mingw64\bin` 添加到环境变量中
+
+> 还可以安装其他工具，比如 cmake, make, gdb, pkg-config, openmp, libpng, zlib 等
 
