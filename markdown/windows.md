@@ -464,3 +464,11 @@ taskkill /f /im QQ小程序开发者工具.exe
 cd /d D:\Program Files (x86)\Tencent\QQ小程序开发者工具\
 start QQ小程序开发者工具.exe
 ```
+
+## 安装 gcc 等工具
+- 下载 [mysys2](https://mirrors.aliyun.com/msys2/distrib/),并安装(安装过程中可能会因为网络问题卡住，可以断网安装)
+- 启动 msys2
+- 执行 `pacman -Syu`, 更新 MSYS2 和所有已安装的包
+- 执行 `pacman -S mingw-w64-x86_64-gcc`,安装 gcc
+- 还可以安装其他工具，比如 cmake, make, gdb, pkg-config, openmp, libpng, zlib 等
+
