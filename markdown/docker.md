@@ -8,3 +8,16 @@
 > 第3条，镜像存储路径建立软连接。好像没有效果。
 > 
 > 可以修改 `Resources/Disk image location` 位置到其他位置。**注意新的位置的权限问题**
+
+
+## 国内镜像加速
+[渡渡鸟镜像同步站](https://docker.aityp.com/)
+```jsonc
+{
+    // ...
+    "registry-mirrors": [
+        "https://swr.cn-north-4.myhuaweicloud.com"
+    ],
+    // ...
+}
+```
