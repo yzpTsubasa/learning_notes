@@ -18,7 +18,8 @@
    vsce publish -p [token]
    ```
    或者直接打包，在[发布页](https://marketplace.visualstudio.com/manage/publishers/TsubasaYeung)上传
-   这个页面可能有些 `js` 文件需要科学上网（蓝灯）才能加载出来，响应码为 `301` 时，可以在禁用缓存重试
+   这个页面可能有些 `js` 文件需要使用网络加速才能加载出来，响应码为 `301` 时，可以在禁用缓存重试
+   网络加速可以使用: `Watt Toolkit` ，勾选`国外验证码平台`并加速
    ```
    vsce package
    ```
