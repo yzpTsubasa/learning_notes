@@ -1,5 +1,19 @@
 ## android
 
+## 配置Gradle使用国内镜像
+```
+1. 修改项目中的 gradle-wrapper.properties 文件
+在您的项目目录中找到 gradle/wrapper/gradle-wrapper.properties 文件，将distributionUrl修改为国内镜像地址：
+
+properties
+# 将原来的URL注释或替换
+distributionUrl=https\://mirrors.cloud.tencent.com/gradle/gradle-4.10.3-all.zip
+
+# 或者使用其他镜像
+# distributionUrl=https\://mirrors.aliyun.com/gradle/gradle-4.10.3-all.zip
+# distributionUrl=https\://repo.huaweicloud.com/gradle/gradle-4.10.3-all.zip
+```
+
 ## android 调试相关命令行
 ``` bash
 # 最近打开的应用
