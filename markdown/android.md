@@ -14,6 +14,38 @@ distributionUrl=https\://mirrors.cloud.tencent.com/gradle/gradle-4.10.3-all.zip
 # distributionUrl=https\://repo.huaweicloud.com/gradle/gradle-4.10.3-all.zip
 ```
 
+## 配置国内Maven镜像
+修改项目的 build.gradle 文件
+在项目的 build.gradle 文件中添加国内镜像源：
+```groovy
+buildscript {
+    repositories {
+        // 阿里云镜像
+        maven { url 'https://maven.aliyun.com/repository/public' }
+        maven { url 'https://maven.aliyun.com/repository/google' }
+        maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
+        // 中央仓库和Google仓库
+        mavenCentral()
+        google()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.3.2' // 根据你的版本调整
+    }
+}
+
+allprojects {
+    repositories {
+        // 阿里云镜像
+        maven { url 'https://maven.aliyun.com/repository/public' }
+        maven { url 'https://maven.aliyun.com/repository/google' }
+        maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
+        // 中央仓库和Google仓库
+        mavenCentral()
+        google()
+    }
+}
+```
+
 ## android 调试相关命令行
 ``` bash
 # 最近打开的应用
