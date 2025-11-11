@@ -6,6 +6,13 @@ http://ffmpeg.org/ffmpeg.html#Main-options
 ffmpeg -i test.mp4 -vcodec copy -acodec copy -ss 00:00:10 -to 00:00:15 out.mp4
 ```
 
+## 音频截取
+```
+ffmpeg -i input.mp3 -ss 00:00:30 -to 00:01:00 -c copy output.mp3
+```
+`-ss`表示从第30秒开始截取,`-to`表示截取到第1分钟结束,`-c copy`表示不重新编码直接复制
+```
+
 ##  音频转换
 ```
 ffmpeg -i my_audio.wav  my_audio.mp3
