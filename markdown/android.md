@@ -1,5 +1,31 @@
 ## android
 
+## APK加固
+> 目前使用 [梆梆加固](https://dev.bangcle.com/apps/index) 加固 APK
+> 加固完成后的 APK 是没有签名的，而且可能没有对齐，需要先对齐，然后签名。
+> 命令`zipalign` 和 `apksigner` 可以在 `%APPDATA%\..\local/Android\Sdk\build-tools` 目录下的指定一个版本的SDK文件夹(如：`%APPDATA%\..\local/Android\Sdk\build-tools\36.0.0`)中找到
+> 命令`adb` 可以在 `%APPDATA%\..\local/Android\Sdk\platform-tools` 目录下找到
+
+```sh
+# 对齐
+zipalign -p -f -v 4 [reinforce_apk_path] [reinforce_aligned_apk_path]
+# 对齐验证
+zipalign -c -v 4 [reinforce_aligned_apk_path]
+
+# apk 签名
+apksigner sign --ks "[keystore_path]" --ks-key-alias "[key_alias]" --ks-pass pass:[keystore_password] --key-pass pass:[key_password] --out "[reinforce_aligned_signed_apk_path]" "[reinforce_aligned_apk_path]"
+# 签名验证
+apksigner verify -v [reinforce_aligned_signed_apk_path]
+
+# 安装APK
+adb install -r -t [reinforce_aligned_signed_apk_path]
+```
+> 加固后常见错误
+> 1. `INSTALL_PARSE_FAILED_NO_CERTIFICATES`：APK 无有效签名（签名被刷或签名流程未正确执行）。
+> 2. `INSTALL_FAILED_INVALID_APK: Failed to extract native libraries, res=-2`：APK 中的 .so被压缩或未对齐，系统无法提取原生库。
+> 3. `Failure [-124 … Targeting R+ … resources.arsc …]`：Android 11+ 要求 resources.arsc必须未压缩且按 4 字节边界对齐。
+
+
 ## 配置Gradle使用国内镜像
 ```
 1. 修改项目中的 gradle-wrapper.properties 文件
