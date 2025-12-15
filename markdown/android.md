@@ -1,5 +1,11 @@
 ## android
 
+## 迁移sdk路径
+- 复制 `%APPDATA%\..\local/Android\Sdk` 到新的路径
+- 在 Android Studio 中配置新的 SDK 路径
+- 打开项目，修改项目的SDK指向，并且执行 `Clean Project`
+- 确认无误后，删除旧的 SDK 路径
+
 ## APK加固
 > 目前使用 [梆梆加固](https://dev.bangcle.com/apps/index) 加固 APK
 > 加固完成后的 APK 是没有签名的，而且可能没有对齐，需要先对齐，然后签名。
