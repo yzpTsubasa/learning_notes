@@ -1,5 +1,13 @@
 ## electron
 
+## 配置镜像
+在项目根目录创建 `.npmrc` 文件，添加以下内容：
+```ini
+registry=https://registry.npmmirror.com/
+electron_mirror=https://cdn.npmmirror.com/binaries/electron/
+electron_builder_binaries_mirror=https://npmmirror.com/mirrors/electron-builder-binaries/
+```
+
 ## 打包绿色免安装包
 ``` bat
 npm install --save-dev electron-packager
