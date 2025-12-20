@@ -473,9 +473,3 @@ start QQ小程序开发者工具.exe
 > 有需要可以把指定路径如 `C:\msys64\mingw64\bin` 添加到环境变量中
 
 > 还可以安装其他工具，比如 cmake, make, gdb, pkg-config, openmp, libpng, zlib 等
-
-## 微信小程序的反编译([windows](https://github.com/biggerstar/wedecode))
-- 找到本地要反编译的小程序目录，一般在 `%APPDATA%/Tencent\xwechat\radium\Applet\packages` 下
-- `npm i wedecode -g`
-- `wedecode ui`
-- 在网页中进行操作即可
