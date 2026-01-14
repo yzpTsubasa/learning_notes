@@ -1,5 +1,8 @@
 ## git
 
+## 导出 commit1 和 commit2 之间的差异文件（包含目录结构）
+git diff --name-only commit1 commit2 | tar -czf changes.tar.gz -T -
+
 ## 凭证
 ``` bash
 # 保存凭证到本地
